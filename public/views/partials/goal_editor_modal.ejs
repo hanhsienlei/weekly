@@ -2,22 +2,26 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Goal name</h5>
+        <span class="goal-title p-3" contenteditable="true" data-goal-id="12">Goal name</span> <span class="badge rounded-pill bg-light">✍</span>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body goal-modal-body overflow-auto smooth-scroll">
+        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+          data-bs-target=".goal-container" aria-expanded="false" aria-controls="goal editor">
+          Edit goal details
+        </button>
+        <div class="row goal-container">
         <div class="row">
           <div class="col-3 mb-3">
-            <label for="start" class="col-form-label">Due date:</label>
-            <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01" max="2100-01-01" />
+            <label class="col-form-label">Due date:</label>
+            <input type="date" class="goal-due-date"  min="1950-01-01" max="2100-01-01" />
           </div>
         </div>
         <div class="row">
-          <div class="col-9 mb-3">
-            <label for="message-text" class="col-form-label">Note:</label>
-            <textarea class="form-control" id="message-text"></textarea>
+          <div class="col-9 mb-3 goal-description-container">
+            <textarea class="form-control goal-description" id="message-text" placeholder="Why and how you wanna reach it?"></textarea>
           </div>
-          <div class="col-3 mb-3">
+          <div class="col-3 mb-3 goal-tags-container">
             <div class="row mb-3">
               <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
                 data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
@@ -40,10 +44,10 @@
                 </div>
               </div>
               <div class="row mb-3">
-                <div class="col-10">
+                <div class="col-9">
                   <input type="text" class="form-control" Placeholder="Add new tag" />
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                   <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c"
                     title="Choose your color">
                 </div>
@@ -51,11 +55,23 @@
             </div>
           </div>
         </div>
+        <div class="row mb-3">
+          <label class="form-label mb-1" for="chooseMilestone">
+            is this goal for a bigger purpose?
+          </label>
+          <select class="form-select purpose-selector" aria-label="select purpose">
+            <option value="null">none</option>
+            <option value="1">purpose 1</option>
+            <option value="2">purpose 2</option>
+            <option value="3">purpose 3</option>
+          </select>
+        </div>
 
         <div class="row">
           <div class="col-3 mb-3">
-            <button type="submit" class="btn btn-primary">Save goal</button>
+            <button class="btn btn-primary save-goal-button" onclick="saveGoal()">Save goal</button>
           </div>
+        </div>
         </div>
         <div class="row add-milestones">
           <div class="col-8">

@@ -7,9 +7,10 @@ const saveGoal = async (req, res) => {
     description: body.goal_description,
     due_date: body.goal_due_date,
     purpose_id: body.goal_purpose_id,
-    status: body.status,
-    user_id:body.goal_user_id
   };
+  if (goalDetails.purpose_id === "null"){
+    goalDetails.purpose_id = null
+  }
   console.log("goalDetails: ", goalDetails);
   if (!body.goal_id) {
     const goalId = await Goal.createGoal(goalDetails);
@@ -28,8 +29,16 @@ const saveGoal = async (req, res) => {
 
 const getGoal = async (req, res) => {
   const goalId = req.body.goal_id;
-  const result = await Goal.getGoal(goalId);
-  res.status(200).send(result);
+  if (!goalId) {
+    return res.status(400).send("goal id is required.");
+  } else {
+    const result = await Goal.getGoal(goalId);
+    if (!result) {
+      return res.status(400).send("goal id doesn't exist.");
+    } else {
+      return res.status(200).send(result);
+    }
+  }
 };
 
 module.exports = {
