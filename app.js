@@ -7,7 +7,7 @@ app.set("view engine", "ejs");
 app.set("views", "./public/views");
 app.engine("ejs", ejs.renderFile);
 
-//public assets
+//Front-end public assets
 app.use(express.static(__dirname + "/public"))
 
 //Middlewares
@@ -19,6 +19,28 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/life", (req, res) => {
   res.render("life");
+});
+
+app.get("/horizon", (req, res) => {
+  res.render("horizon");
+});
+app.get("/dashboard/goal", (req, res) => {
+  res.render("dashboard_goal");
+});
+
+app.get("/goal/library", (req, res) => {
+  res.render("goal_library");
+});
+
+//api routes
+app.use("/api",
+  require("./server/routes/api/goal_route")
+)
+
+//error handler
+app.use(function(err, req, res, next) {
+    console.log(err);
+    res.status(500).send('Internal Server Error');
 });
 
 app.listen(3000, () => {

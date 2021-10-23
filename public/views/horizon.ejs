@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="../css/header.css">
+  <link rel="stylesheet" href="../css/horizon.css">
+  <link rel="stylesheet" href="../css/goal_editor_modal.css">
+
+  <title>Horizon</title>
+</head>
+
+<body>
+  <%- include("partials/header") %>
+    <div class="main">
+      <div class="container-xl my-3">
+        <div class="row justify-content-center section purpose">
+          <div class="row section-title border-top border-secondary mt-4 py-2">
+            Purpose
+          </div>
+          <div class="row d-flex section-content overflow-auto smooth-scroll">
+            <div>Save the puppies</div>
+            <div>Be...wait for it... legendary</div>
+            <div>Maybe save the earth too</div>
+          </div>
+        </div>
+        <div class="row justify-content-between spread">
+          <div class="col-5 section day">
+            <div class="row section-title border-top border-secondary mt-4 py-2">
+              <div class="col-2 text-center before">&lt;</div>
+              <div class="col-8 text-center title">10/18</div>
+              <div class="col-2 text-center next">&gt;</div>
+            </div>
+            <div class="row section-content px-2 overflow-auto smooth-scroll">
+              <div class="card mb-2 task-card">
+                <div class="card-body row">
+                  <div class="form-check col-12">
+                    <div class="row mb-3">
+                      <div class="col-10">
+                        <div class="col">
+                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
+                          <label class="form-check-label" for="task_id">
+                            Task 1</label>
+                          <span class="badge rounded-pill bg-secondary">label 1</span>
+                          <span class="badge rounded-pill bg-info">label 2</span>
+                        </div>
+                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row task-editor">
+                      <div class="collapse" id="editor_taskId">
+                        <div class="row mb-3">
+                          <label class="form-label mb-1" for="taskName_id">
+                            Task name
+                          </label>
+                          <input type="text" id="taskName_id" class="form-control" Value="Task 1"
+                            Placeholder="task name" />
+                        </div>
+                        <div class="row mb-3">
+                          <label class="form-label mb-1" for="dueDate">
+                            Due day
+                          </label>
+                          <input type="date" id="dueDate" name="trip-start" value="2022-01-01" min="1950-01-01"
+                            max="2100-01-01" />
+                        </div>
+                        <div class="row mb-3">
+                          <label class="form-label mb-1" for="task_note">
+                            Description
+                          </label>
+                          <textarea class="form-control" name="task_note"
+                            placeholder="Write some note......"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                          <label class="form-label mb-1" for="chooseMilestone">
+                            Attach to a goal (or not)
+                          </label>
+                          <select class="form-select" name="chooseMilestone" aria-label="select milestone">
+                            <option selected>choose milestone</option>
+                            <option value="">none (as daily task)</option>
+                            <option value="1">milestone 1/goal 2</option>
+                            <option value="2">milestone 1/goal 3</option>
+                            <option value="3">milestone 4/goal 2</option>
+                          </select>
+                        </div>
+                        <div class="row mb-3">
+                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                            Edit tags
+                          </button>
+                          <button class="btn btn-light edit-button col-auto" type="button" >
+                            Save
+                          </button>
+                        </div>
+                        <div class="collapse" id="tag_editor_taskId">
+                          <div class="row mb-3 tags">
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                              <label class="form-check-label badge rounded-pill bg-secondary" for="flexCheckDefault">
+                                tag 1
+                              </label>
+                            </div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                              <label class="form-check-label badge rounded-pill bg-secondary" for="flexCheckChecked">
+                                tag 2
+                              </label>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-10">
+                              <input type="text" class="form-control" Placeholder="Add new tag" />
+                            </div>
+                            <div class="col-2">
+                              <input type="color" class="form-control form-control-color" id="exampleColorInput"
+                                value="#563d7c" title="Choose your color">
+                            </div>
+                          </div>
+                          <button class="btn btn-light edit-button col-auto" type="button">
+                            Save
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-2">
+                <div class="card-body row">
+                  <div class="form-check col-10">
+                    <input class="form-check-input" type="checkbox" value="" id="milestone_id">
+                    <label class="form-check-label" for="mil_id">
+                      Milestone 1
+                      <span class="badge rounded-pill bg-secondary">label 3</span>
+                      <span class="badge rounded-pill bg-info">label 4</span>
+                    </label>
+                    <h6 class="card-subtitle mt-1 mb-2 text-muted">goal 2</h6>
+                  </div>
+                  <div class="col-2">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                      data-bs-target="#goalEditorModal" data-bs-goalId="123">
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-2 task-card">
+                <div class="card-body row">
+                  <div class="form-check col-12">
+                    <div class="row mb-3">
+                      <div class="col-10">
+                        <div class="col">
+                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
+                          <label class="form-check-label" for="task_id">
+                            Task 1</label>
+                          <span class="badge rounded-pill bg-secondary">label 1</span>
+                          <span class="badge rounded-pill bg-info">label 2</span>
+                        </div>
+                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row task-editor">
+                      <div class="collapse" id="editor_taskId">
+                        <div class="row mb-3">
+                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
+                            Placeholder="task name" />
+                        </div>
+                        <div class="row mb-3">
+                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
+                            max="2100-01-01" />
+                        </div>
+                        <div class="row mb-3">
+                          <textarea class="form-control" name="task_note"
+                            placeholder="Write some note......"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                            Edit tags
+                          </button>
+                        </div>
+                        <div class="collapse" id="tag_editor_taskId">
+                          <div class="row mb-3">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-2 task-card">
+                <div class="card-body row">
+                  <div class="form-check col-12">
+                    <div class="row mb-3">
+                      <div class="col-10">
+                        <div class="col">
+                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
+                          <label class="form-check-label" for="task_id">
+                            Task 1</label>
+                          <span class="badge rounded-pill bg-secondary">label 1</span>
+                          <span class="badge rounded-pill bg-info">label 2</span>
+                        </div>
+                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row task-editor">
+                      <div class="collapse" id="editor_taskId">
+                        <div class="row mb-3">
+                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
+                            Placeholder="task name" />
+                        </div>
+                        <div class="row mb-3">
+                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
+                            max="2100-01-01" />
+                        </div>
+                        <div class="row mb-3">
+                          <textarea class="form-control" name="task_note"
+                            placeholder="Write some note......"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                            Edit tags
+                          </button>
+                        </div>
+                        <div class="collapse" id="tag_editor_taskId">
+                          <div class="row mb-3">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-2 task-card">
+                <div class="card-body row">
+                  <div class="form-check col-12">
+                    <div class="row mb-3">
+                      <div class="col-10">
+                        <div class="col">
+                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
+                          <label class="form-check-label" for="task_id">
+                            Task 1</label>
+                          <span class="badge rounded-pill bg-secondary">label 1</span>
+                          <span class="badge rounded-pill bg-info">label 2</span>
+                        </div>
+                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row task-editor">
+                      <div class="collapse" id="editor_taskId">
+                        <div class="row mb-3">
+                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
+                            Placeholder="task name" />
+                        </div>
+                        <div class="row mb-3">
+                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
+                            max="2100-01-01" />
+                        </div>
+                        <div class="row mb-3">
+                          <textarea class="form-control" name="task_note"
+                            placeholder="Write some note......"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                            Edit tags
+                          </button>
+                        </div>
+                        <div class="collapse" id="tag_editor_taskId">
+                          <div class="row mb-3">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-4 section week">
+            <div class="row section-title border-top border-secondary mt-4 py-2">
+              <div class="col-2 text-center before">&lt;</div>
+              <div class="col-8 text-center title">Week 44</div>
+              <div class="col-2 text-center next">&gt;</div>
+            </div>
+            <div class="row section-content px-2 overflow-auto">
+              <div class="card mb-2 task-card">
+                <div class="card-body row">
+                  <div class="form-check col-12">
+                    <div class="row mb-3">
+                      <div class="col-10">
+                        <div class="col">
+                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
+                          <label class="form-check-label" for="task_id">
+                            Task 1</label>
+                          <span class="badge rounded-pill bg-secondary">label 1</span>
+                          <span class="badge rounded-pill bg-info">label 2</span>
+                        </div>
+                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#editor_taskId_44" aria-expanded="false" aria-controls="taskEditor">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row task-editor">
+                      <div class="collapse" id="editor_taskId_44">
+                        <div class="row mb-3">
+                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
+                            Placeholder="task name" />
+                        </div>
+                        <div class="row mb-3">
+                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
+                            max="2100-01-01" />
+                        </div>
+                        <div class="row mb-3">
+                          <textarea class="form-control" name="task_note"
+                            placeholder="Write some note......"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                            Edit tags
+                          </button>
+                        </div>
+                        <div class="collapse" id="tag_editor_taskId">
+                          <div class="row mb-3">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-2 task-card">
+                <div class="card-body row">
+                  <div class="form-check col-12">
+                    <div class="row mb-3">
+                      <div class="col-10">
+                        <div class="col">
+                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
+                          <label class="form-check-label" for="task_id">
+                            Task 1</label>
+                          <span class="badge rounded-pill bg-secondary">label 1</span>
+                          <span class="badge rounded-pill bg-info">label 2</span>
+                        </div>
+                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                          data-bs-target="#editor_taskId_45" aria-expanded="false" aria-controls="taskEditor">
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                    <div class="row task-editor">
+                      <div class="collapse" id="editor_taskId_45">
+                        <div class="row mb-3">
+                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
+                            Placeholder="task name" />
+                        </div>
+                        <div class="row mb-3">
+                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
+                            max="2100-01-01" />
+                        </div>
+                        <div class="row mb-3">
+                          <textarea class="form-control" name="task_note"
+                            placeholder="Write some note......"></textarea>
+                        </div>
+                        <div class="row mb-3">
+                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                            Edit tags
+                          </button>
+                        </div>
+                        <div class="collapse" id="tag_editor_taskId">
+                          <div class="row mb-3">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+            </div>
+          </div>
+          <div class="col-3 section month-and-year">
+            <div class="row section-title border-top border-secondary mt-4 py-2">
+              <div class="col-2 text-center before">&lt;</div>
+              <div class="col-8 text-center title">October</div>
+              <div class="col-2 text-center next">&gt;</div>
+            </div>
+            <div class="section-content overflow-auto">
+              <div class="card mb-2">
+                <div class="card-body row">
+                  <div class="form-check col-10">
+                    <input class="form-check-input" type="checkbox" value="" id="task_id">
+                    <label class="form-check-label" for="task_id">
+                      Task 1
+                      <span class="badge rounded-pill bg-secondary">label 1</span>
+                      <span class="badge rounded-pill bg-info">label 2</span>
+                    </label>
+                    <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-2">
+                <div class="card-body row">
+                  <div class="form-check col-10">
+                    <input class="form-check-input" type="checkbox" value="" id="task_id">
+                    <label class="form-check-label" for="task_id">
+                      Task 1
+                      <span class="badge rounded-pill bg-secondary">label 1</span>
+                      <span class="badge rounded-pill bg-info">label 2</span>
+                    </label>
+                    <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row section-title border-top border-secondary mt-4 py-2">
+              <div class="col-2 text-center before">&lt;</div>
+              <div class="col-8 text-center title">2021</div>
+              <div class="col-2 text-center next">&gt;</div>
+            </div>
+            <div class="section-content overflow-auto ">
+              <div class="card mb-2">
+                <div class="card-body row">
+                  <div class="form-check col-10">
+                    <input class="form-check-input" type="checkbox" value="" id="goal_id">
+                    <label class="form-check-label" for="goal_id">
+                      Goal 1
+                      <span class="badge rounded-pill bg-secondary">label 1</span>
+                      <span class="badge rounded-pill bg-info">label 2</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="card mb-2">
+                <div class="card-body row">
+                  <div class="form-check col-10">
+                    <input class="form-check-input" type="checkbox" value="" id="milestone_id">
+                    <label class="form-check-label" for="milestone_id">
+                      Milestone 5
+                      <span class="badge rounded-pill bg-secondary">label 1</span>
+                      <span class="badge rounded-pill bg-info">label 2</span>
+                    </label>
+                    <h6 class="card-subtitle mt-1 mb-2 text-muted">goal 2</h6>
+                  </div>
+                  <div class="col-2">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                      data-bs-target="#goalEditorModal" data-bs-goalId="123">
+                      Edit
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <%- include("partials/goal_editor_modal") %>
+    
+      <script src="../js/horizon.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
