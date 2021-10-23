@@ -33,8 +33,12 @@ app.get("/goal/library", (req, res) => {
 });
 
 //api routes
-app.use("/api",
-  require("./server/routes/api/goal_route")
+app.use("/api",[
+  require("./server/routes/api/goal_route"),
+  require("./server/routes/api/milestone_route"),
+  require("./server/routes/api/task_route")
+]
+  
 )
 
 //error handler

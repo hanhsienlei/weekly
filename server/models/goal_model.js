@@ -1,18 +1,18 @@
 const { pool } = require("./config_mysql")
 
-const createGoal = async (goal_details) => {
-  const [result] = await pool.query("INSERT INTO goal SET ?", goal_details)
+const createGoal = async (goalDetails) => {
+  const [result] = await pool.query("INSERT INTO goal SET ?", goalDetails)
   return result.insertId
 }
 
-const saveGoal = async (goal_details, goal_id) => {
-  const updateQuery = [goal_details].concat(goal_id)
+const saveGoal = async (goalDetails, goalId) => {
+  const updateQuery = [goalDetails].concat(goalId)
   const [ result ] = await pool.query("UPDATE goal SET ? WHERE id = ?", updateQuery)
   return result.info
 }
 
-const getGoal = async (goal_id) => {
-  const [ result ] = await pool.query("SELECT * FROM goal WHERE id = ?", goal_id)
+const getGoal = async (goalId) => {
+  const [ result ] = await pool.query("SELECT * FROM goal WHERE id = ?", goalId)
   return result[0]
 }
 

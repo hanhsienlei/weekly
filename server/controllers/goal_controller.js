@@ -8,7 +8,7 @@ const saveGoal = async (req, res) => {
     due_date: body.goal_due_date,
     purpose_id: body.goal_purpose_id,
   };
-  if (goalDetails.purpose_id === "null"){
+  if (goalDetails.purpose_id === "null" || !goalDetails.purpose_id){
     goalDetails.purpose_id = null
   }
   console.log("goalDetails: ", goalDetails);
@@ -19,7 +19,8 @@ const saveGoal = async (req, res) => {
     console.log("body.goal_id: ", body.goal_id);
     const row = await Goal.getGoal(body.goal_id);
     if (!row) {
-      res.status(400).send("Goal id doesn't exist.");
+      const goalId = await Goal.createGoal(goalDetails);
+    res.status(200).send(goalId);
     } else {
       const updateResult = await Goal.saveGoal(goalDetails, body.goal_id);
       res.status(200).send(`Update succeeded (${updateResult})`);
