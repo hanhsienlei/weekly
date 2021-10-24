@@ -6,11 +6,9 @@ const saveTask = async (req, res) => {
     title: body.task_title,
     description: body.task_description,
     due_date: body.task_due_date,
-    milestone_id: body.task_milestone_id,
+    milestone_id: (body.task_milestone_id > 0) ? body.task_milestone_id : null
   };
-  if (taskDetails.milestone_id === "null" || !taskDetails.milestone_id) {
-    taskDetails.milestone_id = null;
-  }
+  
   console.log("taskDetails: ", taskDetails);
   if (!body.task_id) {
     const taskId = await Task.createTask(taskDetails);

@@ -6,11 +6,9 @@ const saveGoal = async (req, res) => {
     title: body.goal_title,
     description: body.goal_description,
     due_date: body.goal_due_date,
-    purpose_id: body.goal_purpose_id,
+    purpose_id: (body.goal_purpose_id > 0) ? body.goal_purpose_id : null
   };
-  if (goalDetails.purpose_id === "null" || !goalDetails.purpose_id){
-    goalDetails.purpose_id = null
-  }
+  
   console.log("goalDetails: ", goalDetails);
   if (!body.goal_id) {
     const goalId = await Goal.createGoal(goalDetails);
