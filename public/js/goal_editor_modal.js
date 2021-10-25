@@ -6,6 +6,7 @@ const renderGoalEditor = (
   goalPurposeId,
   purposes
 ) => {
+  getGoalWithPlan(12)
   const modal = document.querySelector(".modal");
   const goalTitleTarget = document.querySelector(".goal-title");
   const goalDueDateTarget = document.querySelector(".goal-due-date");

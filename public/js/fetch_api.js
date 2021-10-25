@@ -112,11 +112,8 @@ function createMilestone() {
     });
 }
 
-function getGoalFull(goalId) {
-  fetch(`/api/goal/${goalId}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  })
+function getGoalWithPlan(goalId) {
+  fetch(`/api/goal/plan?goal_id=${goalId}`)
     .then(response => response.json())
     .then(data => console.log(data))
     .catch((err) => {
