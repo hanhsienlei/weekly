@@ -6,6 +6,5 @@ const { saveGoal, getGoal } = require("../../controllers/goal_controller");
 router
   .route("/goal")
   .post(wrapAsync(saveGoal))
-  .get(wrapAsync(getGoal));
 
 module.exports = router

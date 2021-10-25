@@ -28,7 +28,7 @@ app.get("/dashboard/goal", (req, res) => {
   res.render("dashboard_goal");
 });
 
-app.get("/goal/library", (req, res) => {
+app.get("/library", (req, res) => {
   res.render("goal_library");
 });
 

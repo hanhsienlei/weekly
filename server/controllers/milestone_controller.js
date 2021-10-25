@@ -12,7 +12,7 @@ const saveMilestone = async (req, res) => {
   console.log("milestoneDetails: ", milestoneDetails);
   if (!body.milestone_id) {
     const milestoneId = await Milestone.createMilestone(milestoneDetails);
-    res.status(200).send(milestoneId);
+    res.status(200).json({milestone_id: milestoneId});
   } else {
     console.log("body.milestone_id: ", body.milestone_id);
     const row = await Milestone.getMilestone(body.milestone_id);

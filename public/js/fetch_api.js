@@ -1,81 +1,125 @@
 // save goal
 //1. fetch save goal
 //2.1 if res.ok, render goal
-//2.2 if !res.ok, alert 
+//2.2 if !res.ok, alert
 
-function saveGoal(goalId){
-  const goalModal =document.querySelector(`#modal-goal-${goalId}`)
-  const goalTitle = goalModal.querySelector(".goal-title").textContent.trim()
-  const goalDescription = goalModal.querySelector(".goal-description").value
-  const goalDueDate = goalModal.querySelector(".goal-due-date").value
-  const goalDueDateUnix = Math.ceil(new Date(goalDueDate+ "T23:59:59"))
-  const select = goalModal.querySelector(".purpose-selector")
-	const option = select.options[select.selectedIndex];
-  const goalPurposeId = option.value
+function saveGoal(goalId) {
+  const goalModal = document.querySelector(`#modal-goal-${goalId}`);
+  const goalTitle = goalModal.querySelector(".goal-title").textContent.trim();
+  const goalDescription = goalModal.querySelector(".goal-description").value;
+  const goalDueDate = goalModal.querySelector(".goal-due-date").value;
+  const goalDueDateUnix = Math.ceil(new Date(goalDueDate + "T23:59:59"));
+  const select = goalModal.querySelector(".purpose-selector");
+  const option = select.options[select.selectedIndex];
+  const goalPurposeId = option.value;
 
   const body = {
     goal_id: goalId,
     goal_title: goalTitle,
     goal_due_date: goalDueDateUnix,
     goal_description: goalDescription,
-    goal_purpose_id: goalPurposeId
-  }
-  fetch("/api/goal",{
+    goal_purpose_id: goalPurposeId,
+  };
+  fetch("/api/goal", {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(body)
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   })
-  .then(result=>{
-    console.log("save goal: ", result.statusText)
-  }).catch(err=>{console.log(err)})
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
- function saveMilestone(milestoneId, goalId) {
-   const milestone = document.querySelector(`#milestone-details-${milestoneId}`)
-   const milestoneTitle = milestone.querySelector("h5").textContent.trim()
-   const milestoneDescription = milestone.querySelector("textarea").value
-   const milestoneDueDate = milestone.querySelector(".milestone-due-date").value
-   const milestoneDueDateUnix = Math.ceil(new Date(milestoneDueDate + "T23:59:59"))
+function saveMilestone(milestoneId, goalId) {
+  const milestone = document.querySelector(`#milestone-details-${milestoneId}`);
+  const milestoneTitle = milestone.querySelector("h5").textContent.trim();
+  const milestoneDescription = milestone.querySelector("textarea").value;
+  const milestoneDueDate = milestone.querySelector(".milestone-due-date").value;
+  const milestoneDueDateUnix = Math.ceil(
+    new Date(milestoneDueDate + "T23:59:59")
+  );
 
-   const body = {
-     milestone_id: milestoneId,
-     milestone_title:  milestoneTitle,
-     milestone_description: milestoneDescription,
-     milestone_due_date: milestoneDueDateUnix,
-     milestone_goal_id: goalId
-   }
-   console.log(body)
-   fetch("/api/milestone",{
+  const body = {
+    milestone_id: milestoneId,
+    milestone_title: milestoneTitle,
+    milestone_description: milestoneDescription,
+    milestone_due_date: milestoneDueDateUnix,
+    milestone_goal_id: goalId,
+  };
+  console.log(body);
+  fetch("/api/milestone", {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(body)
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   })
-  .then(result=>{
-    console.log("save milestone: ", result.statusText)
-  }).catch(err=>{console.log(err)})
- }
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
- function saveTask(taskId, MilestoneId) {
-   const task = document.querySelector(`#task-details-${taskId}`)
-   const taskTitle = task.querySelector("h6").textContent.trim()
-   const taskDescription = task.querySelector("textarea").value
-   const taskDueDate = task.querySelector(".task-due-date").value
-   const taskDueDateUnix = Math.ceil(new Date(taskDueDate + "T23:59:59"))
-const body = {
-     task_id: taskId,
-     task_title: taskTitle,
-     task_description: taskDescription,
-     task_due_date: taskDueDateUnix,
-     task_milestone_id: MilestoneId
-   }
-   console.log(body)
-   fetch("/api/task",{
+function saveTask(taskId, MilestoneId) {
+  const task = document.querySelector(`#task-details-${taskId}`);
+  const taskTitle = task.querySelector("h6").textContent.trim();
+  const taskDescription = task.querySelector("textarea").value;
+  const taskDueDate = task.querySelector(".task-due-date").value;
+  const taskDueDateUnix = Math.ceil(new Date(taskDueDate + "T23:59:59"));
+  const body = {
+    task_id: taskId,
+    task_title: taskTitle,
+    task_description: taskDescription,
+    task_due_date: taskDueDateUnix,
+    task_milestone_id: MilestoneId,
+  };
+  console.log(body);
+  fetch("/api/task", {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(body)
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   })
-  .then(result=>{
-    console.log("save task: ", result.statusText)
-  }).catch(err=>{console.log(err)})
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
- }
+function createMilestone() {
+  const milestoneTitle = document.querySelector(".new-milestone-title").value;
+  const milestoneDueDate = document.querySelector(".new-milestone-due-date");
+  const milestoneDueDateUnix = Math.ceil(
+    new Date(milestoneDueDate + "T23:59:59")
+  );
+  const milestoneGoalId = document.querySelector(".modal").dataset.goalId;
+  const body = {
+    milestone_title: milestoneTitle,
+    milestone_due_date: milestoneDueDateUnix,
+    milestone_goal_id: milestoneGoalId
+  };
+
+  fetch("/api/milestone", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function getGoalFull(goalId) {
+  fetch(`/api/goal/${goalId}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
+}
