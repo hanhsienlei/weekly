@@ -6,6 +6,7 @@ const saveTask = async (req, res) => {
     title: body.task_title,
     description: body.task_description,
     due_date: body.task_due_date,
+    due_date_unix: body.task_due_date_unix,
     milestone_id: (body.task_milestone_id > 0) ? body.task_milestone_id : null
   };
   

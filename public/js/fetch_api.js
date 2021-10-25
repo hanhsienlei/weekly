@@ -16,7 +16,8 @@ function saveGoal(goalId) {
   const body = {
     goal_id: goalId,
     goal_title: goalTitle,
-    goal_due_date: goalDueDateUnix,
+    goal_due_date: goalDueDate,
+    goal_due_date_unix: goalDueDateUnix,
     goal_description: goalDescription,
     goal_purpose_id: goalPurposeId,
   };
@@ -45,7 +46,8 @@ function saveMilestone(milestoneId, goalId) {
     milestone_id: milestoneId,
     milestone_title: milestoneTitle,
     milestone_description: milestoneDescription,
-    milestone_due_date: milestoneDueDateUnix,
+    milestone_due_date: milestoneDueDate,
+    milestone_due_date_unix: milestoneDueDateUnix,
     milestone_goal_id: goalId,
   };
   console.log(body);
@@ -71,7 +73,8 @@ function saveTask(taskId, MilestoneId) {
     task_id: taskId,
     task_title: taskTitle,
     task_description: taskDescription,
-    task_due_date: taskDueDateUnix,
+    task_due_date: taskDueDate,
+    task_due_date_unix: taskDueDateUnix,
     task_milestone_id: MilestoneId,
   };
   console.log(body);
@@ -96,7 +99,8 @@ function createMilestone() {
   const milestoneGoalId = document.querySelector(".modal").dataset.goalId;
   const body = {
     milestone_title: milestoneTitle,
-    milestone_due_date: milestoneDueDateUnix,
+    milestone_due_date: milestoneDueDate,
+    milestone_due_date_unix: milestoneDueDateUnix,
     milestone_goal_id: milestoneGoalId
   };
 

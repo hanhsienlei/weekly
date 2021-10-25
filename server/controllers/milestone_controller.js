@@ -6,6 +6,7 @@ const saveMilestone = async (req, res) => {
     title: body.milestone_title,
     description: body.milestone_description,
     due_date: body.milestone_due_date,
+    due_date_unix: body.milestone_due_date_unix,
     goal_id: body.milestone_goal_id,
   };
   

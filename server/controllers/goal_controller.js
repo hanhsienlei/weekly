@@ -6,6 +6,7 @@ const saveGoal = async (req, res) => {
     title: body.goal_title,
     description: body.goal_description,
     due_date: body.goal_due_date,
+    due_date_unix: body.goal_due_date_unix,
     purpose_id: body.goal_purpose_id > 0 ? body.goal_purpose_id : null,
   };
 
@@ -21,7 +22,7 @@ const saveGoal = async (req, res) => {
       res.status(200).send(goalId);
     } else {
       const updateResult = await Goal.saveGoal(goalDetails, body.goal_id);
-      res.status(200).send(`Update succeeded (${updateResult})`);
+      res.status(200).send({message: `Update succeeded (${updateResult})`});
     }
   }
 };
