@@ -1,8 +1,4 @@
-body{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+
 .main {
   color: blue;
   display: flex;
