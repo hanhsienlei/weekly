@@ -1,8 +1,3 @@
-// save goal
-//1. fetch save goal
-//2.1 if res.ok, render goal
-//2.2 if !res.ok, alert
-
 function saveGoal(goalId) {
   const goalModal = document.querySelector(`#modal-goal-${goalId}`);
   const goalTitle = goalModal.querySelector(".goal-title").textContent.trim();
@@ -118,6 +113,15 @@ function createMilestone() {
 
 function getGoalWithPlan(goalId) {
   fetch(`/api/goal/plan?goal_id=${goalId}`)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+function getEventsByDate(date) {
+  fetch(`/api/events/${date}`)
     .then(response => response.json())
     .then(data => console.log(data))
     .catch((err) => {
