@@ -10,6 +10,7 @@ const {
   getNextYearThisDay,
   getPreviousYearThisDay,
 } = require("../../utils/date_converter");
+const { getGoalsAndMilestonesByUser } = require("../models/goal_model");
 
 const getEventsByDate = async (req, res) => {
   //做完登入登出後要換成token驗證取userId
@@ -58,6 +59,7 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateEndYear)
     );
     data.year.value = date.slice(0, 4);
+    data.milestone_list = await getMilestoneList(userId);
     data.buttons_date = getButtonsDate(dateObject);
     return res.status(200).send(data);
   }
@@ -80,6 +82,23 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       const g_due_date = row.g_due_date ? getDateYMD(row.g_due_date) : null;
       const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
+      function addTask(t_repeat) {
+        const { t_id, t_title, t_description, t_status } = row;
+        const newTask = {
+          t_id,
+          t_title,
+          t_description,
+          t_due_date,
+          t_status,
+          t_parent: [row.p_title, row.g_title, row.m_title],
+        };
+        if (t_repeat) {
+          newTask.t_id = null;
+          newTask.t_due_date = dateEnd;
+          console.log("repeated task added!!!!");
+        }
+        data.tasks.push(newTask);
+      }
       if (g_due_date >= dateStart && g_due_date <= dateEnd) {
         if (!records.goalIds.includes(row.g_id)) {
           records.goalIds.push(row.g_id);
@@ -113,16 +132,42 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       if (t_due_date >= dateStart && t_due_date <= dateEnd) {
         if (!records.taskIds.includes(row.t_id)) {
           records.taskIds.push(row.t_id);
-          const { t_id, t_title, t_description, t_status } = row;
-          const newTask = {
-            t_id,
-            t_title,
-            t_description,
-            t_due_date,
-            t_status,
-            t_parent: [row.p_title, row.g_title, row.m_title],
-          };
-          data.tasks.push(newTask);
+          addTask(0);
+        }
+      }
+      if (row.t_repeat == 1 && !records.taskIds.includes(row.t_id)) {
+        if (row.r_frequency == 1) {
+          console.log("r_f =1!!!");
+          records.taskIds.push(row.t_id);
+          addTask(1);
+        }
+
+        if (row.r_frequency == 7) {
+          let dateInit = row.t_due_date;
+          while (dateInit <= getDateObjectFromYMD(dateEnd)) {
+            console.log("looping for weekly tasks!!");
+            let dateNew = new Date(
+              dateInit.valueOf() + 60 * 60 * 24 * 1000 * 7
+            );
+            if (getDateYMD(dateNew) == dateEnd) {
+              records.taskIds.push(row.t_id);
+              addTask(1);
+              break;
+            }
+            dateInit = dateNew;
+          }
+        }
+        if (row.r_frequency == 30) {
+          let dateInit = row.t_due_date;
+          while (dateInit <= getDateObjectFromYMD(dateEnd)) {
+            let dateNew = getNextMonthThisDay(row.t_end_date);
+            if (getDateYMD(dateNew) == dateEnd) {
+              records.taskIds.push(row.t_id);
+              addTask(1);
+              break;
+            }
+            dateInit = dateNew;
+          }
         }
       }
       console.log("records:", records);
@@ -149,6 +194,11 @@ const getButtonsDate = (dateObject) => {
   data.year_before = getDateYMD(new Date(getNextYearThisDay(dateObject)));
   data.year_after = getDateYMD(new Date(getPreviousYearThisDay(dateObject)));
   return data;
+};
+
+const getMilestoneList = async (userId) => {
+  const result = await getGoalsAndMilestonesByUser(userId);
+  console.log(result);
 };
 
 module.exports = {

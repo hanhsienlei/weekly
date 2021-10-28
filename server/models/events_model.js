@@ -39,7 +39,7 @@ const getEventsByDate = async (userId, date) => {
 }
 
 const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
-  const queryConditions = [userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd]
+  const queryConditions = [userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd]
   const [result] = await pool.query(`
     SELECT 
 	  g.user_id user_id,
@@ -75,7 +75,8 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     AND
     (t.due_date BETWEEN ? AND ? 
     OR m.due_date  BETWEEN ? AND ? 
-    OR g.due_date  BETWEEN ? AND ?);  
+    OR g.due_date  BETWEEN ? AND ?
+    or t.repeat = 1 AND t.due_date < ? AND r.end_date <= ?);  
   `, queryConditions) 
   return result
 }

@@ -53,10 +53,34 @@ const getGoalWithPlan = async (goalId) => {
   return result
 }
 
+const getGoalsAndMilestonesByUser = async (userId) => {
+  const [ result ] = await pool.query(`
+  SELECT 
+    g.id g_id,
+    g.title g_title,
+    g.due_date g_due_date,
+    g.status g_status,
+    g.group_id g_group_id,
+    g.publish g_publish,
+    g.purpose_id p_id,
+    m.id m_id,
+    m.title m_title,
+    m.due_date m_due_date,
+    m.status m_status
+  FROM goal g
+  LEFT JOIN purpose p on g.purpose_id = p.id
+  LEFT JOIN milestone m ON g.id = m.goal_id
+  WHERE g.user_id = ? ; 
+  `, userId)
+  return result
+}
+
+
 
 module.exports = {
   createGoal,
   saveGoal,
   getGoal,
-  getGoalWithPlan
+  getGoalWithPlan,
+  getGoalsAndMilestonesByUser
 }
