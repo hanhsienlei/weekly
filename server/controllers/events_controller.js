@@ -14,7 +14,7 @@ const { getGoalsAndMilestonesByUser } = require("../models/goal_model");
 
 const getEventsByDate = async (req, res) => {
   //做完登入登出後要換成token驗證取userId
-  const userId = Number(req.body.user_id);
+  const userId = Number(req.query.user_id);
   const date = req.params.date;
   const data = {
     user_id: userId,
@@ -39,26 +39,40 @@ const getEventsByDate = async (req, res) => {
     //取下月初~年底
     const dateStartYear = new Date(dateEndMonth.valueOf() + dayMilliSecond);
     const dateEndYear = new Date(date.split("-")[0], 11, 31);
-    data.date = await getEventsByDateRange(userId, date, date);
-    data.date.value = date.slice(-5);
+    
+    
+    //重複事件有bug......
+    data.year = await getEventsByDateRange(
+      userId,
+      getDateYMD(dateStartYear),
+      getDateYMD(dateEndYear)
+    );
+    data.year.value = date.split("-")[0];
+    data.year.due_date = getDateYMD(dateEndYear)
+
+    data.month = await getEventsByDateRange(
+      userId,
+      getDateYMD(dateStartMonth),
+      getDateYMD(dateEndMonth)
+    );
+    data.month.value = date.split("-")[1];
+    data.month.due_date = getDateYMD(dateEndMonth)
+
     data.week = await getEventsByDateRange(
       userId,
       getDateYMD(dateStartWeek),
       getDateYMD(dateEndWeek)
     );
     data.week.value = getWeekNumberByDate(dateObject).weekNumber;
-    data.month = await getEventsByDateRange(
-      userId,
-      getDateYMD(dateStartMonth),
-      getDateYMD(dateEndMonth)
-    );
-    data.month.value = date.slice(-5, -3);
-    data.year = await getEventsByDateRange(
-      userId,
-      getDateYMD(dateStartYear),
-      getDateYMD(dateEndYear)
-    );
-    data.year.value = date.slice(0, 4);
+        data.week.due_date = getDateYMD(dateEndWeek)
+
+
+    data.date = await getEventsByDateRange(userId, date, date);
+    data.date.value = date.split("-")[1] + "-" + date.split("-")[2];
+    data.date.due_date = date
+
+    
+    //按鈕資料
     data.milestone_list = await getMilestoneList(userId);
     data.buttons_date = getButtonsDate(dateObject);
     return res.status(200).send(data);
@@ -95,7 +109,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
         if (t_repeat) {
           newTask.t_id = null;
           newTask.t_due_date = dateEnd;
-          console.log("repeated task added!!!!");
+          console.log("repeated task added!!!!t_id: ", t_id);
         }
         data.tasks.push(newTask);
       }
@@ -140,8 +154,8 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           console.log("r_f =1!!!");
           records.taskIds.push(row.t_id);
           addTask(1);
+          console.log("data.tasks: ", data.tasks)
         }
-
         if (row.r_frequency == 7) {
           let dateInit = row.t_due_date;
           while (dateInit <= getDateObjectFromYMD(dateEnd)) {
@@ -189,16 +203,15 @@ const getButtonsDate = (dateObject) => {
   data.week_after = getDateYMD(
     new Date(dateObject.valueOf() + dayMilliSecond * 7)
   );
-  data.month_before = getDateYMD(new Date(getNextMonthThisDay(dateObject)));
-  data.month_after = getDateYMD(new Date(getPreviousMonthThisDay(dateObject)));
-  data.year_before = getDateYMD(new Date(getNextYearThisDay(dateObject)));
-  data.year_after = getDateYMD(new Date(getPreviousYearThisDay(dateObject)));
+  data.month_before = getDateYMD(new Date(getPreviousMonthThisDay(dateObject)));
+  data.month_after = getDateYMD(new Date(getNextMonthThisDay(dateObject)));
+  data.year_before = getDateYMD(new Date(getPreviousYearThisDay(dateObject)));
+  data.year_after = getDateYMD(new Date(getNextYearThisDay(dateObject)));
   return data;
 };
 
 const getMilestoneList = async (userId) => {
   const result = await getGoalsAndMilestonesByUser(userId);
-  console.log(result);
 };
 
 module.exports = {

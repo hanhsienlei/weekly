@@ -7,8 +7,10 @@ const saveGoal = async (req, res) => {
     description: body.goal_description,
     due_date: body.goal_due_date,
     due_date_unix: body.goal_due_date_unix,
-    purpose_id: body.goal_purpose_id > 0 ? body.goal_purpose_id : null,
+    purpose_id: body.goal_purpose_id
+
   };
+if (!goalDetails.purpose_id){delete goalDetails.purpose_id}
 
   console.log("goalDetails: ", goalDetails);
   if (!body.goal_id) {

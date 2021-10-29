@@ -1,8 +1,39 @@
-
+* {
+  box-sizing: border-box;
+}
 .card-edit {
   height: 1.8em;
   line-height: 100%;
 }
-.section-content {
-  max-height: 500px;
+.events-container {
+  max-height: 400px;
 }
+.event-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goal-outer-container {
+  background-color: lightsteelblue;
+}
+.milestone-outer-container {
+  background-color: lightgray;
+}
+.task-outer-container {
+  background-color: lightyellow;
+}
+a {
+  text-decoration: none;
+  color: #111111;
+}
+a:hover {
+  text-decoration: none;
+  color: #111111;
+}
+.date-value, .week-value, .month-value, .year-value {
+  font-size: 1.4rem;
+}
+[contenteditable = "true"] {
+  padding: .8rem; 
+} 

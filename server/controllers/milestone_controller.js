@@ -9,6 +9,7 @@ const saveMilestone = async (req, res) => {
     due_date_unix: body.milestone_due_date_unix,
     goal_id: body.milestone_goal_id,
   };
+  if (!milestoneDetails.goal_id){delete milestoneDetails.goal_id}
   
   console.log("milestoneDetails: ", milestoneDetails);
   if (!body.milestone_id) {
@@ -21,7 +22,7 @@ const saveMilestone = async (req, res) => {
       res.status(400).send("Milestone id doesn't exist.");
     } else {
       const updateResult = await Milestone.saveMilestone(milestoneDetails, body.milestone_id);
-      res.status(200).send(`Update succeeded (${updateResult})`);
+      res.status(200).send({message: `Update succeeded (${updateResult})`});
     }
   }
 };

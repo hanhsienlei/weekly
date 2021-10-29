@@ -8,9 +8,9 @@ const getDateYMD = (dateObject) => {
 
 //return date object
 const getDateObjectFromYMD = (YMD) => {
-  const year = YMD.slice(0,4)
-  let monthIndex = YMD.slice(-5, -3) -1 
-  const date = YMD.slice(-2)
+  const year = YMD.split("-")[0]
+  let monthIndex = YMD.split("-")[1] -1 
+  const date = YMD.split("-")[2]
   return new Date( year, monthIndex, date)
 }
 

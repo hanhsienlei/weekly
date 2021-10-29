@@ -28,112 +28,108 @@
             <div>Maybe save the earth too</div>
           </div>
         </div>
-        <div class="row justify-content-between spread">
-          <div class="col-5 section day">
-            <div class="row section-title border-top border-secondary mt-4 py-2">
-              <div class="col-2 text-center before">&lt;</div>
-              <div class="col-8 text-center title">10/18</div>
-              <div class="col-2 text-center next">&gt;</div>
+        <div class="horizon-container row justify-content-between">
+          <div class="date-container col-3">
+            <div class="date-title-container row border-top border-secondary mt-4 py-2">
+              <div class="date-before before col-2 text-center">&lt;</div>
+              <div class="date-value col-8 text-center">10/18</div>
+              <div class="date-after after col-2 text-center">&gt;</div>
             </div>
-            <div class="row section-content px-2 overflow-auto smooth-scroll">
-              <div class="card mb-2 task-card">
-                <div class="card-body row">
-                  <div class="form-check col-12">
+            <div class="date-events-container events-container row px-2 overflow-auto smooth-scroll">
+              <!-- event草稿 -->
+              <div class="event-outer-container card col-12 mb-2">
+                <div class="evevt-header-container row mb-3">
+                  <div class="event-info-container col-10">
+                    <div class="tags-container my-2">
+                      <span class="tag badge rounded-pill bg-secondary">label 1</span>
+                      <span class="tag badge rounded-pill bg-info">label 2</span>
+                    </div>
+                    <div class="event-title-container my-2">
+                      <input class="form-check-input" type="checkbox" checked />
+                      <span class="event-title">
+                        Task 1</span>
+                    </div>
+                    <h6 class="event-parents mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                  </div>
+                  <div class="event-info-button-container col-2">
+                    <button class="btn btn-light edit-button" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#editor_taskId">
+                      ✍
+                    </button>
+                  </div>
+                </div>
+                <div class="editor collapse" id="editor_taskId">
+                  <div class="row mb-3">
+                    <label class="form-label mb-1" for="taskName_id">
+                      Task name
+                    </label>
+                    <input type="text" id="taskName_id" class="form-control" Value="Task 1" Placeholder="task name" />
+                  </div>
+                  <div class="row mb-3">
+                    <label class="form-label mb-1" for="dueDate">
+                      Due day
+                    </label>
+                    <input type="date" id="dueDate" name="trip-start" value="2022-feb-01" min="1950-01-01"
+                      max="2100-01-01" />
+                  </div>
+                  <div class="row mb-3">
+                    <label class="form-label mb-1" for="task_note">
+                      Description
+                    </label>
+                    <textarea class="form-control" name="task_note" placeholder="Write some note......"></textarea>
+                  </div>
+                  <div class="row mb-3">
+                    <label class="form-label mb-1" for="chooseMilestone">
+                      Attach to a goal (or not)
+                    </label>
+                    <select class="form-select" name="chooseMilestone" aria-label="select milestone">
+                      <option selected>choose milestone</option>
+                      <option value="">none (as daily task)</option>
+                      <option value="1">milestone 1/goal 2</option>
+                      <option value="2">milestone 1/goal 3</option>
+                      <option value="3">milestone 4/goal 2</option>
+                    </select>
+                  </div>
+                  <div class="row mb-3">
+                    <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
+                      data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
+                      Edit tags
+                    </button>
+                    <button class="btn btn-light edit-button col-auto" type="button">
+                      Save
+                    </button>
+                  </div>
+                  <div class="collapse" id="tag_editor_taskId">
+                    <div class="row mb-3 tags">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label badge rounded-pill bg-secondary" for="flexCheckDefault">
+                          tag 1
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                        <label class="form-check-label badge rounded-pill bg-secondary" for="flexCheckChecked">
+                          tag 2
+                        </label>
+                      </div>
+                    </div>
                     <div class="row mb-3">
                       <div class="col-10">
-                        <div class="col">
-                          <input class="form-check-input" type="checkbox" value="" id="task_id" checked />
-                          <label class="form-check-label" for="task_id">
-                            Task 1</label>
-                          <span class="badge rounded-pill bg-secondary">label 1</span>
-                          <span class="badge rounded-pill bg-info">label 2</span>
-                        </div>
-                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
+                        <input type="text" class="form-control" Placeholder="Add new tag" />
                       </div>
                       <div class="col-2">
-                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                          Edit
-                        </button>
+                        <input type="color" class="form-control form-control-color" id="exampleColorInput"
+                          value="#563d7c" title="Choose your color">
                       </div>
                     </div>
-                    <div class="row task-editor">
-                      <div class="collapse" id="editor_taskId">
-                        <div class="row mb-3">
-                          <label class="form-label mb-1" for="taskName_id">
-                            Task name
-                          </label>
-                          <input type="text" id="taskName_id" class="form-control" Value="Task 1"
-                            Placeholder="task name" />
-                        </div>
-                        <div class="row mb-3">
-                          <label class="form-label mb-1" for="dueDate">
-                            Due day
-                          </label>
-                          <input type="date" id="dueDate" name="trip-start" value="2022-01-01" min="1950-01-01"
-                            max="2100-01-01" />
-                        </div>
-                        <div class="row mb-3">
-                          <label class="form-label mb-1" for="task_note">
-                            Description
-                          </label>
-                          <textarea class="form-control" name="task_note"
-                            placeholder="Write some note......"></textarea>
-                        </div>
-                        <div class="row mb-3">
-                          <label class="form-label mb-1" for="chooseMilestone">
-                            Attach to a goal (or not)
-                          </label>
-                          <select class="form-select" name="chooseMilestone" aria-label="select milestone">
-                            <option selected>choose milestone</option>
-                            <option value="">none (as daily task)</option>
-                            <option value="1">milestone 1/goal 2</option>
-                            <option value="2">milestone 1/goal 3</option>
-                            <option value="3">milestone 4/goal 2</option>
-                          </select>
-                        </div>
-                        <div class="row mb-3">
-                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                            Edit tags
-                          </button>
-                          <button class="btn btn-light edit-button col-auto" type="button">
-                            Save
-                          </button>
-                        </div>
-                        <div class="collapse" id="tag_editor_taskId">
-                          <div class="row mb-3 tags">
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                              <label class="form-check-label badge rounded-pill bg-secondary" for="flexCheckDefault">
-                                tag 1
-                              </label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                              <label class="form-check-label badge rounded-pill bg-secondary" for="flexCheckChecked">
-                                tag 2
-                              </label>
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-10">
-                              <input type="text" class="form-control" Placeholder="Add new tag" />
-                            </div>
-                            <div class="col-2">
-                              <input type="color" class="form-control form-control-color" id="exampleColorInput"
-                                value="#563d7c" title="Choose your color">
-                            </div>
-                          </div>
-                          <button class="btn btn-light edit-button col-auto" type="button">
-                            Save
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <button class="btn btn-light edit-button col-auto" type="button">
+                      Save
+                    </button>
                   </div>
                 </div>
               </div>
+              <!-- goal container 草稿 -->
               <div class="card mb-2">
                 <div class="card-body row">
                   <div class="form-check col-10">
@@ -153,346 +149,65 @@
                   </div>
                 </div>
               </div>
-              <div class="card mb-2 task-card">
-                <div class="card-body row">
-                  <div class="form-check col-12">
-                    <div class="row mb-3">
-                      <div class="col-10">
-                        <div class="col">
-                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
-                          <label class="form-check-label" for="task_id">
-                            Task 1</label>
-                          <span class="badge rounded-pill bg-secondary">label 1</span>
-                          <span class="badge rounded-pill bg-info">label 2</span>
-                        </div>
-                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
-                      </div>
-                      <div class="col-2">
-                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                          Edit
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row task-editor">
-                      <div class="collapse" id="editor_taskId">
-                        <div class="row mb-3">
-                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
-                            Placeholder="task name" />
-                        </div>
-                        <div class="row mb-3">
-                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
-                            max="2100-01-01" />
-                        </div>
-                        <div class="row mb-3">
-                          <textarea class="form-control" name="task_note"
-                            placeholder="Write some note......"></textarea>
-                        </div>
-                        <div class="row mb-3">
-                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                            Edit tags
-                          </button>
-                        </div>
-                        <div class="collapse" id="tag_editor_taskId">
-                          <div class="row mb-3">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            </div>
+            <div class="date-add-new-container row px-2">
+              <div class="col-10">
+                <input type="text" class="date-new-task-title" placeholder = "add new task">
               </div>
-              <div class="card mb-2 task-card">
-                <div class="card-body row">
-                  <div class="form-check col-12">
-                    <div class="row mb-3">
-                      <div class="col-10">
-                        <div class="col">
-                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
-                          <label class="form-check-label" for="task_id">
-                            Task 1</label>
-                          <span class="badge rounded-pill bg-secondary">label 1</span>
-                          <span class="badge rounded-pill bg-info">label 2</span>
-                        </div>
-                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
-                      </div>
-                      <div class="col-2">
-                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                          Edit
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row task-editor">
-                      <div class="collapse" id="editor_taskId">
-                        <div class="row mb-3">
-                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
-                            Placeholder="task name" />
-                        </div>
-                        <div class="row mb-3">
-                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
-                            max="2100-01-01" />
-                        </div>
-                        <div class="row mb-3">
-                          <textarea class="form-control" name="task_note"
-                            placeholder="Write some note......"></textarea>
-                        </div>
-                        <div class="row mb-3">
-                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                            Edit tags
-                          </button>
-                        </div>
-                        <div class="collapse" id="tag_editor_taskId">
-                          <div class="row mb-3">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card mb-2 task-card">
-                <div class="card-body row">
-                  <div class="form-check col-12">
-                    <div class="row mb-3">
-                      <div class="col-10">
-                        <div class="col">
-                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
-                          <label class="form-check-label" for="task_id">
-                            Task 1</label>
-                          <span class="badge rounded-pill bg-secondary">label 1</span>
-                          <span class="badge rounded-pill bg-info">label 2</span>
-                        </div>
-                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
-                      </div>
-                      <div class="col-2">
-                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                          Edit
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row task-editor">
-                      <div class="collapse" id="editor_taskId">
-                        <div class="row mb-3">
-                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
-                            Placeholder="task name" />
-                        </div>
-                        <div class="row mb-3">
-                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
-                            max="2100-01-01" />
-                        </div>
-                        <div class="row mb-3">
-                          <textarea class="form-control" name="task_note"
-                            placeholder="Write some note......"></textarea>
-                        </div>
-                        <div class="row mb-3">
-                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                            Edit tags
-                          </button>
-                        </div>
-                        <div class="collapse" id="tag_editor_taskId">
-                          <div class="row mb-3">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              <button class="add-new-task btn col-2" onclick="addNewEvent('date', 'task')">+</button>
             </div>
           </div>
-          <div class="col-4 section week">
-            <div class="row section-title border-top border-secondary mt-4 py-2">
-              <div class="col-2 text-center before">&lt;</div>
-              <div class="col-8 text-center title">Week 44</div>
-              <div class="col-2 text-center next">&gt;</div>
+          <div class="week-container col-3">
+            <div class="week-title-container row border-top border-secondary mt-4 py-2">
+              <div class="week-before before col-2 text-center">&lt;</div>
+              <div class="week-value col-8 text-center">Week 44</div>
+              <div class="week-after after col-2 text-center">&gt;</div>
             </div>
-            <div class="row section-content px-2 overflow-auto">
-              <div class="card mb-2 task-card">
-                <div class="card-body row">
-                  <div class="form-check col-12">
-                    <div class="row mb-3">
-                      <div class="col-10">
-                        <div class="col">
-                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
-                          <label class="form-check-label" for="task_id">
-                            Task 1</label>
-                          <span class="badge rounded-pill bg-secondary">label 1</span>
-                          <span class="badge rounded-pill bg-info">label 2</span>
-                        </div>
-                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
-                      </div>
-                      <div class="col-2">
-                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#editor_taskId_44" aria-expanded="false" aria-controls="taskEditor">
-                          Edit
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row task-editor">
-                      <div class="collapse" id="editor_taskId_44">
-                        <div class="row mb-3">
-                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
-                            Placeholder="task name" />
-                        </div>
-                        <div class="row mb-3">
-                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
-                            max="2100-01-01" />
-                        </div>
-                        <div class="row mb-3">
-                          <textarea class="form-control" name="task_note"
-                            placeholder="Write some note......"></textarea>
-                        </div>
-                        <div class="row mb-3">
-                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                            Edit tags
-                          </button>
-                        </div>
-                        <div class="collapse" id="tag_editor_taskId">
-                          <div class="row mb-3">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div class="week-events-container events-container row px-2 overflow-auto smooth-scroll">
+            </div>
+            <div class="week-add-new-container row px-2">
+              <div class="col-10">
+                <input type="text" class="week-new-task-title" placeholder="add new task">
               </div>
-              <div class="card mb-2 task-card">
-                <div class="card-body row">
-                  <div class="form-check col-12">
-                    <div class="row mb-3">
-                      <div class="col-10">
-                        <div class="col">
-                          <input class="form-check-input" type="checkbox" value="" id="task_id" />
-                          <label class="form-check-label" for="task_id">
-                            Task 1</label>
-                          <span class="badge rounded-pill bg-secondary">label 1</span>
-                          <span class="badge rounded-pill bg-info">label 2</span>
-                        </div>
-                        <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
-                      </div>
-                      <div class="col-2">
-                        <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                          data-bs-target="#editor_taskId_45" aria-expanded="false" aria-controls="taskEditor">
-                          Edit
-                        </button>
-                      </div>
-                    </div>
-                    <div class="row task-editor">
-                      <div class="collapse" id="editor_taskId_45">
-                        <div class="row mb-3">
-                          <input type="text" id="addMileston" class="form-control" Value="Task 1"
-                            Placeholder="task name" />
-                        </div>
-                        <div class="row mb-3">
-                          <input type="date" id="start" name="trip-start" value="2022-01-01" min="1950-01-01"
-                            max="2100-01-01" />
-                        </div>
-                        <div class="row mb-3">
-                          <textarea class="form-control" name="task_note"
-                            placeholder="Write some note......"></textarea>
-                        </div>
-                        <div class="row mb-3">
-                          <button class="btn btn-light edit-button col-auto" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#tag_editor_taskId" aria-expanded="false" aria-controls="taskEditor">
-                            Edit tags
-                          </button>
-                        </div>
-                        <div class="collapse" id="tag_editor_taskId">
-                          <div class="row mb-3">
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <button class="add-new-task btn col-2" onclick="addNewEvent('week', 'task')">+</button>
+            </div>
+            
+          </div>
+          <div class="month-container col-3">
+            <div class="month-title-container row border-top border-secondary mt-4 py-2">
+              <div class="month-before before col-2 text-center">&lt;</div>
+              <div class="month-value col-8 text-center">October</div>
+              <div class="month-after after col-2 text-center">&gt;</div>
+            </div>
+            <div class="month-events-container events-container row px-2 overflow-auto smooth-scroll"></div>
+            <div class="month-add-new-container row px-2">
+              <div class="col-10">
+                <input type="text" class="month-new-task-title" placeholder="add new task">
               </div>
-
+              <button class="add-new-task btn col-2" onclick="addNewEvent('month', 'task')">+</button>
             </div>
           </div>
-          <div class="col-3 section month-and-year">
-            <div class="row section-title border-top border-secondary mt-4 py-2">
-              <div class="col-2 text-center before">&lt;</div>
-              <div class="col-8 text-center title">October</div>
-              <div class="col-2 text-center next">&gt;</div>
+          <div class="year-container col-3">
+            <div class="year-title-container row border-top border-secondary mt-4 py-2">
+              <div class="year-before before col-2 text-center">&lt;</div>
+              <div class="year-value col-8 text-center">2021</div>
+              <div class="year-after after col-2 text-center">&gt;</div>
             </div>
-            <div class="section-content overflow-auto">
-              <div class="card mb-2">
-                <div class="card-body row">
-                  <div class="form-check col-10">
-                    <input class="form-check-input" type="checkbox" value="" id="task_id">
-                    <label class="form-check-label" for="task_id">
-                      Task 1
-                      <span class="badge rounded-pill bg-secondary">label 1</span>
-                      <span class="badge rounded-pill bg-info">label 2</span>
-                    </label>
-                    <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
-                  </div>
-                </div>
+            <div class="year-events-container events-container row px-2 overflow-auto smooth-scroll"></div>
+            <div class="year-add-new-container row px-2">
+              <div class="col-10">
+                <input type="text" class="year-new-task-title" placeholder="add new task">
               </div>
-              <div class="card mb-2">
-                <div class="card-body row">
-                  <div class="form-check col-10">
-                    <input class="form-check-input" type="checkbox" value="" id="task_id">
-                    <label class="form-check-label" for="task_id">
-                      Task 1
-                      <span class="badge rounded-pill bg-secondary">label 1</span>
-                      <span class="badge rounded-pill bg-info">label 2</span>
-                    </label>
-                    <h6 class="card-subtitle mt-1 mb-2 text-muted">milestone 1 / goal 2</h6>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row section-title border-top border-secondary mt-4 py-2">
-              <div class="col-2 text-center before">&lt;</div>
-              <div class="col-8 text-center title">2021</div>
-              <div class="col-2 text-center next">&gt;</div>
-            </div>
-            <div class="section-content overflow-auto ">
-              <div class="card mb-2">
-                <div class="card-body row">
-                  <div class="form-check col-10">
-                    <input class="form-check-input" type="checkbox" value="" id="goal_id">
-                    <label class="form-check-label" for="goal_id">
-                      Goal 1
-                      <span class="badge rounded-pill bg-secondary">label 1</span>
-                      <span class="badge rounded-pill bg-info">label 2</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="card mb-2">
-                <div class="card-body row">
-                  <div class="form-check col-10">
-                    <input class="form-check-input" type="checkbox" value="" id="milestone_id">
-                    <label class="form-check-label" for="milestone_id">
-                      Milestone 5
-                      <span class="badge rounded-pill bg-secondary">label 1</span>
-                      <span class="badge rounded-pill bg-info">label 2</span>
-                    </label>
-                    <h6 class="card-subtitle mt-1 mb-2 text-muted">goal 2</h6>
-                  </div>
-                  <div class="col-2">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                      data-bs-target="#goalEditorModal" data-bs-goalId="123">
-                      Edit
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <button class="add-new-task btn col-2" onclick="addNewEvent('year', 'task')">+</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-   
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-goal-12"
+  data-bs-goalId="123">
+  Edit goal test
+</button>
     <!-- Modal -->
     <%- include("partials/goal_editor_modal") %>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"

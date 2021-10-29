@@ -1,3 +1,5 @@
+
+//for goal editor
 function saveGoal(goalId) {
   const goalModal = document.querySelector(`#modal-goal-${goalId}`);
   const goalTitle = goalModal.querySelector(".goal-title").textContent.trim();
@@ -27,7 +29,7 @@ function saveGoal(goalId) {
       console.log(err);
     });
 }
-
+//for goal editor
 function saveMilestone(milestoneId, goalId) {
   const milestone = document.querySelector(`#milestone-details-${milestoneId}`);
   const milestoneTitle = milestone.querySelector("h5").textContent.trim();
@@ -57,7 +59,7 @@ function saveMilestone(milestoneId, goalId) {
       console.log(err);
     });
 }
-
+//for goal editor
 function saveTask(taskId, MilestoneId) {
   const task = document.querySelector(`#task-details-${taskId}`);
   const taskTitle = task.querySelector("h6").textContent.trim();
@@ -85,6 +87,7 @@ function saveTask(taskId, MilestoneId) {
     });
 }
 
+//for goal editor
 function createMilestone() {
   const milestoneTitle = document.querySelector(".new-milestone-title").value;
   const milestoneDueDate = document.querySelector(".new-milestone-due-date");
@@ -111,6 +114,7 @@ function createMilestone() {
     });
 }
 
+//for goal editor
 function getGoalWithPlan(goalId) {
   fetch(`/api/goal/plan?goal_id=${goalId}`)
     .then(response => response.json())
@@ -120,11 +124,3 @@ function getGoalWithPlan(goalId) {
     });
 }
 
-function getEventsByDate(date) {
-  fetch(`/api/events/${date}`)
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch((err) => {
-      console.log(err);
-    });
-}
