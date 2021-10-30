@@ -31,6 +31,8 @@ const renderEvents = async (date) => {
       //events
       if (data.date.tasks) {
         data.date.tasks.forEach((task) => {
+          const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+          console.log(task.t_id, repeated_frequency, task.r_end_date)
           createEventComponent(
             "date",
             "task",
@@ -39,7 +41,10 @@ const renderEvents = async (date) => {
             task.t_status,
             task.t_due_date,
             task.t_description,
-            task.t_parent.join("·")
+            task.t_parent.join("·"),
+            repeated_frequency,
+            task.r_end_date,
+            task.m_due_date
           );
         });
         data.date.milestones.forEach((milestone) => {
@@ -70,6 +75,7 @@ const renderEvents = async (date) => {
 
       if (data.week.tasks) {
         data.week.tasks.forEach((task) => {
+          const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           createEventComponent(
             "week",
             "task",
@@ -78,7 +84,10 @@ const renderEvents = async (date) => {
             task.t_status,
             task.t_due_date,
             task.t_description,
-            task.t_parent.join("·")
+            task.t_parent.join("·"),
+            repeated_frequency,
+            task.r_end_date,
+            task.m_due_date
           );
         });
         data.week.milestones.forEach((milestone) => {
@@ -109,6 +118,7 @@ const renderEvents = async (date) => {
 
       if (data.month.tasks) {
         data.month.tasks.forEach((task) => {
+          const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           createEventComponent(
             "month",
             "task",
@@ -117,7 +127,10 @@ const renderEvents = async (date) => {
             task.t_status,
             task.t_due_date,
             task.t_description,
-            task.t_parent.join("·")
+            task.t_parent.join("·"),
+            repeated_frequency,
+            task.r_end_date,
+            task.m_due_date
           );
         });
         data.month.milestones.forEach((milestone) => {
@@ -147,6 +160,7 @@ const renderEvents = async (date) => {
       }
       if (data.year.tasks) {
         data.year.tasks.forEach((task) => {
+          const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           createEventComponent(
             "year",
             "task",
@@ -155,7 +169,10 @@ const renderEvents = async (date) => {
             task.t_status,
             task.t_due_date,
             task.t_description,
-            task.t_parent.join("·")
+            task.t_parent.join("·"),
+            repeated_frequency,
+            task.r_end_date,
+            task.m_due_date
           );
         });
 
@@ -196,6 +213,7 @@ const addNewEvent = (timeScale, eventType) => {
   const dueDate = document.querySelector(`.${timeScale}-value`).dataset.dueDate;
   const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
   const body = {
+    user_id: 1,
     task_title: title,
     task_due_date: dueDate,
     task_due_date_unix: dueDateUnix,
@@ -233,7 +251,10 @@ const createEventComponent = (
   status,
   dueDate,
   description,
-  parents
+  parents,
+  task_repeat_frequency = 0,
+  task_repeat_end_date = "2100-01-01",
+  milestone_due_date = "2100-01-01"
 ) => {
   const parentContainer = document.querySelector(
     `.${timeScale}-events-container`
@@ -254,6 +275,16 @@ const createEventComponent = (
   const eventDueDate = document.createElement("input");
   const eventDescriptionContainer = document.createElement("div");
   const eventDescription = document.createElement("p");
+  const taskRepeatSelectorContainer =
+    eventType === "task"
+      ? createTaskRepeatSelector(
+          id,
+          task_repeat_frequency,
+          task_repeat_end_date,
+          dueDate,
+          milestone_due_date
+        )
+      : null;
   const eventFooterContainer = document.createElement("div");
   const eventSaveButton = document.createElement("button");
   const eventCancelButton = document.createElement("button");
@@ -316,18 +347,40 @@ const createEventComponent = (
 
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
-  eventSaveButton.classList.add("col-4", "btn", "btn-light", "save-button", `save-button-${eventType}`);
+  eventSaveButton.classList.add(
+    "col-4",
+    "btn",
+    "btn-light",
+    "save-button",
+    `save-button-${eventType}`
+  );
   eventSaveButton.setAttribute("type", "button");
   eventSaveButton.setAttribute("data-bs-toggle", "collapse");
   eventSaveButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
   eventSaveButton.addEventListener("click", (e) => {
     const body = {};
-    body[`${eventType}_id`] = id
-    body[`${eventType}_title`] = eventTitle.textContent
-    body[`${eventType}_description`] = eventDescription.textContent
-    body[`${eventType}_due_date`] = eventDueDate.value
-    body[`${eventType}_due_date_unix`] = Math.ceil(new Date(eventDueDate.value + "T23:59:59"))
-    console.log("body: ", body)
+    body.user_id = 1;
+    body[`${eventType}_id`] = id;
+    body[`${eventType}_title`] = eventTitle.textContent;
+    body[`${eventType}_description`] = eventDescription.textContent;
+    body[`${eventType}_due_date`] = eventDueDate.value;
+    body[`${eventType}_due_date_unix`] = Math.ceil(
+      new Date(eventDueDate.value + "T23:59:59")
+    );
+    const repeatSelector = taskRepeatSelectorContainer ? taskRepeatSelectorContainer.querySelector("select"): null
+    if (repeatSelector) {
+      const task_r_frequency =
+        repeatSelector.options[repeatSelector.selectedIndex].value;
+      const task_repeat = task_r_frequency != 0 ? 1 : 0;
+      const task_r_end_date =
+        taskRepeatSelectorContainer.querySelector("input").value ||
+        taskRepeatSelectorContainer.querySelector("input").max;
+      body.task_repeat = task_repeat;
+      body.task_r_frequency = task_r_frequency;
+      body.task_r_end_date = task_r_end_date || "2100-01-01"
+      body.task_r_end_date_unix = Math.ceil(new Date(task_r_end_date + "T23:59:59"));
+    }
+    console.log("body: ", body);
     fetch(`/api/${eventType}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -335,7 +388,7 @@ const createEventComponent = (
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -362,6 +415,9 @@ const createEventComponent = (
     eventDescriptionContainer,
     eventFooterContainer
   );
+  if (eventType === "task") {
+    eventDescriptionContainer.after(taskRepeatSelectorContainer);
+  }
   EventTitleContainer.append(checkBox, eventTitle, eventParents);
   eventInfoButtonContainer.appendChild(editButton);
   eventInfoContainer.append(tagsContainer, EventTitleContainer, eventParents);
@@ -373,6 +429,101 @@ const createEventComponent = (
   parentContainer.appendChild(eventOuterContainer);
 };
 
+const createTaskRepeatSelector = (
+  task_id,
+  task_repeat_frequency,
+  task_repeat_end_date,
+  min_date,
+  max_date
+) => {
+  const container = document.createElement("div");
+  container.classList.add(
+    `task-repeat-container-${task_id}`,
+    "task-repeat-container",
+    "mb-3"
+  );
+  if (!task_id) {
+    switch (task_repeat_frequency) {
+      case 0:
+        container.textContent = "Repeat message shouldn't exist";
+        break;
+      case 1:
+        container.textContent = `Repeated daily until ${task_repeat_end_date}`;
+        break;
+      case 7:
+        container.textContent = `Repeated weekly until ${task_repeat_end_date}`;
+        break;
+      case 30:
+        container.textContent = `Repeated monthly until ${task_repeat_end_date}`;
+        break;
+    }
+  } else {
+    const selector = document.createElement("select");
+    const optionNoRepeat = document.createElement("option");
+    const optionEveryday = document.createElement("option");
+    const optionOnceAWeek = document.createElement("option");
+    const optionOnceAMonth = document.createElement("option");
+    const repeatEndDateContainer = document.createElement("div");
+    const repeatEndDate = document.createElement("input");
+    selector.classList.add("task-repeat-selector", "form-selector", "mb-3");
+    optionNoRepeat.setAttribute("value", 0);
+    optionNoRepeat.textContent = "No repeat";
+    optionNoRepeat.setAttribute("selected", "true");
+    optionEveryday.setAttribute("value", 1);
+    optionEveryday.textContent = "Everyday";
+    optionOnceAWeek.setAttribute("value", 7);
+    optionOnceAWeek.textContent = "Once a week";
+    optionOnceAMonth.setAttribute("value", 30);
+    optionOnceAMonth.textContent = "Once a month";
+    
+    repeatEndDateContainer.classList.add(
+      "repeat-end-date-container",
+      "row",
+      "mb-3"
+    );
+    repeatEndDate.classList.add("event-due-date");
+    repeatEndDate.setAttribute("type", "date");
+    repeatEndDate.value = task_repeat_end_date;
+    repeatEndDate.setAttribute("min", min_date);
+    repeatEndDate.setAttribute("max", max_date);
+    selector.addEventListener("change", e=>{
+      if (selector.value == 0){
+        repeatEndDate.setAttribute("disabled", "true")
+      } else {
+        repeatEndDate.removeAttribute("disabled")
+      }
+
+    })
+    switch (task_repeat_frequency) {
+      case 0:
+        optionNoRepeat.setAttribute("selected", "true");
+        repeatEndDate.setAttribute("disabled", "true")
+        repeatEndDate.value = null
+        break;
+      case 1:
+        optionEveryday.setAttribute("selected", "true");
+        break;
+      case 7:
+        optionOnceAWeek.setAttribute("selected", "true");
+        break;
+      case 30:
+        optionOnceAMonth.setAttribute("selected", "true");
+        break;
+    }
+    selector.append(
+      optionNoRepeat,
+      optionEveryday,
+      optionOnceAWeek,
+      optionOnceAMonth
+    );
+    repeatEndDateContainer.append(repeatEndDate);
+    container.append(selector, repeatEndDateContainer);
+  }
+
+  return container;
+};
+
+//還沒做完
 const createTagComponent = () => {
   const tag = document.createElement("span");
   tag.classList.add("tag", "badge", "rounded-pill");

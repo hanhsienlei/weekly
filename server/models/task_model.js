@@ -5,7 +5,7 @@ const createTask = async (taskDetails) => {
   return result.insertId
 }
 
-const saveTask = async (taskDetails, taskId) => {
+const updateTask = async (taskDetails, taskId) => {
   const updateQuery = [taskDetails].concat(taskId)
   const [ result ] = await pool.query("UPDATE task SET ? WHERE id = ?", updateQuery)
   return result.info
@@ -18,6 +18,6 @@ const getTask = async (taskId) => {
 
 module.exports = {
   createTask,
-  saveTask,
+  updateTask,
   getTask
 }

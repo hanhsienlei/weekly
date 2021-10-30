@@ -60,7 +60,7 @@ function saveMilestone(milestoneId, goalId) {
     });
 }
 //for goal editor
-function saveTask(taskId, MilestoneId) {
+function updateTask(taskId, MilestoneId) {
   const task = document.querySelector(`#task-details-${taskId}`);
   const taskTitle = task.querySelector("h6").textContent.trim();
   const taskDescription = task.querySelector("textarea").value;

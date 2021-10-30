@@ -96,8 +96,9 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       const g_due_date = row.g_due_date ? getDateYMD(row.g_due_date) : null;
       const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
-      function addTask(t_repeat) {
-        const { t_id, t_title, t_description, t_status } = row;
+      const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+      function addTask(IsCloneOfTask) {
+        const { t_id, t_title, t_description, t_status, r_frequency, t_repeat } = row;
         const newTask = {
           t_id,
           t_title,
@@ -105,8 +106,13 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_due_date,
           t_status,
           t_parent: [row.p_title, row.g_title, row.m_title],
+          t_repeat,
+          r_frequency, 
+          r_end_date,
+          m_due_date
         };
-        if (t_repeat) {
+        console.log("newTask: ", newTask)
+        if (IsCloneOfTask) {
           newTask.t_id = null;
           newTask.t_due_date = dateEnd;
           console.log("repeated task added!!!!t_id: ", t_id);
