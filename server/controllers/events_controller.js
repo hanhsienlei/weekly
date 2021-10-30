@@ -98,7 +98,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
       function addTask(IsCloneOfTask) {
-        const { t_id, t_title, t_description, t_status, r_frequency, t_repeat } = row;
+        const { t_id, t_title, t_description, t_status, r_frequency, t_repeat, g_id } = row;
         const newTask = {
           t_id,
           t_title,
@@ -109,7 +109,8 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_repeat,
           r_frequency, 
           r_end_date,
-          m_due_date
+          m_due_date,
+          g_id
         };
         console.log("newTask: ", newTask)
         if (IsCloneOfTask) {
@@ -137,7 +138,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       if (m_due_date >= dateStart && m_due_date <= dateEnd) {
         if (!records.milestoneIds.includes(row.m_id)) {
           records.milestoneIds.push(row.m_id);
-          const { m_id, m_title, m_description, m_status } = row;
+          const { m_id, m_title, m_description, m_status, g_id } = row;
           const newMilestone = {
             m_id,
             m_title,
@@ -145,6 +146,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
             m_due_date,
             m_status,
             m_parent: [row.p_title, row.g_title],
+            g_id
           };
           data.milestones.push(newMilestone);
         }

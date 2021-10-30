@@ -32,7 +32,7 @@ const renderEvents = async (date) => {
       if (data.date.tasks) {
         data.date.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          console.log(task.t_id, repeated_frequency, task.r_end_date)
+          console.log(task.t_id, repeated_frequency, task.r_end_date);
           createEventComponent(
             "date",
             "task",
@@ -44,7 +44,8 @@ const renderEvents = async (date) => {
             task.t_parent.join("·"),
             repeated_frequency,
             task.r_end_date,
-            task.m_due_date
+            task.m_due_date,
+            task.g_id
           );
         });
         data.date.milestones.forEach((milestone) => {
@@ -56,7 +57,11 @@ const renderEvents = async (date) => {
             milestone.m_status,
             milestone.m_due_date,
             milestone.m_description,
-            milestone.m_parent.join("·")
+            milestone.m_parent.join("·"),
+            null,
+            null,
+            null,
+            milestone.g_id
           );
         });
         data.date.goals.forEach((goal) => {
@@ -68,7 +73,11 @@ const renderEvents = async (date) => {
             goal.g_status,
             goal.g_due_date,
             goal.g_description,
-            goal.g_parent.join("·")
+            goal.g_parent.join("·"),
+            null,
+            null,
+            null,
+            goal.g_id
           );
         });
       }
@@ -87,7 +96,8 @@ const renderEvents = async (date) => {
             task.t_parent.join("·"),
             repeated_frequency,
             task.r_end_date,
-            task.m_due_date
+            task.m_due_date,
+            task.g_id
           );
         });
         data.week.milestones.forEach((milestone) => {
@@ -99,7 +109,11 @@ const renderEvents = async (date) => {
             milestone.m_status,
             milestone.m_due_date,
             milestone.m_description,
-            milestone.m_parent.join("·")
+            milestone.m_parent.join("·"),
+            null,
+            null,
+            null,
+            milestone.g_id
           );
         });
         data.week.goals.forEach((goal) => {
@@ -111,7 +125,11 @@ const renderEvents = async (date) => {
             goal.g_status,
             goal.g_due_date,
             goal.g_description,
-            goal.g_parent.join("·")
+            goal.g_parent.join("·"),
+            null,
+            null,
+            null,
+            goal.g_id
           );
         });
       }
@@ -130,7 +148,8 @@ const renderEvents = async (date) => {
             task.t_parent.join("·"),
             repeated_frequency,
             task.r_end_date,
-            task.m_due_date
+            task.m_due_date,
+            task.g_id
           );
         });
         data.month.milestones.forEach((milestone) => {
@@ -142,7 +161,11 @@ const renderEvents = async (date) => {
             milestone.m_status,
             milestone.m_due_date,
             milestone.m_description,
-            milestone.m_parent.join("·")
+            milestone.m_parent.join("·"),
+            null,
+            null,
+            null,
+            milestone.g_id
           );
         });
         data.month.goals.forEach((goal) => {
@@ -154,7 +177,11 @@ const renderEvents = async (date) => {
             goal.g_status,
             goal.g_due_date,
             goal.g_description,
-            goal.g_parent.join("·")
+            goal.g_parent.join("·"),
+            null,
+            null,
+            null,
+            goal.g_id
           );
         });
       }
@@ -172,7 +199,8 @@ const renderEvents = async (date) => {
             task.t_parent.join("·"),
             repeated_frequency,
             task.r_end_date,
-            task.m_due_date
+            task.m_due_date,
+            task.g_id
           );
         });
 
@@ -185,7 +213,11 @@ const renderEvents = async (date) => {
             milestone.m_status,
             milestone.m_due_date,
             milestone.m_description,
-            milestone.m_parent.join("·")
+            milestone.m_parent.join("·"),
+            null,
+            null,
+            null,
+            milestone.g_id
           );
         });
         data.year.goals.forEach((goal) => {
@@ -197,7 +229,11 @@ const renderEvents = async (date) => {
             goal.g_status,
             goal.g_due_date,
             goal.g_description,
-            goal.g_parent.join("·")
+            goal.g_parent.join("·"),
+            null,
+            null,
+            null,
+            goal.g_id
           );
         });
       }
@@ -254,7 +290,8 @@ const createEventComponent = (
   parents,
   task_repeat_frequency = 0,
   task_repeat_end_date = "2100-01-01",
-  milestone_due_date = "2100-01-01"
+  milestone_due_date = "2100-01-01",
+  goal_id = 0
 ) => {
   const parentContainer = document.querySelector(
     `.${timeScale}-events-container`
@@ -288,6 +325,7 @@ const createEventComponent = (
   const eventFooterContainer = document.createElement("div");
   const eventSaveButton = document.createElement("button");
   const eventCancelButton = document.createElement("button");
+  const goalEditorButton = goal_id ? createGoalButton(goal_id) : null;
 
   eventOuterContainer.classList.add(
     `${eventType}-outer-container`,
@@ -367,7 +405,9 @@ const createEventComponent = (
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
-    const repeatSelector = taskRepeatSelectorContainer ? taskRepeatSelectorContainer.querySelector("select"): null
+    const repeatSelector = taskRepeatSelectorContainer
+      ? taskRepeatSelectorContainer.querySelector("select")
+      : null;
     if (repeatSelector) {
       const task_r_frequency =
         repeatSelector.options[repeatSelector.selectedIndex].value;
@@ -377,8 +417,10 @@ const createEventComponent = (
         taskRepeatSelectorContainer.querySelector("input").max;
       body.task_repeat = task_repeat;
       body.task_r_frequency = task_r_frequency;
-      body.task_r_end_date = task_r_end_date || "2100-01-01"
-      body.task_r_end_date_unix = Math.ceil(new Date(task_r_end_date + "T23:59:59"));
+      body.task_r_end_date = task_r_end_date || "2100-01-01";
+      body.task_r_end_date_unix = Math.ceil(
+        new Date(task_r_end_date + "T23:59:59")
+      );
     }
     console.log("body: ", body);
     fetch(`/api/${eventType}`, {
@@ -408,6 +450,9 @@ const createEventComponent = (
   });
 
   eventFooterContainer.append(eventSaveButton, eventCancelButton);
+  if (goal_id) {
+    eventFooterContainer.append(goalEditorButton);
+  }
   eventDescriptionContainer.appendChild(eventDescription);
   eventDueDateContainer.appendChild(eventDueDate);
   eventEditor.append(
@@ -475,7 +520,7 @@ const createTaskRepeatSelector = (
     optionOnceAWeek.textContent = "Once a week";
     optionOnceAMonth.setAttribute("value", 30);
     optionOnceAMonth.textContent = "Once a month";
-    
+
     repeatEndDateContainer.classList.add(
       "repeat-end-date-container",
       "row",
@@ -486,19 +531,18 @@ const createTaskRepeatSelector = (
     repeatEndDate.value = task_repeat_end_date;
     repeatEndDate.setAttribute("min", min_date);
     repeatEndDate.setAttribute("max", max_date);
-    selector.addEventListener("change", e=>{
-      if (selector.value == 0){
-        repeatEndDate.setAttribute("disabled", "true")
+    selector.addEventListener("change", (e) => {
+      if (selector.value == 0) {
+        repeatEndDate.setAttribute("disabled", "true");
       } else {
-        repeatEndDate.removeAttribute("disabled")
+        repeatEndDate.removeAttribute("disabled");
       }
-
-    })
+    });
     switch (task_repeat_frequency) {
       case 0:
         optionNoRepeat.setAttribute("selected", "true");
-        repeatEndDate.setAttribute("disabled", "true")
-        repeatEndDate.value = null
+        repeatEndDate.setAttribute("disabled", "true");
+        repeatEndDate.value = null;
         break;
       case 1:
         optionEveryday.setAttribute("selected", "true");
@@ -521,6 +565,15 @@ const createTaskRepeatSelector = (
   }
 
   return container;
+};
+const createGoalButton = (goal_id) => {
+  const button = document.createElement("button");
+  button.classList.add("btn", "btn-light", "edit-goal-button");
+  button.setAttribute("type", "button");
+  button.setAttribute("data-bs-toggle", "modal");
+  button.setAttribute("data-bs-target", `#modal-goal-${goal_id}`);
+  button.textContent = "goal";
+  return button
 };
 
 //還沒做完
