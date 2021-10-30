@@ -77,9 +77,9 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     OR (m.due_date  BETWEEN ? AND ?) 
     OR (g.due_date  BETWEEN ? AND ?)
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?)
-    UNION
+    UNION ALL
     SELECT 
-	  g.user_id user_id,
+	  t.user_id user_id,
     g.id g_id,
     g.title g_title,
     g.description g_description,
@@ -103,18 +103,17 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     t.repeat t_repeat,
     r.frequency r_frequency,
     r.end_date r_end_date
-    FROM goal g
-    RIGHT JOIN purpose p on g.purpose_id = p.id
-    RIGHT JOIN milestone m ON g.id = m.goal_id
-    RIGHT JOIN task t ON m.id = t.milestone_id
-    RIGHT JOIN repeated_task r ON t.id = r.task_id
+    FROM task t
+    LEFT JOIN repeated_task r ON t.id = r.task_id
+    LEFT JOIN milestone m ON t.milestone_id = m.id
+    LEFT JOIN goal g ON m.goal_id = g.id
+    LEFT JOIN purpose p on g.purpose_id = p.id    
     WHERE (t.user_id=? or g.user_id=?)  
     AND
     (t.due_date BETWEEN ? AND ?) 
     OR (m.due_date  BETWEEN ? AND ?) 
     OR (g.due_date  BETWEEN ? AND ?)
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?)
-    
     ;  
   `, queryConditions) 
   console.log("model result: ", result)
