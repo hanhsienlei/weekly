@@ -17,13 +17,13 @@ const saveGoal = async (req, res) => {
   console.log("goalDetails: ", goalDetails);
   if (!body.goal_id) {
     const goalId = await Goal.createGoal(goalDetails);
-    res.status(200).send(goalId);
+    res.status(200).send({goal_id: goalId});
   } else {
     console.log("body.goal_id: ", body.goal_id);
     const row = await Goal.getGoal(body.goal_id);
     if (!row) {
       const goalId = await Goal.createGoal(goalDetails);
-      res.status(200).send(goalId);
+      res.status(200).send({goal_id: goalId});
     } else {
       const updateResult = await Goal.saveGoal(goalDetails, body.goal_id);
       res.status(200).send({ message: `Update succeeded (${updateResult})` });

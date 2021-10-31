@@ -250,28 +250,34 @@ const addNewEvent = (timeScale, eventType) => {
   const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
   const body = {
     user_id: 1,
-    task_title: title,
-    task_due_date: dueDate,
-    task_due_date_unix: dueDateUnix,
   };
-  fetch("/api/task", {
+  body[`${eventType}_title`] = title
+  body[`${eventType}_due_date`] = dueDate
+  body[`${eventType}_due_date_unix`] = dueDateUnix
+
+
+  fetch(`/api/${eventType}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   })
     .then((response) => response.json())
     .then((data) => {
-      const taskId = data.task_id;
-      console.log(taskId)
+      const eventId = data.task_id || data.goal_id
+      console.log(eventId)
       createEventComponent(
         timeScale,
         eventType,
-        taskId,
+        eventId,
         title,
         null,
         dueDate,
         null,
-        null
+        null,
+        null, 
+        null,
+        null,
+        eventId
       );
       input.value = "";
     })

@@ -42,8 +42,10 @@ const renderGoalEditor = (goalId) => {
       });
 
       newMilestoneButton.addEventListener("click", (e) => {
+        const newTitle = newMilestoneTitle.value.trim()
+        if(!newTitle){return alert("Please name the milestone fore adding ")}
         const body = {
-          milestone_title: newMilestoneTitle.value.trim(),
+          milestone_title: newTitle,
           milestone_goal_id: goalId,
         };
         console.log(body);
@@ -55,10 +57,10 @@ const renderGoalEditor = (goalId) => {
           .then((response) => response.json())
           .then((data) => {
             const milestoneId = data.milestone_id;
-            console.log("milestoneId: ", milestoneId);
+            console.log("newMilestoneButton: milestoneId: ", milestoneId);
             createMilestoneContainer(
               milestoneId,
-              newMilestoneTitle.value.trim()
+              newTitle
             );
             newMilestoneTitle.value = "";
           })
