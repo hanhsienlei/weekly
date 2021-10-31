@@ -1,14 +1,14 @@
 
 //for goal editor
 function saveGoal(goalId) {
-  const goalModal = document.querySelector(`#modal-goal-${goalId}`);
-  const goalTitle = goalModal.querySelector(".goal-title").textContent.trim();
-  const goalDescription = goalModal.querySelector(".goal-description").value;
-  const goalDueDate = goalModal.querySelector(".goal-due-date").value;
+  const modal = document.querySelector(`#modal-goal`);
+  const goalTitle = modal.querySelector(".goal-title").textContent.trim();
+  const goalDescription = modal.querySelector(".goal-description").value;
+  const goalDueDate = modal.querySelector(".goal-due-date").value;
   const goalDueDateUnix = Math.ceil(new Date(goalDueDate + "T23:59:59"));
-  const select = goalModal.querySelector(".purpose-selector");
-  const option = select.options[select.selectedIndex];
-  const goalPurposeId = option.value;
+  //const select = goalModal.querySelector(".purpose-selector");
+  //const option = select.options[select.selectedIndex];
+  //const goalPurposeId = option.value;
 
   const body = {
     goal_id: goalId,
@@ -16,7 +16,7 @@ function saveGoal(goalId) {
     goal_due_date: goalDueDate,
     goal_due_date_unix: goalDueDateUnix,
     goal_description: goalDescription,
-    goal_purpose_id: goalPurposeId,
+    //goal_purpose_id: goalPurposeId,
   };
   fetch("/api/goal", {
     method: "POST",

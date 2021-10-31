@@ -365,7 +365,7 @@ const createEventComponent = (
     body[`${eventType}_title`] = eventTitle.textContent;
     body[`${eventType}_description`] = eventDescription.textContent;
     body[`${eventType}_status`] = isCheckedNew? 1 : 0
-    body[`${eventType}_due_date`] = eventDueDate.value;
+    body[`${eventType}_due_date`] = eventDueDate.value.length == 10 ? eventDueDate.value : null;
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
@@ -608,7 +608,7 @@ const createGoalButton = (goal_id) => {
   button.classList.add("btn", "btn-light", "edit-goal-button");
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
-  button.setAttribute("data-bs-target", "#madol-goal");
+  button.setAttribute("data-bs-target", "#modal-goal");
   button.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
   button.textContent = "goal";
   return button;

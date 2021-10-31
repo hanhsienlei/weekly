@@ -17,9 +17,9 @@
 .goal-outer-container {
   background-color: lightsteelblue;
 }
-.milestone-outer-container {
-  background-color: lightgray;
-}
+/* .milestone-outer-container {
+   background-color: lightgray; 
+} */
 .task-outer-container {
   background-color: lightyellow;
 }

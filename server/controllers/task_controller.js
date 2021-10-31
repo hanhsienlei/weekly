@@ -36,15 +36,19 @@ const updateTask = async (req, res) => {
     if (!row) {
       taskDetails.user_id = body.user_id;
       const taskId = await Number(Task.createTask(taskDetails));
+      if (body.task_repeat) {
+        console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
+        await handleRepeatRule(repeatDetails, taskId);
+      }
       res.status(200).send({ task_id: taskId });
     } else {
       const updateResult = await Task.updateTask(taskDetails, body.task_id);
+      if (body.task_repeat) {
+        console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
+        await handleRepeatRule(repeatDetails, body.task_id);
+      }
       res.status(200).send({ message: `Update succeeded (${updateResult})` });
     }
-  }
-  if (body.task_repeat) {
-    console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
-    await handleRepeatRule(repeatDetails, taskId);
   }
 };
 
