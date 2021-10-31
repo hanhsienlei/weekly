@@ -262,6 +262,7 @@ const addNewEvent = (timeScale, eventType) => {
     .then((response) => response.json())
     .then((data) => {
       const taskId = data.task_id;
+      console.log(taskId)
       createEventComponent(
         timeScale,
         eventType,
@@ -336,9 +337,9 @@ const createEventComponent = (
   );
   eventOuterContainer.setAttribute("id", `${eventType}-${id}`);
   //eventToggle.classList.add("event-toggle");
-  editButton.addEventListener("click", (e) => {
-    e.target.removeAttribute("data-bs-toggle");
-  });
+  // editButton.addEventListener("click", (e) => {
+  //   e.target.removeAttribute("data-bs-toggle");
+  // });
   //eventToggle.setAttribute("data-bs-toggle", "collapse");
   //eventToggle.setAttribute("data-bs-target", `#editor-${eventType}-${id}`)
   eventHeaderContainer.classList.add("event-header-container", "row", "mb-3");
@@ -347,7 +348,42 @@ const createEventComponent = (
   EventTitleContainer.classList.add("event-title-container", "my-2");
   checkBox.classList.add("form-check-input");
   checkBox.setAttribute("type", "checkbox");
-  checkBox.setAttribute("checked", status);
+  if (status){
+  checkBox.setAttribute("checked", "true");}
+  checkBox.addEventListener("click", e => {
+    const isChecked = checkBox.hasAttribute("checked")
+    if(isChecked){
+      checkBox.removeAttribute("checked")
+    } else {
+      checkBox.setAttribute("checked", "true")
+    }
+    const isCheckedNew = checkBox.hasAttribute("checked")
+
+    const body = {};
+    body.user_id = 1;
+    body[`${eventType}_id`] = id;
+    body[`${eventType}_title`] = eventTitle.textContent;
+    body[`${eventType}_description`] = eventDescription.textContent;
+    body[`${eventType}_status`] = isCheckedNew? 1 : 0
+    body[`${eventType}_due_date`] = eventDueDate.value;
+    body[`${eventType}_due_date_unix`] = Math.ceil(
+      new Date(eventDueDate.value + "T23:59:59")
+    );
+    
+    console.log("[checkbox] body: ", body);
+    fetch(`/api/${eventType}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
   eventTitle.classList.add("event-title");
   eventTitle.setAttribute("contenteditable", "true");
   eventTitle.textContent = title;
@@ -401,10 +437,12 @@ const createEventComponent = (
     body[`${eventType}_id`] = id;
     body[`${eventType}_title`] = eventTitle.textContent;
     body[`${eventType}_description`] = eventDescription.textContent;
+    body[`${eventType}_status`] = checkBox.hasAttribute("checked")? 1 : 0
     body[`${eventType}_due_date`] = eventDueDate.value;
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
+    
     const repeatSelector = taskRepeatSelectorContainer
       ? taskRepeatSelectorContainer.querySelector("select")
       : null;
@@ -435,7 +473,6 @@ const createEventComponent = (
       .catch((err) => {
         console.log(err);
       });
-    editButton.setAttribute("data-bs-toggle", "collapse");
   });
   eventCancelButton.textContent = "x";
   eventCancelButton.classList.add("col-4", "btn", "btn-light", "cancel-button");
@@ -571,9 +608,10 @@ const createGoalButton = (goal_id) => {
   button.classList.add("btn", "btn-light", "edit-goal-button");
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
-  button.setAttribute("data-bs-target", `#modal-goal-${goal_id}`);
+  button.setAttribute("data-bs-target", "#madol-goal");
+  button.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
   button.textContent = "goal";
-  return button
+  return button;
 };
 
 //還沒做完
@@ -582,4 +620,14 @@ const createTagComponent = () => {
   tag.classList.add("tag", "badge", "rounded-pill");
 };
 
-document.onload = renderEvents("2021-10-25");
+const renderEventsToday = () => {
+  const today = new Date();
+  const year = today.getFullYear().toString();
+  const month = (today.getMonth() + 1).toString();
+  const date = today.getDate().toString();
+  const todayYMD = `${year}-${month}-${date}`;
+console.log(todayYMD)
+  renderEvents(todayYMD);
+};
+
+document.onload = renderEventsToday();
