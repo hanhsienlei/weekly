@@ -1,4 +1,5 @@
 const Goal = require("../models/goal_model");
+const { getDateYMD } = require("../../utils/date_converter");
 
 const saveGoal = async (req, res) => {
   const body = req.body;
@@ -7,10 +8,11 @@ const saveGoal = async (req, res) => {
     description: body.goal_description,
     due_date: body.goal_due_date,
     due_date_unix: body.goal_due_date_unix,
-    purpose_id: body.goal_purpose_id
-
+    purpose_id: body.goal_purpose_id,
   };
-if (!goalDetails.purpose_id){delete goalDetails.purpose_id}
+  if (!goalDetails.purpose_id) {
+    delete goalDetails.purpose_id;
+  }
 
   console.log("goalDetails: ", goalDetails);
   if (!body.goal_id) {
@@ -24,7 +26,7 @@ if (!goalDetails.purpose_id){delete goalDetails.purpose_id}
       res.status(200).send(goalId);
     } else {
       const updateResult = await Goal.saveGoal(goalDetails, body.goal_id);
-      res.status(200).send({message: `Update succeeded (${updateResult})`});
+      res.status(200).send({ message: `Update succeeded (${updateResult})` });
     }
   }
 };
@@ -45,8 +47,9 @@ const getGoal = async (req, res) => {
 
 const getGoalWithPlan = async (req, res) => {
   const goalId = req.query.goal_id;
+  console.log("goalId: ", goalId);
   if (!goalId) {
-    return res.status(400).send("goal id is required.");
+    return res.status(400).send({ message: "goal id is required." });
   } else {
     const result = await Goal.getGoalWithPlan(goalId);
     const {
@@ -54,12 +57,12 @@ const getGoalWithPlan = async (req, res) => {
       g_id,
       g_title,
       g_description,
-      g_due_date,
       g_status,
       g_group_id,
       g_popularity,
       g_publish,
     } = result[0];
+    const g_due_date = result[0].g_due_date ? getDateYMD(result[0].g_due_date) : null;
     const goalPlan = {
       user_id,
       g_id,
@@ -73,9 +76,13 @@ const getGoalWithPlan = async (req, res) => {
       milestones: [],
     };
     const milestoneIndexes = {};
-    result.forEach((result) => {
-      if (!Object.keys(milestoneIndexes).includes(String(result.m_id))) {
-        const { m_id, m_title, m_description, m_due_date, m_status } = result;
+    result.forEach((row) => {
+      
+      const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+      const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
+      const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+      if (!Object.keys(milestoneIndexes).includes(String(row.m_id))) {
+        const { m_id, m_title, m_description, m_status } = row;
         const newMilestone = {
           m_id,
           m_title,
@@ -85,21 +92,19 @@ const getGoalWithPlan = async (req, res) => {
           tasks: [],
         };
         goalPlan.milestones.push(newMilestone);
-        milestoneIndexes[result.m_id] = goalPlan.milestones.length - 1;
+        milestoneIndexes[row.m_id] = goalPlan.milestones.length - 1;
       }
 
-      if (result.t_id) {
-        const index = milestoneIndexes[result.m_id];
+      if (row.t_id) {
+        const index = milestoneIndexes[row.m_id];
         const {
           t_id,
           t_title,
           t_description,
-          t_due_date,
           t_status,
           t_repeat,
-          r_end_date,
           r_frequency,
-        } = result;
+        } = row;
         const newTask = {
           t_id,
           t_title,
@@ -113,7 +118,7 @@ const getGoalWithPlan = async (req, res) => {
         goalPlan.milestones[index].tasks.push(newTask);
       }
     });
-
+    console.log("[goal plan controller ]goalPlan: ", goalPlan);
     if (!result) {
       return res.status(400).send("goal id doesn't exist.");
     } else {
