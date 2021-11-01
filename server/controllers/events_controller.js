@@ -15,7 +15,7 @@ const { getGoalsAndMilestonesByUser } = require("../models/goal_model");
 const getEventsByDate = async (req, res) => {
   //做完登入登出後要換成token驗證取userId
   const userId = Number(req.query.user_id);
-  const date = req.params.date;
+  const targetDate = req.params.date;
   const data = {
     user_id: userId,
     date: {},
@@ -25,21 +25,21 @@ const getEventsByDate = async (req, res) => {
     milestone_list: [],
     buttons_date: {},
   };
+  
   if (!userId) {
     return res.status(400).send({ message: "user id is required." });
   } else {
-    const dateObject = getDateObjectFromYMD(date); //get date object with local timezone
+    const targetDateObject = getDateObjectFromYMD(targetDate); //get date object with local timezone
     const dayMilliSecond = 60 * 60 * 24 * 1000;
     //取明天~週日
-    const dateStartWeek = new Date(dateObject.valueOf() + dayMilliSecond);
-    const dateEndWeek = getSundayByDate(dateObject);
+    const dateStartWeek = new Date(targetDateObject.valueOf() + dayMilliSecond);
+    const dateEndWeek = getSundayByDate(targetDateObject);
     //取下週一~月底
     const dateStartMonth = new Date(dateEndWeek.valueOf() + dayMilliSecond);
-    const dateEndMonth = getMonthEndByDate(dateObject);
+    const dateEndMonth = getMonthEndByDate(targetDateObject);
     //取下月初~年底
     const dateStartYear = new Date(dateEndMonth.valueOf() + dayMilliSecond);
-    const dateEndYear = new Date(date.split("-")[0], 11, 31);
-    
+    const dateEndYear = new Date(targetDate.split("-")[0], 11, 31);
     
     //重複事件有bug......
     data.year = await getEventsByDateRange(
@@ -47,7 +47,7 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateStartYear),
       getDateYMD(dateEndYear)
     );
-    data.year.value = date.split("-")[0];
+    data.year.value = targetDate.split("-")[0];
     data.year.due_date = getDateYMD(dateEndYear)
 
     data.month = await getEventsByDateRange(
@@ -55,7 +55,7 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateStartMonth),
       getDateYMD(dateEndMonth)
     );
-    data.month.value = date.split("-")[1];
+    data.month.value = targetDate.split("-")[1];
     data.month.due_date = getDateYMD(dateEndMonth)
 
     data.week = await getEventsByDateRange(
@@ -63,18 +63,19 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateStartWeek),
       getDateYMD(dateEndWeek)
     );
-    data.week.value = getWeekNumberByDate(dateObject).weekNumber;
+    data.week.value = getWeekNumberByDate(targetDateObject).weekNumber;
         data.week.due_date = getDateYMD(dateEndWeek)
 
 
-    data.date = await getEventsByDateRange(userId, date, date);
-    data.date.value = date.split("-")[1] + "-" + date.split("-")[2];
-    data.date.due_date = date
+    data.date = await getEventsByDateRange(userId, targetDate, targetDate);
+    data.date.value = targetDate.split("-")[1] + "-" + targetDate.split("-")[2];
+    data.date.due_date = targetDate
 
     
     //按鈕資料
+    data.buttons_date = getButtonsDate(targetDateObject);
     data.milestone_list = await getMilestoneList(userId);
-    data.buttons_date = getButtonsDate(dateObject);
+    
     return res.status(200).send(data);
   }
 };
@@ -198,6 +199,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
 };
 
 const getButtonsDate = (dateObject) => {
+  console.log("date from getButtonsDate(): ", dateObject)
   const dayMilliSecond = 60 * 60 * 24 * 1000;
   const data = {};
   data.date_before = getDateYMD(

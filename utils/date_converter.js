@@ -1,18 +1,20 @@
-//return YYYY-MM-DD
+//return YYYY-MM-DD in local timezone
 const getDateYMD = (dateObject) => {
   const year = dateObject.getFullYear().toString();
   const month = (dateObject.getMonth() + 1).toString();
-  const month2Digit = month.length == 1? `0${month}` : month
+  const month2Digit = month.length === 1? `0${month}` : month
   const date = dateObject.getDate().toString();
-  const date2Digit = date.length == 1? `0${date}` : date
+  const date2Digit = date.length === 1? `0${date}` : date
   return `${year}-${month2Digit}-${date2Digit}`;
 };
 
 //return date object
 const getDateObjectFromYMD = (YMD) => {
-  const year = YMD.split("-")[0]
-  let monthIndex = YMD.split("-")[1] -1 
-  const date = YMD.split("-")[2]
+  //(X)formats differs in that date-only strings (e.g. "1970-01-01") are treated as UTC, not local due to browser differences and inconsistencies.
+  //(O)Individual date and time component values are all evaluated against the local time zone, rather than UTC.
+  const year = Number(YMD.split("-")[0])
+  let monthIndex = Number(YMD.split("-")[1]) -1
+  const date = Number(YMD.split("-")[2])
   return new Date( year, monthIndex, date)
 }
 
@@ -91,8 +93,8 @@ const getMonthEndByDate = (dateObject) => {
   const monthIndex = dateObject.getMonth();
   const year = dateObject.getFullYear();
   if (monthIndex === 11) {
-    dateObject.setDate(31);
-    return dateObject;
+    const YearEnd = new Date(year, 11, 31);
+    return YearEnd;
   } else {
     const NextMonth01 = new Date(year, monthIndex + 1, 01);
     const monthEndDate = new Date(NextMonth01.valueOf() - 60 * 60 * 24 * 1000);
