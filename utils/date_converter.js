@@ -2,8 +2,10 @@
 const getDateYMD = (dateObject) => {
   const year = dateObject.getFullYear().toString();
   const month = (dateObject.getMonth() + 1).toString();
+  const month2Digit = month.length == 1? `0${month}` : month
   const date = dateObject.getDate().toString();
-  return `${year}-${month}-${date}`;
+  const date2Digit = date.length == 1? `0${date}` : date
+  return `${year}-${month2Digit}-${date2Digit}`;
 };
 
 //return date object

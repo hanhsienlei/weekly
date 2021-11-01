@@ -630,9 +630,11 @@ const renderEventsToday = () => {
   const today = new Date();
   const year = today.getFullYear().toString();
   const month = (today.getMonth() + 1).toString();
+  const month2Digit = month.length == 1? `0${month}` : month
   const date = today.getDate().toString();
-  const todayYMD = `${year}-${month}-${date}`;
-console.log(todayYMD)
+  const date2Digit = date.length == 1? `0${date}` : date
+  const todayYMD = `${year}-${month2Digit}-${date2Digit}`;
+  console.log(todayYMD) 
   renderEvents(todayYMD);
 };
 
