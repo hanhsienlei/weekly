@@ -85,7 +85,8 @@ const renderEvents = async (date) => {
       if (data.week.tasks) {
         data.week.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          createEventComponent(
+          if (task.t_id){
+            createEventComponent(
             "week",
             "task",
             task.t_id,
@@ -99,6 +100,8 @@ const renderEvents = async (date) => {
             task.m_due_date,
             task.g_id
           );
+          }
+          
         });
         data.week.milestones.forEach((milestone) => {
           createEventComponent(
@@ -137,7 +140,8 @@ const renderEvents = async (date) => {
       if (data.month.tasks) {
         data.month.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          createEventComponent(
+          if(task.t_id){
+            createEventComponent(
             "month",
             "task",
             task.t_id,
@@ -151,6 +155,8 @@ const renderEvents = async (date) => {
             task.m_due_date,
             task.g_id
           );
+          }
+          
         });
         data.month.milestones.forEach((milestone) => {
           createEventComponent(
@@ -188,7 +194,8 @@ const renderEvents = async (date) => {
       if (data.year.tasks) {
         data.year.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          createEventComponent(
+          if(task.t_id){
+            createEventComponent(
             "year",
             "task",
             task.t_id,
@@ -202,6 +209,7 @@ const renderEvents = async (date) => {
             task.m_due_date,
             task.g_id
           );
+          }
         });
 
         data.year.milestones.forEach((milestone) => {
@@ -425,7 +433,7 @@ const createEventComponent = (
   eventDescription.setAttribute("contenteditable", "true");
   eventDescription.textContent = description
     ? description
-    : "what is this task about?";
+    : `Description of this ${eventType}...`;
 
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
@@ -632,9 +640,9 @@ const renderEventsToday = () => {
   const today = new Date();
   const year = today.getFullYear().toString();
   const month = (today.getMonth() + 1).toString();
-  const month2Digit = month.length == 1? `0${month}` : month
+  const month2Digit = month.length === 1? `0${month}` : month
   const date = today.getDate().toString();
-  const date2Digit = date.length == 1? `0${date}` : date
+  const date2Digit = date.length === 1? `0${date}` : date
   const todayYMD = `${year}-${month2Digit}-${date2Digit}`;
   console.log(todayYMD) 
   renderEvents(todayYMD);
