@@ -11,18 +11,12 @@ const renderGoalEditor = (goalId) => {
       const goalSaveButton = modal.querySelector(".save-goal-button");
       const newMilestoneTitle = modal.querySelector(".new-milestone-title");
       const newMilestoneButton = modal.querySelector(".new-milestone-button");
-
-      modal.dataset.goalId = goalId;
-      goalTitle.textContent = data.g_title;
-      goalDueDate.value = data.g_due_date;
-      goalDescription.textContent = data.g_description
-        ? data.g_description
-        : "Why and how you wanna reach this goal";
-      goalSaveButton.addEventListener("click", (e) => {
+      const saveGoal = () => {
         const body = {
           goal_id: goalId,
           goal_title: goalTitle.textContent.trim(),
-          goal_due_date: goalDueDate.value.length == 10 ? goalDueDate.value : null,
+          goal_due_date:
+            goalDueDate.value.length == 10 ? goalDueDate.value : null,
           goal_due_date_unix: Math.ceil(
             new Date(goalDueDate.value + "T23:59:59")
           ),
@@ -39,11 +33,12 @@ const renderGoalEditor = (goalId) => {
           .catch((err) => {
             console.log(err);
           });
-      });
-
-      newMilestoneButton.addEventListener("click", (e) => {
-        const newTitle = newMilestoneTitle.value.trim()
-        if(!newTitle){return alert("Please name the milestone fore adding ")}
+      };
+      const addNewMilestone = (e) => {
+        const newTitle = newMilestoneTitle.value.trim();
+        if (!newTitle) {
+          return alert("Please name the milestone fore adding ");
+        }
         const body = {
           milestone_title: newTitle,
           milestone_goal_id: goalId,
@@ -58,18 +53,28 @@ const renderGoalEditor = (goalId) => {
           .then((data) => {
             const milestoneId = data.milestone_id;
             console.log("newMilestoneButton: milestoneId: ", milestoneId);
-            createMilestoneContainer(
-              milestoneId,
-              newTitle
-            );
+            createMilestoneContainer(milestoneId, newTitle);
             newMilestoneTitle.value = "";
           })
           .catch((err) => {
             console.log(err);
           });
-      });
+      };
 
-      if (data.milestones) {
+      modal.dataset.goalId = goalId;
+      goalTitle.textContent = data.g_title? data.g_title : "Goal title...";
+      goalDueDate.value = data.g_due_date;
+      goalDescription.textContent = data.g_description
+        ? data.g_description
+        : "Description of this goal......";
+      goalSaveButton.addEventListener("click", saveGoal);
+      newMilestoneButton.addEventListener("click", addNewMilestone);
+      modal.addEventListener("hidden.bs.modal", () => {
+        modal.querySelector(".milestones-container").innerHTML = "";
+        goalSaveButton.removeEventListener("click", saveGoal);
+        newMilestoneButton.removeEventListener("click", addNewMilestone);
+      });
+      if (data.milestones && data.milestones.length > 0) {
         data.milestones.forEach((milestone) => {
           const milestoneId = milestone.m_id;
           const milestoneDueDate = milestone.m_deu_date;
@@ -206,17 +211,18 @@ const createMilestoneContainer = (
     "btn-primary"
   );
   milestoneSaveButton.textContent = "Save milestone";
-  milestoneSaveButton.addEventListener("click", e => {
+  milestoneSaveButton.addEventListener("click", (e) => {
     const body = {};
     body.user_id = 1;
     body.milestone_id = milestoneId;
     body.milestone_title = milestoneTitle.textContent.trim();
     body.milestone_description = milestoneDescription.textContent.trim();
-    body.milestone_due_date = milestoneDueDate.value.length == 10? milestoneDueDate.value : null;
+    body.milestone_due_date =
+      milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
     body.task_due_date_unix = Math.ceil(
       new Date(milestoneDueDate.value + "T23:59:59")
     );
-    
+
     console.log("body: ", body);
     fetch(`/api/milestone`, {
       method: "POST",
@@ -230,7 +236,7 @@ const createMilestoneContainer = (
       .catch((err) => {
         console.log(err);
       });
-  })
+  });
   tasksContainer.classList.add("tasks-container", "row");
   addNewTaskContainer.classList.add("add-new-task-container", "row", "px-2");
   newTaskInputContainer.classList.add("new-task-input-container", "col-10");
@@ -259,8 +265,18 @@ const createMilestoneContainer = (
       .then((data) => {
         const taskId = data.task_id;
         console.log(taskId);
-        createTaskComponent(milestoneId, taskId, newTaskTitle, 0, null, null, null, null, null);
-        input.value = "";
+        createTaskComponent(
+          milestoneId,
+          taskId,
+          newTaskTitle,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null
+        );
+        newTaskInput.value = "";
       })
       .catch((err) => {
         console.log(err);
@@ -369,7 +385,8 @@ const createTaskComponent = (
     body.task_title = eventTitle.textContent;
     body.task_description = eventDescription.textContent;
     body.task_status = isCheckedNew ? 1 : 0;
-    body.task_due_date = eventDueDate.value.length == 10?eventDueDate.value : null
+    body.task_due_date =
+      eventDueDate.value.length == 10 ? eventDueDate.value : null;
     body.task_due_date_unix = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
@@ -501,3 +518,12 @@ const createTaskComponent = (
 };
 
 const renderMilestone = (milestoneId) => {};
+
+const resetModal = () => {
+  const modal = document.querySelector("#modal-goal");
+  modal.addEventListener("hidden.bs.modal", (e) => {
+    modal.querySelector(".milestones-container").innerHTML = "";
+  });
+};
+
+resetModal();

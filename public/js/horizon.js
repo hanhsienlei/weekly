@@ -255,7 +255,9 @@ const addNewEvent = (timeScale, eventType) => {
   body[`${eventType}_due_date`] = dueDate
   body[`${eventType}_due_date_unix`] = dueDateUnix
 
-
+if( !title ) {
+  return alert(`Please name the ${eventType} before adding!`)
+} 
   fetch(`/api/${eventType}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -616,7 +618,7 @@ const createGoalButton = (goal_id) => {
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#modal-goal");
   button.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-  button.textContent = "goal";
+  button.textContent = "check goal";
   return button;
 };
 

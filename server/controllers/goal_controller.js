@@ -81,7 +81,8 @@ const getGoalWithPlan = async (req, res) => {
       const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
-      if (!Object.keys(milestoneIndexes).includes(String(row.m_id))) {
+      if(row.m_id){
+        if (!Object.keys(milestoneIndexes).includes(String(row.m_id))) {
         const { m_id, m_title, m_description, m_status } = row;
         const newMilestone = {
           m_id,
@@ -94,6 +95,8 @@ const getGoalWithPlan = async (req, res) => {
         goalPlan.milestones.push(newMilestone);
         milestoneIndexes[row.m_id] = goalPlan.milestones.length - 1;
       }
+      }
+      
 
       if (row.t_id) {
         const index = milestoneIndexes[row.m_id];
