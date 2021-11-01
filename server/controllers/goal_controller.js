@@ -187,8 +187,8 @@ const getGoalProgress = async (req, res) => {
       let count = 0;
       for (let i = 0; i < goalProgress.m_number_of_task.length; i++) {
         if (
-          goalProgress.m_number_of_task.length[i] ===
-          goalProgress.m_number_of_task.length
+          goalProgress.m_number_of_task[i] ===
+          goalProgress.m_number_of_task_done[i]
         ) {
           count += 1;
         }
@@ -205,7 +205,6 @@ const getGoalProgress = async (req, res) => {
       numberOfMilestone
     );
     goalProgress.g_summary.task.push(sumOfTaskDone, sumOfTask);
-
     if (!result) {
       return res.status(400).send({message: "goal id doesn't exist."});
     } else {
