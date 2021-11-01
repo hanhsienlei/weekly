@@ -396,7 +396,7 @@ const createEventComponent = (
   eventTitle.setAttribute("contenteditable", "true");
   eventTitle.textContent = title;
   eventParents.classList.add("event-parents", "mt-1", "mb-2", "text-muted");
-  eventParents.textContent = parents;
+  eventParents.textContent = parents !="··" ?parents : null;
   eventInfoButtonContainer.classList.add(
     "event-info-button-container",
     "col-2"
