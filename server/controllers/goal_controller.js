@@ -118,7 +118,6 @@ const getGoalWithPlan = async (req, res) => {
         goalPlan.milestones[index].tasks.push(newTask);
       }
     });
-    console.log("[goal plan controller ]goalPlan: ", goalPlan);
     if (!result) {
       return res.status(400).send("goal id doesn't exist.");
     } else {

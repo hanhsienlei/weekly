@@ -162,7 +162,6 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           console.log("r_f =1!!!");
           records.taskIds.push(row.t_id);
           addTask(1);
-          console.log("data.tasks: ", data.tasks)
         }
         if (row.r_frequency == 7) {
           let dateInit = row.t_due_date;

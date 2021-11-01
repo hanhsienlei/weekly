@@ -116,7 +116,6 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?)
     ;  
   `, queryConditions) 
-  console.log("model result: ", result)
   return result
 }
 

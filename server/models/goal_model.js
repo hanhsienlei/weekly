@@ -50,7 +50,6 @@ const getGoalWithPlan = async (goalId) => {
   LEFT JOIN repeated_task r ON t.id = r.task_id
   WHERE g.id = ?  
   `, goalId)
-  console.log("[goal model]: goal with plan result :", result )
   return result
 }
 
