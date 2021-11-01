@@ -237,7 +237,7 @@ const createMilestoneContainer = (
         console.log(err);
       });
   });
-  tasksContainer.classList.add("tasks-container", "row");
+  tasksContainer.classList.add("tasks-container", "row", "border-top", "pt-3");
   addNewTaskContainer.classList.add("add-new-task-container", "row", "px-2");
   newTaskInputContainer.classList.add("new-task-input-container", "col-10");
   newTaskInput.setAttribute("type", "text");
