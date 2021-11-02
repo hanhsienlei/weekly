@@ -162,12 +162,14 @@ const createTaskRepeatSelector = (
   task_repeat_frequency,
   task_repeat_end_date,
   min_date,
-  max_date
+  max_date,
+  task_due_date_element
 ) => {
   const container = document.createElement("div");
   container.classList.add(
     `task-repeat-container-${task_id}`,
     "task-repeat-container",
+    "row",
     "mb-3"
   );
   if (!task_id) {
@@ -192,6 +194,7 @@ const createTaskRepeatSelector = (
     const optionOnceAWeek = document.createElement("option");
     const optionOnceAMonth = document.createElement("option");
     const repeatEndDateContainer = document.createElement("div");
+    const repeatEndDateDescription = document.createElement("span")
     const repeatEndDate = document.createElement("input");
     selector.classList.add("task-repeat-selector", "form-selector", "mb-3");
     optionNoRepeat.setAttribute("value", 0);
@@ -209,8 +212,12 @@ const createTaskRepeatSelector = (
       "row",
       "mb-3"
     );
+    repeatEndDateDescription.textContent = "Repeat until..."
     repeatEndDate.classList.add("event-due-date");
     repeatEndDate.setAttribute("type", "date");
+    if(!task_repeat_frequency){
+      repeatEndDate.setAttribute("disabled", "true");
+    }
     repeatEndDate.value = task_repeat_end_date;
     repeatEndDate.setAttribute("min", min_date);
     repeatEndDate.setAttribute("max", max_date);
@@ -219,6 +226,7 @@ const createTaskRepeatSelector = (
         repeatEndDate.setAttribute("disabled", "true");
       } else {
         repeatEndDate.removeAttribute("disabled");
+        repeatEndDate.setAttribute("min", task_due_date_element.value);
       }
     });
     switch (task_repeat_frequency) {
@@ -243,7 +251,7 @@ const createTaskRepeatSelector = (
       optionOnceAWeek,
       optionOnceAMonth
     );
-    repeatEndDateContainer.append(repeatEndDate);
+    repeatEndDateContainer.append(repeatEndDateDescription, repeatEndDate);
     container.append(selector, repeatEndDateContainer);
   }
 

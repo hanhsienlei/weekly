@@ -42,6 +42,7 @@ const renderGoalEditor = (goalId) => {
         const body = {
           milestone_title: newTitle,
           milestone_goal_id: goalId,
+          milestone_due_date: goalDueDate.value,
         };
         console.log(body);
         fetch("/api/milestone", {
@@ -53,7 +54,7 @@ const renderGoalEditor = (goalId) => {
           .then((data) => {
             const milestoneId = data.milestone_id;
             console.log("newMilestoneButton: milestoneId: ", milestoneId);
-            createMilestoneContainer(milestoneId, newTitle);
+            createMilestoneContainer(milestoneId, newTitle, goalDueDate.value);
             newMilestoneTitle.value = "";
           })
           .catch((err) => {
@@ -122,7 +123,8 @@ const createMilestoneContainer = (
   milestoneId,
   title,
   dueDate = null,
-  description = null
+  description = null,
+  goalDueDate = null,
 ) => {
   const parent = document.querySelector(".milestones-container");
   const containerOuter = document.createElement("div");
@@ -184,6 +186,7 @@ const createMilestoneContainer = (
   );
   milestoneDueDate.type = "date";
   milestoneDueDate.classList.add("milestone-due-date");
+  milestoneDueDate.setAttribute("max", goalDueDate);
   milestoneDueDate.value = dueDate;
   milestoneDescriptionContainer.classList.add(
     "milestone-description-container",
@@ -253,6 +256,7 @@ const createMilestoneContainer = (
     const body = {};
     body.user_id = 1;
     body.task_title = newTaskTitle;
+    body.task_due_date = milestoneDueDate.value;
     body.task_milestone_id = milestoneId;
 
     console.log("body: ", body);
@@ -270,11 +274,11 @@ const createMilestoneContainer = (
           taskId,
           newTaskTitle,
           0,
+          milestoneDueDate.value,
           null,
           null,
           null,
-          null,
-          null
+          milestoneDueDate.value
         );
         newTaskInput.value = "";
       })
@@ -316,8 +320,8 @@ const createTaskComponent = (
   dueDate,
   description,
   task_repeat_frequency = 0,
-  task_repeat_end_date = "2100-01-01",
-  milestone_due_date = "2100-01-01"
+  task_repeat_end_date = null,
+  milestone_due_date = null
 ) => {
   const milestoneContainer = document.querySelector(
     `.milestone-outer-container-${milestoneId}`
@@ -343,7 +347,8 @@ const createTaskComponent = (
     task_repeat_frequency,
     task_repeat_end_date,
     dueDate,
-    milestone_due_date
+    milestone_due_date,
+    eventDueDate
   );
   const eventFooterContainer = document.createElement("div");
   const eventSaveButton = document.createElement("button");
@@ -426,6 +431,7 @@ const createTaskComponent = (
   );
   eventDueDate.classList.add("event-due-date");
   eventDueDate.setAttribute("type", "date");
+  eventDueDate.setAttribute("max", milestone_due_date);
   eventDueDate.value = dueDate;
   eventDescriptionContainer.classList.add(
     "event-description-container",
@@ -517,7 +523,6 @@ const createTaskComponent = (
   parentContainer.appendChild(eventOuterContainer);
 };
 
-const renderMilestone = (milestoneId) => {};
 
 const resetModal = () => {
   const modal = document.querySelector("#modal-goal");

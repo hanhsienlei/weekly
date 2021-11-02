@@ -31,7 +31,7 @@ const renderEvents = async (date) => {
           const endDate = data[container].due_date? data[container].due_date.split("-")[1] + "-" + data[container].due_date.split("-")[2] : null
           subTitle.textContent = startDate + " ~ " + endDate
         }
-        
+        eventsContainer.classList.add(`events-container-${data[container].due_date}`)
         eventsContainer.innerHTML = "";
         if (container === "week") {
           title.textContent = "Week " + data[container].value;
@@ -70,7 +70,8 @@ const renderEvents = async (date) => {
             null,
             null,
             null,
-            milestone.g_id
+            milestone.g_id,
+            milestone.g_due_date
           );
         });
         data.date.goals.forEach((goal) => {
@@ -125,7 +126,8 @@ const renderEvents = async (date) => {
             null,
             null,
             null,
-            milestone.g_id
+            milestone.g_id,
+            milestone.g_due_date
           );
         });
         data.week.goals.forEach((goal) => {
@@ -180,7 +182,8 @@ const renderEvents = async (date) => {
             null,
             null,
             null,
-            milestone.g_id
+            milestone.g_id,
+            milestone.g_due_date
           );
         });
         data.month.goals.forEach((goal) => {
@@ -283,8 +286,9 @@ if( !title ) {
     .then((response) => response.json())
     .then((data) => {
       const eventId = data.task_id || data.goal_id
-      console.log(eventId)
+      
       if(data.task_id){
+        //沒有goal button
         createEventComponent(
         timeScale,
         eventType,
@@ -300,6 +304,7 @@ if( !title ) {
         null
       );
       }else {
+        //有goal button
         createEventComponent(
         timeScale,
         eventType,
@@ -333,9 +338,10 @@ const createEventComponent = (
   description,
   parents,
   task_repeat_frequency = 0,
-  task_repeat_end_date = "2100-01-01",
-  milestone_due_date = "2100-01-01",
-  goal_id = 0
+  task_repeat_end_date = null,
+  milestone_due_date = null,
+  goal_id = 0,
+  goal_due_date = null,
 ) => {
   const parentContainer = document.querySelector(
     `.${timeScale}-events-container`
@@ -363,7 +369,8 @@ const createEventComponent = (
           task_repeat_frequency,
           task_repeat_end_date,
           dueDate,
-          milestone_due_date
+          milestone_due_date,
+          eventDueDate
         )
       : null;
   const eventFooterContainer = document.createElement("div");
@@ -448,15 +455,23 @@ const createEventComponent = (
     "row",
     "mb-3"
   );
-  eventDueDate.classList.add("event-due-date");
+  eventDueDate.classList.add("event-due-date", `due-date-${eventType}-${id}`);
   eventDueDate.setAttribute("type", "date");
   eventDueDate.value = dueDate;
+  switch(eventType){
+    case "milestone":
+      eventDueDate.setAttribute("max", goal_due_date);
+      break;
+    case "goal":
+      eventDueDate.setAttribute("max", milestone_due_date);
+      break;
+  }
   eventDescriptionContainer.classList.add(
     "event-description-container",
     "row",
     "mb-3"
   );
-  eventDescription.classList.add("event-description");
+  eventDescription.classList.add("event-description", `event-description-${eventType}-${id}`);
   eventDescription.setAttribute("contenteditable", "true");
   eventDescription.textContent = description
     ? description
@@ -469,7 +484,7 @@ const createEventComponent = (
     "btn",
     "btn-light",
     "save-button",
-    `save-button-${eventType}`
+    `save-button-${eventType}-${id}`
   );
   eventSaveButton.setAttribute("type", "button");
   eventSaveButton.setAttribute("data-bs-toggle", "collapse");
@@ -512,6 +527,9 @@ const createEventComponent = (
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        if(eventDueDate.value !== dueDate){
+          eventOuterContainer.remove()
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -559,7 +577,8 @@ const createTaskRepeatSelector = (
   task_repeat_frequency,
   task_repeat_end_date,
   min_date,
-  max_date
+  max_date,
+  task_due_date_element
 ) => {
   const container = document.createElement("div");
   container.classList.add(
@@ -611,6 +630,9 @@ const createTaskRepeatSelector = (
     repeatEndDateDescription.textContent = "Repeat until..."
     repeatEndDate.classList.add("event-due-date");
     repeatEndDate.setAttribute("type", "date");
+    if(!task_repeat_frequency){
+      repeatEndDate.setAttribute("disabled", "true");
+    }
     repeatEndDate.value = task_repeat_end_date;
     repeatEndDate.setAttribute("min", min_date);
     repeatEndDate.setAttribute("max", max_date);
@@ -619,6 +641,7 @@ const createTaskRepeatSelector = (
         repeatEndDate.setAttribute("disabled", "true");
       } else {
         repeatEndDate.removeAttribute("disabled");
+        repeatEndDate.setAttribute("min", task_due_date_element.value);
       }
     });
     switch (task_repeat_frequency) {
@@ -674,7 +697,6 @@ const renderEventsToday = () => {
   const date = today.getDate().toString();
   const date2Digit = date.length === 1? `0${date}` : date
   const todayYMD = `${year}-${month2Digit}-${date2Digit}`;
-  console.log(todayYMD) 
   renderEvents(todayYMD);
 };
 

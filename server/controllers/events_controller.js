@@ -161,7 +161,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
         }
       }
       if (m_due_date >= dateStart && m_due_date <= dateEnd) {
-        if (!records.milestoneIds.includes(row.m_id)) {
+        if (!records.milestoneIds.includes(row.m_id)){
           records.milestoneIds.push(row.m_id);
           const { m_id, m_title, m_description, m_status, g_id } = row;
           const newMilestone = {
@@ -172,6 +172,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
             m_status,
             m_parent: [row.p_title, row.g_title],
             g_id,
+            g_due_date
           };
           data.milestones.push(newMilestone);
         }
