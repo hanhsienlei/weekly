@@ -55,7 +55,7 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateStartMonth),
       getDateYMD(dateEndMonth)
     );
-    data.month.value = targetDate.split("-")[1];
+    data.month.value = targetDateObject.toLocaleString('default', { month: 'long' });
     data.month.due_date = getDateYMD(dateEndMonth);
 
     data.week = await getEventsByDateRange(

@@ -35,5 +35,9 @@ a:hover {
   font-size: 1.4rem;
 }
 [contenteditable = "true"] {
-  padding: .8rem; 
+  padding: .4rem; 
 } 
+
+.year-new-goal-title {
+  background-color: rgb(225, 255, 245);
+}
