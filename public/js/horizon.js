@@ -15,6 +15,7 @@ const renderEvents = async (date) => {
         const afterKey = `${container}_after`;
         const dateBefore = data.buttons_date[beforeKey];
         const dateAfter = data.buttons_date[afterKey];
+        const subTitle = document.querySelector(`.${container}-sub-title`);
         const eventsContainer = document.querySelector(
           `.${container}-events-container`
         );
@@ -23,6 +24,14 @@ const renderEvents = async (date) => {
         title.textContent = data[container].value;
         beforeButton.setAttribute("onclick", `renderEvents('${dateBefore}')`);
         afterButton.setAttribute("onclick", `renderEvents('${dateAfter}')`);
+        if(container === "date"){
+          subTitle.textContent = data[container].week_day
+        } else {
+          const startDate = data[container].start_date? data[container].start_date.split("-")[1] + "-" + data[container].start_date.split("-")[2] : null
+          const endDate = data[container].due_date? data[container].due_date.split("-")[1] + "-" + data[container].due_date.split("-")[2] : null
+          subTitle.textContent = startDate + " ~ " + endDate
+        }
+        
         eventsContainer.innerHTML = "";
         if (container === "week") {
           title.textContent = "Week " + data[container].value;
@@ -275,7 +284,23 @@ if( !title ) {
     .then((data) => {
       const eventId = data.task_id || data.goal_id
       console.log(eventId)
-      createEventComponent(
+      if(data.task_id){
+        createEventComponent(
+        timeScale,
+        eventType,
+        eventId,
+        title,
+        null,
+        dueDate,
+        null,
+        null,
+        null, 
+        null,
+        null,
+        null
+      );
+      }else {
+        createEventComponent(
         timeScale,
         eventType,
         eventId,
@@ -289,6 +314,8 @@ if( !title ) {
         null,
         eventId
       );
+      }
+      
       input.value = "";
     })
     .catch((err) => {
@@ -538,6 +565,7 @@ const createTaskRepeatSelector = (
   container.classList.add(
     `task-repeat-container-${task_id}`,
     "task-repeat-container",
+    "row",
     "mb-3"
   );
   if (!task_id) {
@@ -562,6 +590,7 @@ const createTaskRepeatSelector = (
     const optionOnceAWeek = document.createElement("option");
     const optionOnceAMonth = document.createElement("option");
     const repeatEndDateContainer = document.createElement("div");
+    const repeatEndDateDescription = document.createElement("span")
     const repeatEndDate = document.createElement("input");
     selector.classList.add("task-repeat-selector", "form-selector", "mb-3");
     optionNoRepeat.setAttribute("value", 0);
@@ -579,6 +608,7 @@ const createTaskRepeatSelector = (
       "row",
       "mb-3"
     );
+    repeatEndDateDescription.textContent = "Repeat until..."
     repeatEndDate.classList.add("event-due-date");
     repeatEndDate.setAttribute("type", "date");
     repeatEndDate.value = task_repeat_end_date;
@@ -613,7 +643,7 @@ const createTaskRepeatSelector = (
       optionOnceAWeek,
       optionOnceAMonth
     );
-    repeatEndDateContainer.append(repeatEndDate);
+    repeatEndDateContainer.append(repeatEndDateDescription, repeatEndDate);
     container.append(selector, repeatEndDateContainer);
   }
 

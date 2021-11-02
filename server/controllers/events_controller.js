@@ -31,14 +31,19 @@ const getEventsByDate = async (req, res) => {
   } else {
     const targetDateObject = getDateObjectFromYMD(targetDate); //get date object with local timezone
     const dayMilliSecond = 60 * 60 * 24 * 1000;
-    //取明天~週日
-    const dateStartWeek = new Date(targetDateObject.valueOf() + dayMilliSecond);
-    const dateEndWeek = getSundayByDate(targetDateObject);
-    //取下週一~月底
+    //取明天~週日 (target date 為週日則 target date)
+    const dateStartWeek = targetDateObject.getDay()
+      ? new Date(targetDateObject.valueOf() + dayMilliSecond)
+      : targetDateObject;
+    const dateEndWeek = targetDateObject.getDay()
+      ? getSundayByDate(targetDateObject)
+      : targetDateObject;
+    //取下週一~月底 
     const dateStartMonth = new Date(dateEndWeek.valueOf() + dayMilliSecond);
     const dateEndMonth = getMonthEndByDate(targetDateObject);
     //取下月初~年底
     const dateStartYear = new Date(dateEndMonth.valueOf() + dayMilliSecond);
+
     const dateEndYear = new Date(targetDate.split("-")[0], 11, 31);
 
     //重複事件有bug......
@@ -48,33 +53,39 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateEndYear)
     );
     data.year.value = targetDate.split("-")[0];
+    data.year.start_date = getDateYMD(dateStartYear);
     data.year.due_date = getDateYMD(dateEndYear);
-
-    data.month = await getEventsByDateRange(
-      userId,
-      getDateYMD(dateStartMonth),
-      getDateYMD(dateEndMonth)
-    );
-    data.month.value = targetDateObject.toLocaleString('default', { month: 'long' });
+      data.month = await getEventsByDateRange(
+        userId,
+        getDateYMD(dateStartMonth),
+        getDateYMD(dateEndMonth)
+      );
+      
+    data.month.value = targetDateObject.toLocaleString("default", {
+      month: "long"});
+    data.month.start_date = getDateYMD(dateStartMonth);
     data.month.due_date = getDateYMD(dateEndMonth);
 
-    data.week = await getEventsByDateRange(
-      userId,
-      getDateYMD(dateStartWeek),
-      getDateYMD(dateEndWeek)
-    );
+      data.week = await getEventsByDateRange(
+        userId,
+        getDateYMD(dateStartWeek),
+        getDateYMD(dateEndWeek)
+      );
+  
+    
+
     data.week.value = getWeekNumberByDate(targetDateObject).weekNumber;
+    data.week.start_date = getDateYMD(dateStartWeek);
     data.week.due_date = getDateYMD(dateEndWeek);
 
     data.date = await getEventsByDateRange(userId, targetDate, targetDate);
-    
-    const weekdayName = targetDateObject.toLocaleString("default", { weekday: "short" })
 
-    data.date.value =
-      targetDate.split("-")[1] +
-      "-" +
-      targetDate.split("-")[2] +
-      ` ${weekdayName}`;
+    const weekdayName = targetDateObject.toLocaleString("default", {
+      weekday: "long",
+    });
+
+    data.date.value = targetDate.split("-")[1] + "-" + targetDate.split("-")[2];
+    data.date.week_day = weekdayName;
     data.date.due_date = targetDate;
 
     //按鈕資料

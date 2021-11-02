@@ -31,12 +31,15 @@
         <div class="horizon-container row justify-content-between">
           <div class="date-container col-3">
             <div class="date-header-container d-flex justify-content-center mt-1">
-              <h4>TODAY</h4>
+              <h4 onclick=renderEventsToday()>TODAY</h4>
             </div>
-            <div class="date-title-container row border-top border-secondary mt-2 py-2">
+            <div class="date-title-container row border-top border-secondary mt-2">
               <div class="date-before before col-2 text-center btn">&lt;</div>
               <div class="date-value col-8 text-center"></div>
               <div class="date-after after col-2 text-center btn">&gt;</div>
+            </div>
+            <div class="date-sub-title-container row mb-2">
+              <div class="date-sub-title text-center"></div>
             </div>
             <div class="date-events-container events-container row px-2 overflow-auto smooth-scroll">
 
@@ -52,10 +55,13 @@
             <div class="week-header-container d-flex justify-content-center mt-1">
               <h4>WEEK</h4>
             </div>
-            <div class="week-title-container row border-top border-secondary mt-2 py-2">
+            <div class="week-title-container row border-top border-secondary mt-2">
               <div class="week-before before col-2 text-center btn">&lt;</div>
               <div class="week-value col-8 text-center"></div>
               <div class="week-after after col-2 text-center btn">&gt;</div>
+            </div>
+            <div class="week-sub-title-container row mb-2">
+              <div class="week-sub-title text-center"></div>
             </div>
             <div class="week-events-container events-container row px-2 overflow-auto smooth-scroll">
             </div>
@@ -71,10 +77,13 @@
             <div class="month-header-container d-flex justify-content-center mt-1">
               <h4>MONTH</h4>
             </div>
-            <div class="month-title-container row border-top border-secondary mt-2 py-2">
+            <div class="month-title-container row border-top border-secondary mt-2">
               <div class="month-before before col-2 text-center btn">&lt;</div>
               <div class="month-value col-8 text-center"></div>
               <div class="month-after after col-2 text-center btn">&gt;</div>
+            </div>
+            <div class="month-sub-title-container row mb-2">
+              <div class="month-sub-title text-center"></div>
             </div>
             <div class="month-events-container events-container row px-2 overflow-auto smooth-scroll"></div>
             <div class="month-add-new-container row px-2">
@@ -88,10 +97,13 @@
             <div class="year-header-container d-flex justify-content-center mt-1">
               <h4>YEAR</h4>
             </div>
-            <div class="year-title-container row border-top border-secondary mt-2 py-2">
+            <div class="year-title-container row border-top border-secondary mt-2">
               <div class="year-before before col-2 text-center btn">&lt;</div>
               <div class="year-value col-8 text-center"></div>
               <div class="year-after after col-2 text-center btn">&gt;</div>
+            </div>
+            <div class="year-sub-title-container row mb-2">
+              <div class="year-sub-title text-center"></div>
             </div>
             <div class="year-events-container events-container row px-2 overflow-auto smooth-scroll"></div>
             <div class="year-add-new-container row px-2">
