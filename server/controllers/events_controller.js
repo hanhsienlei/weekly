@@ -25,7 +25,7 @@ const getEventsByDate = async (req, res) => {
     milestone_list: [],
     buttons_date: {},
   };
-  
+
   if (!userId) {
     return res.status(400).send({ message: "user id is required." });
   } else {
@@ -40,7 +40,7 @@ const getEventsByDate = async (req, res) => {
     //取下月初~年底
     const dateStartYear = new Date(dateEndMonth.valueOf() + dayMilliSecond);
     const dateEndYear = new Date(targetDate.split("-")[0], 11, 31);
-    
+
     //重複事件有bug......
     data.year = await getEventsByDateRange(
       userId,
@@ -48,7 +48,7 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateEndYear)
     );
     data.year.value = targetDate.split("-")[0];
-    data.year.due_date = getDateYMD(dateEndYear)
+    data.year.due_date = getDateYMD(dateEndYear);
 
     data.month = await getEventsByDateRange(
       userId,
@@ -56,7 +56,7 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateEndMonth)
     );
     data.month.value = targetDate.split("-")[1];
-    data.month.due_date = getDateYMD(dateEndMonth)
+    data.month.due_date = getDateYMD(dateEndMonth);
 
     data.week = await getEventsByDateRange(
       userId,
@@ -64,18 +64,23 @@ const getEventsByDate = async (req, res) => {
       getDateYMD(dateEndWeek)
     );
     data.week.value = getWeekNumberByDate(targetDateObject).weekNumber;
-        data.week.due_date = getDateYMD(dateEndWeek)
-
+    data.week.due_date = getDateYMD(dateEndWeek);
 
     data.date = await getEventsByDateRange(userId, targetDate, targetDate);
-    data.date.value = targetDate.split("-")[1] + "-" + targetDate.split("-")[2];
-    data.date.due_date = targetDate
-
     
+    const weekdayName = targetDateObject.toLocaleString("default", { weekday: "short" })
+
+    data.date.value =
+      targetDate.split("-")[1] +
+      "-" +
+      targetDate.split("-")[2] +
+      ` ${weekdayName}`;
+    data.date.due_date = targetDate;
+
     //按鈕資料
     data.buttons_date = getButtonsDate(targetDateObject);
     data.milestone_list = await getMilestoneList(userId);
-    
+
     return res.status(200).send(data);
   }
 };
@@ -99,7 +104,15 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
       function addTask(IsCloneOfTask) {
-        const { t_id, t_title, t_description, t_status, r_frequency, t_repeat, g_id } = row;
+        const {
+          t_id,
+          t_title,
+          t_description,
+          t_status,
+          r_frequency,
+          t_repeat,
+          g_id,
+        } = row;
         const newTask = {
           t_id,
           t_title,
@@ -108,12 +121,12 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_status,
           t_parent: [row.p_title, row.g_title, row.m_title],
           t_repeat,
-          r_frequency, 
+          r_frequency,
           r_end_date,
           m_due_date,
-          g_id
+          g_id,
         };
-        console.log("newTask: ", newTask)
+        console.log("newTask: ", newTask);
         if (IsCloneOfTask) {
           newTask.t_id = null;
           newTask.t_due_date = dateEnd;
@@ -147,7 +160,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
             m_due_date,
             m_status,
             m_parent: [row.p_title, row.g_title],
-            g_id
+            g_id,
           };
           data.milestones.push(newMilestone);
         }
@@ -199,7 +212,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
 };
 
 const getButtonsDate = (dateObject) => {
-  console.log("date from getButtonsDate(): ", dateObject)
+  console.log("date from getButtonsDate(): ", dateObject);
   const dayMilliSecond = 60 * 60 * 24 * 1000;
   const data = {};
   data.date_before = getDateYMD(
