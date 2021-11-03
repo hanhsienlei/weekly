@@ -40,9 +40,9 @@ const renderEvents = async (date) => {
             : null;
           subTitle.textContent = startDate + " ~ " + endDate;
         }
-        eventsContainer.classList.add(
-          `events-container-${data[container].due_date}`
-        );
+        // eventsContainer.classList.add(
+        //   `events-container-${data[container].due_date}`
+        // );
         eventsContainer.setAttribute("data-due-date", data[container].due_date);
         eventsContainer.setAttribute(
           "data-start-date",
@@ -69,8 +69,10 @@ const renderEvents = async (date) => {
             task.t_parent.join("·"),
             repeated_frequency,
             task.r_end_date,
+            task.m_id,
             task.m_due_date,
-            task.g_id
+            task.g_id,
+            task.g_due_date
           );
         });
         data.date.milestones.forEach((milestone) => {
@@ -83,6 +85,7 @@ const renderEvents = async (date) => {
             milestone.m_due_date,
             milestone.m_description,
             milestone.m_parent.join("·"),
+            null,
             null,
             null,
             null,
@@ -100,6 +103,7 @@ const renderEvents = async (date) => {
             goal.g_due_date,
             goal.g_description,
             goal.g_parent.join("·"),
+            null,
             null,
             null,
             null,
@@ -123,6 +127,7 @@ const renderEvents = async (date) => {
               task.t_parent.join("·"),
               repeated_frequency,
               task.r_end_date,
+              task.m_id,
               task.m_due_date,
               task.g_id
             );
@@ -141,6 +146,7 @@ const renderEvents = async (date) => {
             null,
             null,
             null,
+            null,
             milestone.g_id,
             milestone.g_due_date
           );
@@ -155,6 +161,7 @@ const renderEvents = async (date) => {
             goal.g_due_date,
             goal.g_description,
             goal.g_parent.join("·"),
+            null,
             null,
             null,
             null,
@@ -178,6 +185,7 @@ const renderEvents = async (date) => {
               task.t_parent.join("·"),
               repeated_frequency,
               task.r_end_date,
+              task.m_id,
               task.m_due_date,
               task.g_id
             );
@@ -196,6 +204,7 @@ const renderEvents = async (date) => {
             null,
             null,
             null,
+            null,
             milestone.g_id,
             milestone.g_due_date
           );
@@ -210,6 +219,7 @@ const renderEvents = async (date) => {
             goal.g_due_date,
             goal.g_description,
             goal.g_parent.join("·"),
+            null,
             null,
             null,
             null,
@@ -232,6 +242,7 @@ const renderEvents = async (date) => {
               task.t_parent.join("·"),
               repeated_frequency,
               task.r_end_date,
+              task.m_id,
               task.m_due_date,
               task.g_id
             );
@@ -251,6 +262,7 @@ const renderEvents = async (date) => {
             null,
             null,
             null,
+            null,
             milestone.g_id
           );
         });
@@ -264,6 +276,7 @@ const renderEvents = async (date) => {
             goal.g_due_date,
             goal.g_description,
             goal.g_parent.join("·"),
+            null,
             null,
             null,
             null,
@@ -331,6 +344,7 @@ const addNewEvent = (timeScale, eventType) => {
           null,
           null,
           null,
+          null,
           eventId
         );
       }
@@ -353,8 +367,9 @@ const createEventComponent = (
   parents,
   task_repeat_frequency = 0,
   task_repeat_end_date = null,
+  milestone_id = null,
   milestone_due_date = null,
-  goal_id = 0,
+  goal_id = null,
   goal_due_date = null
 ) => {
   //如果移動要改parentContainer所以用let
@@ -414,8 +429,12 @@ const createEventComponent = (
   // });
   //eventToggle.setAttribute("data-bs-toggle", "collapse");
   //eventToggle.setAttribute("data-bs-target", `#editor-${eventType}-${id}`)
+  eventOuterContainer.setAttribute("data-milestone-id", milestone_id)
+  eventOuterContainer.setAttribute("data-milestone-due-date", milestone_due_date)
+  eventOuterContainer.setAttribute("data-goal-id", goal_id)
+  eventOuterContainer.setAttribute("data-goal-due-date", goal_due_date)
   eventHeaderContainer.classList.add("event-header-container", "row", "mb-3");
-  eventInfoContainer.classList.add("event-info-container", "col-10");
+  eventOuterContainer.classList.add("event-info-container", "col-10");
   tagsContainer.classList.add("tags-container");
   EventTitleContainer.classList.add("event-title-container", "my-2");
   checkBox.classList.add("form-check-input");
@@ -443,7 +462,9 @@ const createEventComponent = (
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
-
+    if(!id && eventType === "task"){
+      body.task_milestone_id = milestone_id
+    }
     console.log("[checkbox] body: ", body);
     fetch(`/api/${eventType}`, {
       method: "POST",
@@ -536,6 +557,9 @@ const createEventComponent = (
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
+    if(!id && eventType === "task"){
+      body.task_milestone_id = milestone_id
+    }
 
     
     if (taskRepeatSelector) {

@@ -38,7 +38,7 @@ const getEventsByDate = async (req, res) => {
     const dateEndWeek = targetDateObject.getDay()
       ? getSundayByDate(targetDateObject)
       : targetDateObject;
-    //取下週一~月底 
+    //取下週一~月底
     const dateStartMonth = new Date(dateEndWeek.valueOf() + dayMilliSecond);
     const dateEndMonth = getMonthEndByDate(targetDateObject);
     //取下月初~年底
@@ -55,24 +55,23 @@ const getEventsByDate = async (req, res) => {
     data.year.value = targetDate.split("-")[0];
     data.year.start_date = getDateYMD(dateStartYear);
     data.year.due_date = getDateYMD(dateEndYear);
-      data.month = await getEventsByDateRange(
-        userId,
-        getDateYMD(dateStartMonth),
-        getDateYMD(dateEndMonth)
-      );
-      
+    data.month = await getEventsByDateRange(
+      userId,
+      getDateYMD(dateStartMonth),
+      getDateYMD(dateEndMonth)
+    );
+
     data.month.value = targetDateObject.toLocaleString("default", {
-      month: "long"});
+      month: "long",
+    });
     data.month.start_date = getDateYMD(dateStartMonth);
     data.month.due_date = getDateYMD(dateEndMonth);
 
-      data.week = await getEventsByDateRange(
-        userId,
-        getDateYMD(dateStartWeek),
-        getDateYMD(dateEndWeek)
-      );
-  
-    
+    data.week = await getEventsByDateRange(
+      userId,
+      getDateYMD(dateStartWeek),
+      getDateYMD(dateEndWeek)
+    );
 
     data.week.value = getWeekNumberByDate(targetDateObject).weekNumber;
     data.week.start_date = getDateYMD(dateStartWeek);
@@ -108,6 +107,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       tasks: [],
     };
     const records = { goalIds: [], milestoneIds: [], taskIds: [] };
+    const dateTaskTitles = [];
     result.forEach((row) => {
       //javascript會自動將時區加入到date string再做成ISO string(UTC), 例如2021-10-25會變成2021-10-24T16:00:00.000Z
       //要自己轉回local time zone 的 date string (YYYY-MM-DD)
@@ -123,6 +123,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_status,
           r_frequency,
           t_repeat,
+          m_id,
           g_id,
         } = row;
         const newTask = {
@@ -135,8 +136,10 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_repeat,
           r_frequency,
           r_end_date,
+          m_id,
           m_due_date,
           g_id,
+          g_due_date,
         };
         console.log("newTask: ", newTask);
         if (IsCloneOfTask) {
@@ -162,7 +165,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
         }
       }
       if (m_due_date >= dateStart && m_due_date <= dateEnd) {
-        if (!records.milestoneIds.includes(row.m_id)){
+        if (!records.milestoneIds.includes(row.m_id)) {
           records.milestoneIds.push(row.m_id);
           const { m_id, m_title, m_description, m_status, g_id } = row;
           const newMilestone = {
@@ -173,7 +176,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
             m_status,
             m_parent: [row.p_title, row.g_title],
             g_id,
-            g_due_date
+            g_due_date,
           };
           data.milestones.push(newMilestone);
         }
@@ -181,14 +184,62 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       if (t_due_date >= dateStart && t_due_date <= dateEnd) {
         if (!records.taskIds.includes(row.t_id)) {
           records.taskIds.push(row.t_id);
+          dateTaskTitles.push(row.t_title);
           addTask(0);
         }
       }
+      console.log("records:", records);
+    });
+
+    //render玩真tasks後才render repeated tasks
+     result.forEach((row) => {
+      const g_due_date = row.g_due_date ? getDateYMD(row.g_due_date) : null;
+      const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+      const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
+      const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+      function addTask(IsCloneOfTask) {
+        const {
+          t_id,
+          t_title,
+          t_description,
+          t_status,
+          r_frequency,
+          t_repeat,
+          m_id,
+          g_id,
+        } = row;
+        const newTask = {
+          t_id,
+          t_title,
+          t_description,
+          t_due_date,
+          t_status,
+          t_parent: [row.p_title, row.g_title, row.m_title],
+          t_repeat,
+          r_frequency,
+          r_end_date,
+          m_id,
+          m_due_date,
+          g_id,
+          g_due_date,
+        };
+        console.log("newTask: ", newTask);
+        if (IsCloneOfTask) {
+          newTask.t_id = null;
+          newTask.t_due_date = dateEnd;
+          console.log("repeated task added!!!!t_id: ", t_id);
+        }
+        data.tasks.push(newTask);
+      }
+      
       if (row.t_repeat == 1 && !records.taskIds.includes(row.t_id)) {
+        console.log("dateTaskTitles: ", dateTaskTitles)
         if (row.r_frequency == 1) {
           console.log("r_f =1!!!");
           records.taskIds.push(row.t_id);
-          addTask(1);
+          if (!dateTaskTitles.includes(row.t_title)) {
+            addTask(1);
+          }
         }
         if (row.r_frequency == 7) {
           let dateInit = row.t_due_date;
@@ -199,7 +250,10 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
             );
             if (getDateYMD(dateNew) == dateEnd) {
               records.taskIds.push(row.t_id);
-              addTask(1);
+              if (!dateTaskTitles.includes(row.t_title)) {
+                addTask(1);
+              }
+
               break;
             }
             dateInit = dateNew;
@@ -211,14 +265,16 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
             let dateNew = getNextMonthThisDay(row.t_end_date);
             if (getDateYMD(dateNew) == dateEnd) {
               records.taskIds.push(row.t_id);
-              addTask(1);
+              if (!dateTaskTitles.includes(row.t_title)) {
+                addTask(1);
+              }
+
               break;
             }
             dateInit = dateNew;
           }
         }
       }
-      console.log("records:", records);
     });
     return data;
   }
