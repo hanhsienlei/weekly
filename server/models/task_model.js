@@ -16,8 +16,28 @@ const getTask = async (taskId) => {
   return result[0]
 }
 
+const DeleteTasksByMilestoneId = async (milestoneId) => {
+  const [ result ] = await pool.query(`
+  UPDATE task 
+  SET status = -1
+  WHERE milestone_id = ?;
+  `, milestoneId)
+  return result
+}
+
+const DeleteTask = async (taskId) => {
+  const [ result ] = await pool.query(`
+  UPDATE task 
+  SET status = -1
+  WHERE id = ?;
+  `, taskId)
+  return result
+}
+
 module.exports = {
   createTask,
   updateTask,
-  getTask
+  getTask,
+  DeleteTasksByMilestoneId,
+  DeleteTask
 }

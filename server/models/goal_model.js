@@ -92,6 +92,16 @@ const getGoalsByUser = async (userId) => {
 }
 
 
+const deleteGoal = async (goalId) => {
+  const [ result ] = await pool.query(`
+  UPDATE goal 
+  SET status = -1
+  WHERE id = ?;
+  `, goalId)
+  return result
+}
+
+
 
 module.exports = {
   createGoal,
@@ -99,5 +109,6 @@ module.exports = {
   getGoal,
   getGoalWithPlan,
   getGoalsAndMilestonesByUser,
-  getGoalsByUser
+  getGoalsByUser,
+  deleteGoal
 }
