@@ -21,17 +21,33 @@ const renderEvents = async (date) => {
         );
 
         title.setAttribute("data-due-date", data[container].due_date);
+
         title.textContent = data[container].value;
         beforeButton.setAttribute("onclick", `renderEvents('${dateBefore}')`);
         afterButton.setAttribute("onclick", `renderEvents('${dateAfter}')`);
-        if(container === "date"){
-          subTitle.textContent = data[container].week_day
+        if (container === "date") {
+          subTitle.textContent = data[container].week_day;
         } else {
-          const startDate = data[container].start_date? data[container].start_date.split("-")[1] + "-" + data[container].start_date.split("-")[2] : null
-          const endDate = data[container].due_date? data[container].due_date.split("-")[1] + "-" + data[container].due_date.split("-")[2] : null
-          subTitle.textContent = startDate + " ~ " + endDate
+          const startDate = data[container].start_date
+            ? data[container].start_date.split("-")[1] +
+              "-" +
+              data[container].start_date.split("-")[2]
+            : null;
+          const endDate = data[container].due_date
+            ? data[container].due_date.split("-")[1] +
+              "-" +
+              data[container].due_date.split("-")[2]
+            : null;
+          subTitle.textContent = startDate + " ~ " + endDate;
         }
-        eventsContainer.classList.add(`events-container-${data[container].due_date}`)
+        eventsContainer.classList.add(
+          `events-container-${data[container].due_date}`
+        );
+        eventsContainer.setAttribute("data-due-date", data[container].due_date);
+        eventsContainer.setAttribute(
+          "data-start-date",
+          data[container].start_date
+        );
         eventsContainer.innerHTML = "";
         if (container === "week") {
           title.textContent = "Week " + data[container].value;
@@ -95,23 +111,22 @@ const renderEvents = async (date) => {
       if (data.week.tasks) {
         data.week.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          if (task.t_id){
+          if (task.t_id) {
             createEventComponent(
-            "week",
-            "task",
-            task.t_id,
-            task.t_title,
-            task.t_status,
-            task.t_due_date,
-            task.t_description,
-            task.t_parent.join("·"),
-            repeated_frequency,
-            task.r_end_date,
-            task.m_due_date,
-            task.g_id
-          );
+              "week",
+              "task",
+              task.t_id,
+              task.t_title,
+              task.t_status,
+              task.t_due_date,
+              task.t_description,
+              task.t_parent.join("·"),
+              repeated_frequency,
+              task.r_end_date,
+              task.m_due_date,
+              task.g_id
+            );
           }
-          
         });
         data.week.milestones.forEach((milestone) => {
           createEventComponent(
@@ -151,23 +166,22 @@ const renderEvents = async (date) => {
       if (data.month.tasks) {
         data.month.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          if(task.t_id){
+          if (task.t_id) {
             createEventComponent(
-            "month",
-            "task",
-            task.t_id,
-            task.t_title,
-            task.t_status,
-            task.t_due_date,
-            task.t_description,
-            task.t_parent.join("·"),
-            repeated_frequency,
-            task.r_end_date,
-            task.m_due_date,
-            task.g_id
-          );
+              "month",
+              "task",
+              task.t_id,
+              task.t_title,
+              task.t_status,
+              task.t_due_date,
+              task.t_description,
+              task.t_parent.join("·"),
+              repeated_frequency,
+              task.r_end_date,
+              task.m_due_date,
+              task.g_id
+            );
           }
-          
         });
         data.month.milestones.forEach((milestone) => {
           createEventComponent(
@@ -206,21 +220,21 @@ const renderEvents = async (date) => {
       if (data.year.tasks) {
         data.year.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          if(task.t_id){
+          if (task.t_id) {
             createEventComponent(
-            "year",
-            "task",
-            task.t_id,
-            task.t_title,
-            task.t_status,
-            task.t_due_date,
-            task.t_description,
-            task.t_parent.join("·"),
-            repeated_frequency,
-            task.r_end_date,
-            task.m_due_date,
-            task.g_id
-          );
+              "year",
+              "task",
+              task.t_id,
+              task.t_title,
+              task.t_status,
+              task.t_due_date,
+              task.t_description,
+              task.t_parent.join("·"),
+              repeated_frequency,
+              task.r_end_date,
+              task.m_due_date,
+              task.g_id
+            );
           }
         });
 
@@ -271,13 +285,13 @@ const addNewEvent = (timeScale, eventType) => {
   const body = {
     user_id: 1,
   };
-  body[`${eventType}_title`] = title
-  body[`${eventType}_due_date`] = dueDate
-  body[`${eventType}_due_date_unix`] = dueDateUnix
+  body[`${eventType}_title`] = title;
+  body[`${eventType}_due_date`] = dueDate;
+  body[`${eventType}_due_date_unix`] = dueDateUnix;
 
-if( !title ) {
-  return alert(`Please name the ${eventType} before adding!`)
-} 
+  if (!title) {
+    return alert(`Please name the ${eventType} before adding!`);
+  }
   fetch(`/api/${eventType}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -285,42 +299,42 @@ if( !title ) {
   })
     .then((response) => response.json())
     .then((data) => {
-      const eventId = data.task_id || data.goal_id
-      
-      if(data.task_id){
+      const eventId = data.task_id || data.goal_id;
+
+      if (data.task_id) {
         //沒有goal button
         createEventComponent(
-        timeScale,
-        eventType,
-        eventId,
-        title,
-        null,
-        dueDate,
-        null,
-        null,
-        null, 
-        null,
-        null,
-        null
-      );
-      }else {
+          timeScale,
+          eventType,
+          eventId,
+          title,
+          null,
+          dueDate,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        );
+      } else {
         //有goal button
         createEventComponent(
-        timeScale,
-        eventType,
-        eventId,
-        title,
-        null,
-        dueDate,
-        null,
-        null,
-        null, 
-        null,
-        null,
-        eventId
-      );
+          timeScale,
+          eventType,
+          eventId,
+          title,
+          null,
+          dueDate,
+          null,
+          null,
+          null,
+          null,
+          null,
+          eventId
+        );
       }
-      
+
       input.value = "";
     })
     .catch((err) => {
@@ -341,9 +355,10 @@ const createEventComponent = (
   task_repeat_end_date = null,
   milestone_due_date = null,
   goal_id = 0,
-  goal_due_date = null,
+  goal_due_date = null
 ) => {
-  const parentContainer = document.querySelector(
+  //如果移動要改parentContainer所以用let
+  let parentContainer = document.querySelector(
     `.${timeScale}-events-container`
   );
   const eventOuterContainer = document.createElement("div");
@@ -373,6 +388,13 @@ const createEventComponent = (
           eventDueDate
         )
       : null;
+  const taskRepeatSelector = taskRepeatSelectorContainer
+      ? taskRepeatSelectorContainer.querySelector("select")
+      : null;
+  const taskRepeatEndDate = taskRepeatSelectorContainer
+      ? taskRepeatSelectorContainer.querySelector("input")
+      : null;
+      
   const eventFooterContainer = document.createElement("div");
   const eventSaveButton = document.createElement("button");
   const eventCancelButton = document.createElement("button");
@@ -398,28 +420,30 @@ const createEventComponent = (
   EventTitleContainer.classList.add("event-title-container", "my-2");
   checkBox.classList.add("form-check-input");
   checkBox.setAttribute("type", "checkbox");
-  if (status){
-  checkBox.setAttribute("checked", "true");}
-  checkBox.addEventListener("click", e => {
-    const isChecked = checkBox.hasAttribute("checked")
-    if(isChecked){
-      checkBox.removeAttribute("checked")
+  if (status) {
+    checkBox.setAttribute("checked", "true");
+  }
+  checkBox.addEventListener("click", (e) => {
+    const isChecked = checkBox.hasAttribute("checked");
+    if (isChecked) {
+      checkBox.removeAttribute("checked");
     } else {
-      checkBox.setAttribute("checked", "true")
+      checkBox.setAttribute("checked", "true");
     }
-    const isCheckedNew = checkBox.hasAttribute("checked")
+    const isCheckedNew = checkBox.hasAttribute("checked");
 
     const body = {};
     body.user_id = 1;
     body[`${eventType}_id`] = id;
     body[`${eventType}_title`] = eventTitle.textContent;
     body[`${eventType}_description`] = eventDescription.textContent;
-    body[`${eventType}_status`] = isCheckedNew? 1 : 0
-    body[`${eventType}_due_date`] = eventDueDate.value.length == 10 ? eventDueDate.value : null;
+    body[`${eventType}_status`] = isCheckedNew ? 1 : 0;
+    body[`${eventType}_due_date`] =
+      eventDueDate.value.length == 10 ? eventDueDate.value : null;
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
-    
+
     console.log("[checkbox] body: ", body);
     fetch(`/api/${eventType}`, {
       method: "POST",
@@ -433,12 +457,12 @@ const createEventComponent = (
       .catch((err) => {
         console.log(err);
       });
-  })
+  });
   eventTitle.classList.add("event-title");
   eventTitle.setAttribute("contenteditable", "true");
   eventTitle.textContent = title;
   eventParents.classList.add("event-parents", "mt-1", "mb-2", "text-muted");
-  eventParents.textContent = parents !="··" ?parents : null;
+  eventParents.textContent = parents != "··" ? parents : null;
   eventInfoButtonContainer.classList.add(
     "event-info-button-container",
     "col-2"
@@ -458,7 +482,7 @@ const createEventComponent = (
   eventDueDate.classList.add("event-due-date", `due-date-${eventType}-${id}`);
   eventDueDate.setAttribute("type", "date");
   eventDueDate.value = dueDate;
-  switch(eventType){
+  switch (eventType) {
     case "milestone":
       eventDueDate.setAttribute("max", goal_due_date);
       break;
@@ -471,7 +495,19 @@ const createEventComponent = (
     "row",
     "mb-3"
   );
-  eventDescription.classList.add("event-description", `event-description-${eventType}-${id}`);
+  eventDescription.classList.add(
+    "event-description",
+    `event-description-${eventType}-${id}`
+  );
+  
+  eventDueDate.addEventListener("change", ()=>{
+    if (taskRepeatSelector) {
+      taskRepeatEndDate.min = eventDueDate.value
+      if(taskRepeatEndDate.value < eventDueDate.value){
+        taskRepeatEndDate.value = eventDueDate.value
+      }
+    }
+  })
   eventDescription.setAttribute("contenteditable", "true");
   eventDescription.textContent = description
     ? description
@@ -495,24 +531,27 @@ const createEventComponent = (
     body[`${eventType}_id`] = id;
     body[`${eventType}_title`] = eventTitle.textContent;
     body[`${eventType}_description`] = eventDescription.textContent;
-    body[`${eventType}_status`] = checkBox.hasAttribute("checked")? 1 : 0
+    body[`${eventType}_status`] = checkBox.hasAttribute("checked") ? 1 : 0;
     body[`${eventType}_due_date`] = eventDueDate.value;
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
+
     
-    const repeatSelector = taskRepeatSelectorContainer
-      ? taskRepeatSelectorContainer.querySelector("select")
-      : null;
-    if (repeatSelector) {
+    if (taskRepeatSelector) {
       const task_r_frequency =
-        repeatSelector.options[repeatSelector.selectedIndex].value;
+        taskRepeatSelector.options[taskRepeatSelector.selectedIndex].value;
       const task_repeat = task_r_frequency != 0 ? 1 : 0;
-      const task_r_end_date =
-        taskRepeatSelectorContainer.querySelector("input").value ||
-        taskRepeatSelectorContainer.querySelector("input").max;
+      const task_r_end_date = taskRepeatEndDate.value || taskRepeatEndDate.max;
       body.task_repeat = task_repeat;
       body.task_r_frequency = task_r_frequency;
+      //task due date > repeat end date的話，repeat end date設為task due date
+      if(task_r_end_date < eventDueDate.value){
+        body.task_r_end_date = eventDueDate.value;
+      body.task_r_end_date_unix = Math.ceil(
+        new Date(eventDueDate.value + "T23:59:59"))
+      }
+      console.log("task repeat date set to new task due date by system!")
       body.task_r_end_date = task_r_end_date || "2100-01-01";
       body.task_r_end_date_unix = Math.ceil(
         new Date(task_r_end_date + "T23:59:59")
@@ -527,8 +566,28 @@ const createEventComponent = (
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        if(eventDueDate.value !== dueDate){
-          eventOuterContainer.remove()
+        const currentContainerDueDate = parentContainer.dataset.dueDate;
+        const currentContainerStartDate = parentContainer.dataset.startDate;
+        const eventContainers = document.querySelectorAll(".events-container");
+        if (
+          eventDueDate.value < currentContainerStartDate &&
+          eventDueDate.value > currentContainerDueDate
+        ) {
+          parentContainer.removeChild(eventOuterContainer);
+        }
+        for (let i = 0; i < eventContainers.length; i++) {
+          const containerDueDate = eventContainers[i].dataset.dueDate;
+          const containerStartDate = eventContainers[i].dataset.startDate;
+          const isTargetContainer =
+            eventDueDate.value <= containerDueDate &&
+            eventDueDate.value >= containerStartDate;
+          const isCurrentContainer = parentContainer === eventContainers[i];
+          if (isTargetContainer && !isCurrentContainer) {
+            eventContainers[i].appendChild(eventOuterContainer);
+            parentContainer = eventContainers[i]
+            console.log("event appended to  ", eventContainers[i]);
+            return 
+          }
         }
       })
       .catch((err) => {
@@ -609,7 +668,7 @@ const createTaskRepeatSelector = (
     const optionOnceAWeek = document.createElement("option");
     const optionOnceAMonth = document.createElement("option");
     const repeatEndDateContainer = document.createElement("div");
-    const repeatEndDateDescription = document.createElement("span")
+    const repeatEndDateDescription = document.createElement("span");
     const repeatEndDate = document.createElement("input");
     selector.classList.add("task-repeat-selector", "form-selector", "mb-3");
     optionNoRepeat.setAttribute("value", 0);
@@ -627,10 +686,10 @@ const createTaskRepeatSelector = (
       "row",
       "mb-3"
     );
-    repeatEndDateDescription.textContent = "Repeat until..."
+    repeatEndDateDescription.textContent = "Repeat until...";
     repeatEndDate.classList.add("event-due-date");
     repeatEndDate.setAttribute("type", "date");
-    if(!task_repeat_frequency){
+    if (!task_repeat_frequency) {
       repeatEndDate.setAttribute("disabled", "true");
     }
     repeatEndDate.value = task_repeat_end_date;
@@ -693,9 +752,9 @@ const renderEventsToday = () => {
   const today = new Date();
   const year = today.getFullYear().toString();
   const month = (today.getMonth() + 1).toString();
-  const month2Digit = month.length === 1? `0${month}` : month
+  const month2Digit = month.length === 1 ? `0${month}` : month;
   const date = today.getDate().toString();
-  const date2Digit = date.length === 1? `0${date}` : date
+  const date2Digit = date.length === 1 ? `0${date}` : date;
   const todayYMD = `${year}-${month2Digit}-${date2Digit}`;
   renderEvents(todayYMD);
 };

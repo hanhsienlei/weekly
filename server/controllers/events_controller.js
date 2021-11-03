@@ -87,6 +87,7 @@ const getEventsByDate = async (req, res) => {
     data.date.value = targetDate.split("-")[1] + "-" + targetDate.split("-")[2];
     data.date.week_day = weekdayName;
     data.date.due_date = targetDate;
+    data.date.start_date = targetDate;
 
     //按鈕資料
     data.buttons_date = getButtonsDate(targetDateObject);
