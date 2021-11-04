@@ -1,3 +1,14 @@
+const deleteGoalAndChildren = (goalId) => {
+  fetch(`/api/goal?goal_id=${goalId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 const renderEvents = async (date) => {
   fetch(`/api/events/${date}?user_id=1`)
     .then((response) => response.json())
@@ -437,7 +448,9 @@ const createEventComponent = (
   const eventFooterContainer = document.createElement("div");
   const eventSaveButton = document.createElement("button");
   const eventCancelButton = document.createElement("button");
-  const goalEditorButton = goal_id ? createGoalButton(goal_id) : null;
+  const goalDeleteButton =
+    eventType === "goal" ? createDeleteGoalButton(goal_id) : null;
+  const goalEditorButton = goal_id ? createViewGoalButton(goal_id) : null;
 
   eventOuterContainer.classList.add(
     `${eventType}-outer-container`,
@@ -674,6 +687,9 @@ const createEventComponent = (
   });
 
   eventFooterContainer.append(eventSaveButton, eventCancelButton);
+  if (eventType === "goal") {
+    eventFooterContainer.append(goalDeleteButton);
+  }
   if (goal_id) {
     eventFooterContainer.append(goalEditorButton);
   }
@@ -798,15 +814,53 @@ const createTaskRepeatSelector = (
 
   return container;
 };
-const createGoalButton = (goal_id) => {
+const createViewGoalButton = (goal_id) => {
   const button = document.createElement("button");
-  button.classList.add("btn", "btn-light", "edit-goal-button");
+  button.classList.add("btn", "btn-info", "edit-goal-button");
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#modal-goal");
   button.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-  button.textContent = "check goal";
+  button.textContent = "view goal";
   return button;
+};
+const createDeleteGoalButton = (goalId) => {
+  const button = document.createElement("button");
+  button.setAttribute("type", "button");
+  button.setAttribute("data-bs-toggle", "modal");
+  button.setAttribute("data-bs-target", "#deleteGoalModal");
+  button.classList.add("btn", "btn-light");
+  button.textContent = "delete";
+
+  button.addEventListener("click", (e) => {
+    const deleteGoalModal = document.querySelector("#deleteGoalModal");
+    const modalFooter = deleteGoalModal.querySelector(".modal-footer");
+    const deleteGoalButton = deleteGoalModal.querySelector(
+      ".delete-goal-button"
+    );
+    deleteGoalButton.setAttribute(
+      "onclick",
+      `deleteGoalAndChildren(${goalId})`
+    );
+    const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
+    console.log("oldViewGoalButton: ", oldViewGoalButton);
+    if (oldViewGoalButton) {
+      oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
+
+    }
+    const viewGoalButton = createViewGoalButton(goalId);
+    viewGoalButton.setAttribute("data-bs-dismiss","modal")
+    modalFooter.appendChild(viewGoalButton);
+  });
+
+  return button;
+};
+const createDeleteMilestoneButton = (milestoneId) => {
+  const button = document.createElement("button");
+  button.setAttribute("type", "button");
+  button.setAttribute("data-bs-toggle", "modal");
+  button.setAttribute("data-bs-target", "#deleteMilestoneModal");
+  button.classList.add("btn", "btn-light");
 };
 
 //還沒做完
