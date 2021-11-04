@@ -30,20 +30,14 @@ const getMilestoneWithChildrenIds = async (milestoneId) => {
   return result
 }
 
-const DeleteMilestonesByGoalId = async (goalId) => {
+const DeleteMilestoneAndChildren = async (milestoneId) => {
   const [ result ] = await pool.query(`
-  UPDATE milestone 
-  SET status = -1
-  WHERE goal_id = ?;
-  `, goalId)
-  return result
-}
-
-const DeleteMilestone = async (milestoneId) => {
-  const [ result ] = await pool.query(`
-  UPDATE milestone 
-  SET status = -1
-  WHERE id = ?;
+  UPDATE 
+  milestone m 
+  INNER JOIN task t ON (m.id = t.milestone_id)
+  SET
+  m.status = -1, t.status = -1
+  WHERE m.id = ? ;
   `, milestoneId)
   return result
 }
@@ -55,8 +49,7 @@ module.exports = {
   saveMilestone,
   getMilestone,
   getMilestoneWithChildrenIds,
-  DeleteMilestonesByGoalId,
-  DeleteMilestone
+  DeleteMilestoneAndChildren
 }
 
 

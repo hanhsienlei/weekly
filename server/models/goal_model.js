@@ -92,11 +92,14 @@ const getGoalsByUser = async (userId) => {
 }
 
 
-const deleteGoal = async (goalId) => {
+const DeleteGoalAndChildren = async (goalId) => {
   const [ result ] = await pool.query(`
-  UPDATE goal 
-  SET status = -1
-  WHERE id = ?;
+  UPDATE goal g 
+  INNER JOIN milestone m ON (g.id = m.goal_id)
+  INNER JOIN task t ON (m.id = t.milestone_id)
+  SET
+  g.status = -1, m.status = -1, t.status = -1 
+  WHERE g.id = ? ;
   `, goalId)
   return result
 }
@@ -110,5 +113,5 @@ module.exports = {
   getGoalWithPlan,
   getGoalsAndMilestonesByUser,
   getGoalsByUser,
-  deleteGoal
+  DeleteGoalAndChildren
 }
