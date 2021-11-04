@@ -417,11 +417,15 @@ const createEventComponent = (
   const eventInfoContainer = document.createElement("div");
   const tagsContainer = document.createElement("div");
   const EventTitleContainer = document.createElement("div");
+  const checkBoxContainer = document.createElement("div")
+  
   const checkBox = document.createElement("input");
+  const eventTitleContentContainer = document.createElement("div")
   const eventTitle = document.createElement("span");
-  const eventParents = document.createElement("h6");
   const eventInfoButtonContainer = document.createElement("div");
   const editButton = document.createElement("button");
+  const eventParents = document.createElement("h6");
+  
   const eventEditor = document.createElement("div");
   const eventDueDateContainer = document.createElement("div");
   const eventDueDate = document.createElement("input");
@@ -460,12 +464,6 @@ const createEventComponent = (
     "mb-2"
   );
   eventOuterContainer.setAttribute("id", `${eventType}-${id}`);
-  //eventToggle.classList.add("event-toggle");
-  // editButton.addEventListener("click", (e) => {
-  //   e.target.removeAttribute("data-bs-toggle");
-  // });
-  //eventToggle.setAttribute("data-bs-toggle", "collapse");
-  //eventToggle.setAttribute("data-bs-target", `#editor-${eventType}-${id}`)
   eventOuterContainer.setAttribute("data-milestone-id", milestone_id);
   eventOuterContainer.setAttribute(
     "data-milestone-due-date",
@@ -476,7 +474,9 @@ const createEventComponent = (
   eventHeaderContainer.classList.add("event-header-container", "row", "mb-3");
   eventOuterContainer.classList.add("event-info-container", "col-10");
   tagsContainer.classList.add("tags-container");
-  EventTitleContainer.classList.add("event-title-container", "my-2");
+  EventTitleContainer.classList.add("event-title-container", "my-2", "d-flex");
+  checkBoxContainer.classList.add("check-box-container", "col-1")
+  
   checkBox.classList.add("form-check-input");
   checkBox.setAttribute("type", "checkbox");
   if (status) {
@@ -519,6 +519,7 @@ const createEventComponent = (
         console.log(err);
       });
   });
+  eventTitleContentContainer.classList.add("event-title-content-container", "col-9")
   eventTitle.classList.add("event-title");
   eventTitle.setAttribute("contenteditable", "true");
   eventTitle.textContent = title;
@@ -703,13 +704,13 @@ const createEventComponent = (
   if (eventType === "task") {
     eventDescriptionContainer.after(taskRepeatSelectorContainer);
   }
-  EventTitleContainer.append(checkBox, eventTitle, eventParents);
+
+  checkBoxContainer.appendChild(checkBox)
+  eventTitleContentContainer.appendChild(eventTitle)
+  EventTitleContainer.append(checkBoxContainer, eventTitleContentContainer, eventInfoButtonContainer);
   eventInfoButtonContainer.appendChild(editButton);
   eventInfoContainer.append(tagsContainer, EventTitleContainer, eventParents);
-  eventHeaderContainer.append(eventInfoContainer, eventInfoButtonContainer);
-  //eventHeaderContainer.append(eventInfoContainer);
-  //eventToggle.append(eventHeaderContainer, eventEditor);
-  //eventOuterContainer.append(eventToggle);
+  eventHeaderContainer.append(eventInfoContainer);
   eventOuterContainer.append(eventHeaderContainer, eventEditor);
   parentContainer.appendChild(eventOuterContainer);
 };
