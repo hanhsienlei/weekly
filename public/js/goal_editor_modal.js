@@ -79,14 +79,17 @@ const renderGoalEditor = (goalId) => {
         data.milestones.forEach((milestone) => {
           const milestoneId = milestone.m_id;
           const milestoneDueDate = milestone.m_deu_date;
+          if(milestone.m_status > -1){
           createMilestoneContainer(
             milestoneId,
             milestone.m_title,
             milestone.m_due_date,
             milestone.m_description
           );
+          }
           if (milestone.tasks) {
             milestone.tasks.forEach((task) => {
+              if(task.t_status > -1){
               createTaskComponent(
                 milestoneId,
                 task.t_id,
@@ -98,6 +101,7 @@ const renderGoalEditor = (goalId) => {
                 task.r_end_date,
                 milestoneDueDate
               );
+              }
             });
           }
         });
