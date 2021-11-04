@@ -58,7 +58,8 @@ const renderEvents = async (date) => {
         data.date.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           console.log(task.t_id, repeated_frequency, task.r_end_date);
-          createEventComponent(
+          if(task.t_status > -1) {
+            createEventComponent(
             "date",
             "task",
             task.t_id,
@@ -74,8 +75,11 @@ const renderEvents = async (date) => {
             task.g_id,
             task.g_due_date
           );
+          }
+          
         });
         data.date.milestones.forEach((milestone) => {
+          if(milestone.m_status > -1) {
           createEventComponent(
             "date",
             "milestone",
@@ -92,8 +96,10 @@ const renderEvents = async (date) => {
             milestone.g_id,
             milestone.g_due_date
           );
+          }
         });
         data.date.goals.forEach((goal) => {
+          if(goal.g_status > -1) {
           createEventComponent(
             "date",
             "goal",
@@ -109,11 +115,13 @@ const renderEvents = async (date) => {
             null,
             goal.g_id
           );
+          }
         });
       }
 
       if (data.week.tasks) {
         data.week.tasks.forEach((task) => {
+          if(task.t_status > -1){
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           if (task.t_id) {
             createEventComponent(
@@ -132,8 +140,10 @@ const renderEvents = async (date) => {
               task.g_id
             );
           }
+        }
         });
         data.week.milestones.forEach((milestone) => {
+          if(milestone.m_status > -1){
           createEventComponent(
             "week",
             "milestone",
@@ -150,8 +160,10 @@ const renderEvents = async (date) => {
             milestone.g_id,
             milestone.g_due_date
           );
+          }
         });
         data.week.goals.forEach((goal) => {
+          if(goal.g_status > -1){
           createEventComponent(
             "week",
             "goal",
@@ -167,11 +179,13 @@ const renderEvents = async (date) => {
             null,
             goal.g_id
           );
+          }
         });
       }
 
       if (data.month.tasks) {
         data.month.tasks.forEach((task) => {
+          if(task.t_status > -1){
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           if (task.t_id) {
             createEventComponent(
@@ -190,8 +204,10 @@ const renderEvents = async (date) => {
               task.g_id
             );
           }
+        }
         });
         data.month.milestones.forEach((milestone) => {
+          if(milestone.m_status > -1){
           createEventComponent(
             "month",
             "milestone",
@@ -208,8 +224,10 @@ const renderEvents = async (date) => {
             milestone.g_id,
             milestone.g_due_date
           );
+          }
         });
         data.month.goals.forEach((goal) => {
+          if(goal.g_status > -1){
           createEventComponent(
             "month",
             "goal",
@@ -225,10 +243,12 @@ const renderEvents = async (date) => {
             null,
             goal.g_id
           );
+          }
         });
       }
       if (data.year.tasks) {
         data.year.tasks.forEach((task) => {
+          if(task.t_status > -1){
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           if (task.t_id) {
             createEventComponent(
@@ -247,9 +267,11 @@ const renderEvents = async (date) => {
               task.g_id
             );
           }
+        }
         });
 
         data.year.milestones.forEach((milestone) => {
+          if(milestone.m_status > -1){
           createEventComponent(
             "year",
             "milestone",
@@ -265,8 +287,10 @@ const renderEvents = async (date) => {
             null,
             milestone.g_id
           );
+          }
         });
         data.year.goals.forEach((goal) => {
+          if(goal.g_status > -1){
           createEventComponent(
             "year",
             "goal",
@@ -282,6 +306,7 @@ const renderEvents = async (date) => {
             null,
             goal.g_id
           );
+          }
         });
       }
     })
