@@ -231,6 +231,7 @@ const deleteGoalAndChildren = async (req, res) => {
     return res.status(400).send("goal id is required.");
   } else {
     const result = await Goal.deleteGoalAndChildren(goalId);
+    console.log(goalId, result)
     return res.status(200).send(result);
   }
 };

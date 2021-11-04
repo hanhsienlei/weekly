@@ -95,8 +95,8 @@ const getGoalsByUser = async (userId) => {
 const deleteGoalAndChildren = async (goalId) => {
   const [ result ] = await pool.query(`
   UPDATE goal g 
-  INNER JOIN milestone m ON (g.id = m.goal_id)
-  INNER JOIN task t ON (m.id = t.milestone_id)
+  LEFT JOIN milestone m ON (g.id = m.goal_id)
+  LEFT JOIN task t ON (m.id = t.milestone_id)
   SET
   g.status = -1, m.status = -1, t.status = -1 
   WHERE g.id = ? ;

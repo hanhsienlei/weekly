@@ -8,6 +8,16 @@ const deleteGoalAndChildren = (goalId) => {
       console.log(err);
     });
 };
+const deleteMilestoneAndChildren = (milestoneId) => {
+  fetch(`/api/milestone?milestone_id=${milestoneId}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 const renderEvents = async (date) => {
   fetch(`/api/events/${date}?user_id=1`)
@@ -417,15 +427,15 @@ const createEventComponent = (
   const eventInfoContainer = document.createElement("div");
   const tagsContainer = document.createElement("div");
   const EventTitleContainer = document.createElement("div");
-  const checkBoxContainer = document.createElement("div")
-  
+  const checkBoxContainer = document.createElement("div");
+
   const checkBox = document.createElement("input");
-  const eventTitleContentContainer = document.createElement("div")
+  const eventTitleContentContainer = document.createElement("div");
   const eventTitle = document.createElement("span");
   const eventInfoButtonContainer = document.createElement("div");
   const editButton = document.createElement("button");
   const eventParents = document.createElement("h6");
-  
+
   const eventEditor = document.createElement("div");
   const eventDueDateContainer = document.createElement("div");
   const eventDueDate = document.createElement("input");
@@ -453,7 +463,9 @@ const createEventComponent = (
   const eventSaveButton = document.createElement("button");
   const eventCancelButton = document.createElement("button");
   const goalDeleteButton =
-    eventType === "goal" ? createDeleteGoalButton(goal_id) : null;
+    eventType === "goal" ? createDeleteGoalButton(id) : null;
+  const milestoneDeleteButton =
+    eventType === "milestone" ? createDeleteMilestoneButton(id, goal_id) : null;
   const goalEditorButton = goal_id ? createViewGoalButton(goal_id) : null;
 
   eventOuterContainer.classList.add(
@@ -475,8 +487,8 @@ const createEventComponent = (
   eventOuterContainer.classList.add("event-info-container", "col-10");
   tagsContainer.classList.add("tags-container");
   EventTitleContainer.classList.add("event-title-container", "my-2", "d-flex");
-  checkBoxContainer.classList.add("check-box-container", "col-1")
-  
+  checkBoxContainer.classList.add("check-box-container", "col-1");
+
   checkBox.classList.add("form-check-input");
   checkBox.setAttribute("type", "checkbox");
   if (status) {
@@ -519,7 +531,10 @@ const createEventComponent = (
         console.log(err);
       });
   });
-  eventTitleContentContainer.classList.add("event-title-content-container", "col-9")
+  eventTitleContentContainer.classList.add(
+    "event-title-content-container",
+    "col-9"
+  );
   eventTitle.classList.add("event-title");
   eventTitle.setAttribute("contenteditable", "true");
   eventTitle.textContent = title;
@@ -691,6 +706,9 @@ const createEventComponent = (
   if (eventType === "goal") {
     eventFooterContainer.append(goalDeleteButton);
   }
+  if (eventType === "milestone") {
+    eventFooterContainer.append(milestoneDeleteButton);
+  }
   if (goal_id) {
     eventFooterContainer.append(goalEditorButton);
   }
@@ -705,9 +723,13 @@ const createEventComponent = (
     eventDescriptionContainer.after(taskRepeatSelectorContainer);
   }
 
-  checkBoxContainer.appendChild(checkBox)
-  eventTitleContentContainer.appendChild(eventTitle)
-  EventTitleContainer.append(checkBoxContainer, eventTitleContentContainer, eventInfoButtonContainer);
+  checkBoxContainer.appendChild(checkBox);
+  eventTitleContentContainer.appendChild(eventTitle);
+  EventTitleContainer.append(
+    checkBoxContainer,
+    eventTitleContentContainer,
+    eventInfoButtonContainer
+  );
   eventInfoButtonContainer.appendChild(editButton);
   eventInfoContainer.append(tagsContainer, EventTitleContainer, eventParents);
   eventHeaderContainer.append(eventInfoContainer);
@@ -846,22 +868,49 @@ const createDeleteGoalButton = (goalId) => {
     const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
     console.log("oldViewGoalButton: ", oldViewGoalButton);
     if (oldViewGoalButton) {
-      oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-
+      oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
+    } else {
+      const viewGoalButton = createViewGoalButton(goalId);
+      viewGoalButton.setAttribute("data-bs-dismiss", "modal");
+      modalFooter.appendChild(viewGoalButton);
     }
-    const viewGoalButton = createViewGoalButton(goalId);
-    viewGoalButton.setAttribute("data-bs-dismiss","modal")
-    modalFooter.appendChild(viewGoalButton);
   });
 
   return button;
 };
-const createDeleteMilestoneButton = (milestoneId) => {
+
+const createDeleteMilestoneButton = (milestoneId, goalId) => {
   const button = document.createElement("button");
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#deleteMilestoneModal");
   button.classList.add("btn", "btn-light");
+  button.textContent = "delete";
+
+  button.addEventListener("click", (e) => {
+    const deleteMilestoneModal = document.querySelector(
+      "#deleteMilestoneModal"
+    );
+    const modalFooter = deleteMilestoneModal.querySelector(".modal-footer");
+    const deleteMilestoneButton = deleteMilestoneModal.querySelector(
+      ".delete-milestone-button"
+    );
+    deleteMilestoneButton.setAttribute(
+      "onclick",
+      `deleteMilestoneAndChildren(${milestoneId})`
+    );
+    const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
+    console.log("oldViewGoalButton: ", oldViewGoalButton);
+    if (oldViewGoalButton) {
+      oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
+    } else {
+      const viewGoalButton = createViewGoalButton(goalId);
+      viewGoalButton.setAttribute("data-bs-dismiss", "modal");
+      modalFooter.appendChild(viewGoalButton);
+    }
+  });
+
+  return button;
 };
 
 //還沒做完
