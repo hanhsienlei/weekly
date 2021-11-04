@@ -48,6 +48,7 @@ const deleteMilestoneAndChildren = async (req, res) => {
     return res.status(400).send("milestone id is required.");
   } else {
     const result = await Milestone.deleteMilestoneAndChildren(milestoneId);
+    console.log(milestoneId, result)
     return res.status(200).send(result);
   }
 };

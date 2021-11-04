@@ -5,6 +5,7 @@ const renderGoalEditor = (goalId) => {
       console.log(data);
       const modal = document.querySelector("#modal-goal");
       const goalTitle = modal.querySelector(".goal-title");
+      const deleteGoalButton = modal.querySelector(".editor-delete-goal-button")
       const goalDueDate = modal.querySelector(".goal-due-date");
       const goalDescription = modal.querySelector(".goal-description");
       //const purposeSelector = modal.querySelector(".purpose-selector");
@@ -37,7 +38,7 @@ const renderGoalEditor = (goalId) => {
       const addNewMilestone = (e) => {
         const newTitle = newMilestoneTitle.value.trim();
         if (!newTitle) {
-          return alert("Please name the milestone fore adding ");
+          return alert("Please name the milestone before adding ");
         }
         const body = {
           milestone_title: newTitle,
@@ -64,6 +65,7 @@ const renderGoalEditor = (goalId) => {
 
       modal.dataset.goalId = goalId;
       goalTitle.textContent = data.g_title? data.g_title : "Goal title...";
+      deleteGoalButton.setAttribute("onclick",`deleteGoalAndChildren(${goalId})`)
       goalDueDate.value = data.g_due_date;
       goalDescription.textContent = data.g_description
         ? data.g_description
@@ -144,6 +146,8 @@ const createMilestoneContainer = (
   const milestoneTagsContainer = document.createElement("div");
   const milestoneSaveButtonContainer = document.createElement("div");
   const milestoneSaveButton = document.createElement("button");
+  const milestoneDeleteButtonContainer = document.createElement("div");
+  const milestoneDeleteButton = document.createElement("button");
   const tasksContainer = document.createElement("div");
   const addNewTaskContainer = document.createElement("div");
   const newTaskInputContainer = document.createElement("div");
@@ -244,6 +248,26 @@ const createMilestoneContainer = (
         console.log(err);
       });
   });
+
+  milestoneDeleteButtonContainer.classList.add(
+    "delete-milestone-button-container",
+    "col-auto",
+    "mb-3"
+  );
+  milestoneDeleteButton.classList.add(
+    "delete-milestone-button",
+    "btn",
+    "btn-primary"
+  );
+  milestoneDeleteButton.textContent = "Delete the whole milestone";
+  milestoneDeleteButton.addEventListener("click", e=>{
+    deleteMilestoneAndChildren(milestoneId)
+    const currentContainer = parent.querySelector(`.milestone-outer-container-${milestoneId}`)
+    console.log(parent, currentContainer)
+    parent.removeChild(currentContainer)
+  })
+  
+
   tasksContainer.classList.add("tasks-container", "row", "border-top", "pt-3");
   addNewTaskContainer.classList.add("add-new-task-container", "row", "px-2");
   newTaskInputContainer.classList.add("new-task-input-container", "col-10");
@@ -307,11 +331,13 @@ const createMilestoneContainer = (
     milestoneDueDateContainer,
     milestoneDescriptionContainer,
     milestoneTagsContainer,
-    milestoneSaveButtonContainer
+    milestoneSaveButtonContainer,
+    milestoneDeleteButtonContainer
   );
   milestoneDueDateContainer.append(milestoneDueDate);
   milestoneDescriptionContainer.append(milestoneDescription);
   milestoneSaveButtonContainer.append(milestoneSaveButton);
+  milestoneDeleteButtonContainer.append(milestoneDeleteButton);
   addNewTaskContainer.append(newTaskInputContainer, newTaskButton);
   newTaskInputContainer.appendChild(newTaskInput);
 };
