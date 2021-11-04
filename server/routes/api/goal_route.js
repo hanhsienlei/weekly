@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { wrapAsync } = require("../../../utils/util");
 
-const { saveGoal, getGoal, getGoalWithPlan, getGoalProgress, getGoalsByUser } = require("../../controllers/goal_controller");
+const { saveGoal, getGoal, getGoalWithPlan, getGoalProgress, getGoalsByUser, deleteGoalAndChildren } = require("../../controllers/goal_controller");
 
 router
   .route("/goals")
@@ -10,6 +10,7 @@ router
 router
   .route("/goal")
   .post(wrapAsync(saveGoal))
+  .delete(wrapAsync(deleteGoalAndChildren))
 
 router
   .route("/goal/plan")

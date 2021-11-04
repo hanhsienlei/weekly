@@ -42,7 +42,18 @@ const getMilestone = async (req, res) => {
   }
 };
 
+const deleteMilestoneAndChildren = async (req, res) => {
+  const milestoneId = req.query.milestone_id;
+  if (!milestoneId) {
+    return res.status(400).send("milestone id is required.");
+  } else {
+    const result = await Milestone.deleteMilestoneAndChildren(milestoneId);
+    return res.status(200).send(result);
+  }
+};
+
 module.exports = {
   saveMilestone,
   getMilestone,
+  deleteMilestoneAndChildren
 };

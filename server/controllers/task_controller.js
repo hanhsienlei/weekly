@@ -82,7 +82,18 @@ const handleRepeatRule = async (repeatDetails, taskId) => {
   }
 };
 
+const deleteTask = async (req, res) => {
+  const taskId = req.query.task_id;
+  if (!taskId) {
+    return res.status(400).send("task id is required.");
+  } else {
+    const result = await Task.deleteTask(taskId);
+    return res.status(200).send(result);
+  }
+};
+
 module.exports = {
   updateTask,
   getTask,
+  deleteTask
 };

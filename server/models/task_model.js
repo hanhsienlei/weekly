@@ -17,7 +17,7 @@ const getTask = async (taskId) => {
 }
 
 
-const DeleteTask = async (taskId) => {
+const deleteTask = async (taskId) => {
   const [ result ] = await pool.query(`
   UPDATE task 
   SET status = -1
@@ -30,5 +30,5 @@ module.exports = {
   createTask,
   updateTask,
   getTask,
-  DeleteTask
+  deleteTask
 }

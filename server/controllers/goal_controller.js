@@ -225,11 +225,21 @@ const getGoalsByUser = async (req, res) => {
     }
   }
 };
+const deleteGoalAndChildren = async (req, res) => {
+  const goalId = req.query.goal_id;
+  if (!goalId) {
+    return res.status(400).send("goal id is required.");
+  } else {
+    const result = await Goal.deleteGoalAndChildren(goalId);
+    return res.status(200).send(result);
+  }
+};
 
 module.exports = {
   saveGoal,
   getGoal,
   getGoalWithPlan,
   getGoalProgress,
-  getGoalsByUser
+  getGoalsByUser,
+  deleteGoalAndChildren
 };

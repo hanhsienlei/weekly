@@ -30,7 +30,7 @@ const getMilestoneWithChildrenIds = async (milestoneId) => {
   return result
 }
 
-const DeleteMilestoneAndChildren = async (milestoneId) => {
+const deleteMilestoneAndChildren = async (milestoneId) => {
   const [ result ] = await pool.query(`
   UPDATE 
   milestone m 
@@ -49,7 +49,7 @@ module.exports = {
   saveMilestone,
   getMilestone,
   getMilestoneWithChildrenIds,
-  DeleteMilestoneAndChildren
+  deleteMilestoneAndChildren
 }
 
 
