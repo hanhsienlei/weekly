@@ -65,6 +65,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     t.due_date t_due_date,
     t.status t_status,
     t.repeat t_repeat,
+    t.origin_id t_origin_id,
     r.frequency r_frequency,
     r.end_date r_end_date
     FROM goal g
@@ -118,6 +119,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?)
     ;  
   `, queryConditions) 
+  console.log("[event model] result: ", result)
   return result
 }
 

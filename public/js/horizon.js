@@ -674,7 +674,7 @@ const createEventComponent = (
         console.log(err);
       });
   });
-  eventCancelButton.textContent = "x";
+  eventCancelButton.textContent = eventType === "task"? "delete":"x";
   eventCancelButton.classList.add("col-4", "btn", "btn-light", "cancel-button");
   eventCancelButton.setAttribute("type", "button");
   eventCancelButton.setAttribute("data-bs-toggle", "collapse");
@@ -696,7 +696,7 @@ const createEventComponent = (
           console.log(err);
         });
     } else {
-      console.log(eventType);
+      console.log(eventType, "not deleted");
     }
 
     editButton.setAttribute("data-bs-toggle", "collapse");

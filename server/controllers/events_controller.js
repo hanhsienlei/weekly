@@ -45,8 +45,6 @@ const getEventsByDate = async (req, res) => {
     const dateStartYear = new Date(dateEndMonth.valueOf() + dayMilliSecond);
 
     const dateEndYear = new Date(targetDate.split("-")[0], 11, 31);
-
-    //重複事件有bug......
     data.year = await getEventsByDateRange(
       userId,
       getDateYMD(dateStartYear),
@@ -107,7 +105,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       tasks: [],
     };
     const records = { goalIds: [], milestoneIds: [], taskIds: [] };
-    const dateTaskTitles = [];
+    const repeatedTaskIds = [];
     result.forEach((row) => {
       //javascript會自動將時區加入到date string再做成ISO string(UTC), 例如2021-10-25會變成2021-10-24T16:00:00.000Z
       //要自己轉回local time zone 的 date string (YYYY-MM-DD)
@@ -115,41 +113,12 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
       const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
-      function addTask(IsCloneOfTask) {
-        const {
-          t_id,
-          t_title,
-          t_description,
-          t_status,
-          r_frequency,
-          t_repeat,
-          m_id,
-          g_id,
-        } = row;
-        const newTask = {
-          t_id,
-          t_title,
-          t_description,
-          t_due_date,
-          t_status,
-          t_parent: [row.p_title, row.g_title, row.m_title],
-          t_repeat,
-          r_frequency,
-          r_end_date,
-          m_id,
-          m_due_date,
-          g_id,
-          g_due_date,
-        };
-        console.log("newTask: ", newTask);
-        if (IsCloneOfTask) {
-          newTask.t_id = null;
-          newTask.t_due_date = dateEnd;
-          console.log("repeated task added!!!!t_id: ", t_id);
-        }
-        data.tasks.push(newTask);
-      }
-      if (g_due_date >= dateStart && g_due_date <= dateEnd) {
+
+      if (
+        row.g_status !== -1 &&
+        g_due_date >= dateStart &&
+        g_due_date <= dateEnd
+      ) {
         if (!records.goalIds.includes(row.g_id)) {
           records.goalIds.push(row.g_id);
           const { g_id, g_title, g_description, g_status } = row;
@@ -164,7 +133,11 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           data.goals.push(newGoal);
         }
       }
-      if (m_due_date >= dateStart && m_due_date <= dateEnd) {
+      if (
+        row.m_status !== -1 &&
+        m_due_date >= dateStart &&
+        m_due_date <= dateEnd
+      ) {
         if (!records.milestoneIds.includes(row.m_id)) {
           records.milestoneIds.push(row.m_id);
           const { m_id, m_title, m_description, m_status, g_id } = row;
@@ -182,22 +155,53 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
         }
       }
       if (t_due_date >= dateStart && t_due_date <= dateEnd) {
-        if (!records.taskIds.includes(row.t_id)) {
+        if (row.t_status !== -1 && !records.taskIds.includes(row.t_id)) {
           records.taskIds.push(row.t_id);
-          dateTaskTitles.push(row.t_title);
-          addTask(0);
+          const {
+            t_id,
+            t_title,
+            t_description,
+            t_status,
+            r_frequency,
+            t_repeat,
+            t_origin_id,
+            m_id,
+            g_id,
+          } = row;
+          const newTask = {
+            t_id,
+            t_title,
+            t_description,
+            t_due_date,
+            t_status,
+            t_parent: [row.p_title, row.g_title, row.m_title],
+            t_repeat,
+            t_origin_id,
+            r_frequency,
+            r_end_date,
+            m_id,
+            m_due_date,
+            g_id,
+            g_due_date,
+          };
+          data.tasks.push(newTask);
+        } 
+        if (row.t_origin_id) {
+          repeatedTaskIds.push(row.t_origin_id);
         }
       }
+      console.log("repeatedTaskIds", repeatedTaskIds);
       console.log("records:", records);
     });
 
-    //render玩真tasks後才render repeated tasks
-     result.forEach((row) => {
+    //render完真tasks後才render repeated tasks
+    //repeated tasks only for date container
+    result.forEach((row) => {
       const g_due_date = row.g_due_date ? getDateYMD(row.g_due_date) : null;
       const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
-      function addTask(IsCloneOfTask) {
+      function addNewRepeatingTask() {
         const {
           t_id,
           t_title,
@@ -209,13 +213,14 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           g_id,
         } = row;
         const newTask = {
-          t_id,
+          t_id: null,
           t_title,
           t_description,
-          t_due_date,
+          t_due_date: dateEnd,
           t_status,
           t_parent: [row.p_title, row.g_title, row.m_title],
           t_repeat,
+          t_origin_id: t_id,
           r_frequency,
           r_end_date,
           m_id,
@@ -223,56 +228,55 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           g_id,
           g_due_date,
         };
-        console.log("newTask: ", newTask);
-        if (IsCloneOfTask) {
-          newTask.t_id = null;
-          newTask.t_due_date = dateEnd;
-          console.log("repeated task added!!!!t_id: ", t_id);
-        }
+
         data.tasks.push(newTask);
+        console.log("[repeat] newTask: ", newTask);
+        console.log("repeated task added!!!!t_id: ", t_id);
       }
-      
-      if (row.t_repeat == 1 && !records.taskIds.includes(row.t_id)) {
-        console.log("dateTaskTitles: ", dateTaskTitles)
-        if (row.r_frequency == 1) {
-          console.log("r_f =1!!!");
-          records.taskIds.push(row.t_id);
-          if (!dateTaskTitles.includes(row.t_title)) {
-            addTask(1);
-          }
-        }
-        if (row.r_frequency == 7) {
-          let dateInit = row.t_due_date;
-          while (dateInit <= getDateObjectFromYMD(dateEnd)) {
-            console.log("looping for weekly tasks!!");
-            let dateNew = new Date(
-              dateInit.valueOf() + 60 * 60 * 24 * 1000 * 7
-            );
-            if (getDateYMD(dateNew) == dateEnd) {
-              records.taskIds.push(row.t_id);
-              if (!dateTaskTitles.includes(row.t_title)) {
-                addTask(1);
-              }
 
-              break;
+      const isRepeatedTaskRecorded = repeatedTaskIds.includes(row.t_id);
+      const isTaskListed = records.taskIds.includes(row.t_id);
+      const isInDateRange = t_due_date < dateStart && r_end_date >= dateEnd;
+      console.log(t_due_date, dateStart, "...", r_end_date, dateEnd);
+      //console.log(row.t_id, "isRepeatedTaskRecorded, isTaskListed, isInDateRange: ", isRepeatedTaskRecorded, isTaskListed, isInDateRange)
+      //console.log(row.t_repeat == 1 && !isTaskListed && !isRepeatedTaskRecorded && isInDateRange)
+      if (
+        row.t_status != -1 &&
+        row.t_repeat == 1 &&
+        !isTaskListed &&
+        !isRepeatedTaskRecorded &&
+        isInDateRange
+      ) {
+        //console.log("repeatedTaskIds: ", repeatedTaskIds);
+        //console.log(row.t_id, "...", row.r_frequency)
+        switch (row.r_frequency) {
+          case 1:
+            console.log("r_f =1!!!");
+            addNewRepeatingTask();
+            break;
+          case 7:
+            const dateStartRepeatValue = new Date(t_due_date).valueOf();
+            const dateEndValue = new Date(dateEnd).valueOf();
+            const sevenDaysInMilliSecond = 60 * 60 * 24 * 1000 * 7;
+            const isWeekly =
+              (dateEndValue - dateStartRepeatValue) % sevenDaysInMilliSecond ===
+              0;
+            //console.log(dateStartRepeatValue, dateEndValue, sevenDaysInMilliSecond, isWeekly)
+            if (isWeekly) {
+              addNewRepeatingTask();
             }
-            dateInit = dateNew;
-          }
-        }
-        if (row.r_frequency == 30) {
-          let dateInit = row.t_due_date;
-          while (dateInit <= getDateObjectFromYMD(dateEnd)) {
-            let dateNew = getNextMonthThisDay(row.t_end_date);
-            if (getDateYMD(dateNew) == dateEnd) {
-              records.taskIds.push(row.t_id);
-              if (!dateTaskTitles.includes(row.t_title)) {
-                addTask(1);
+            break;
+          case 30:
+            let dateInit = t_due_date;
+            while (dateInit <= dateEnd) {
+              let dateNew = getDateYMD(getNextMonthThisDay(new Date(dateInit)));
+              //console.log("month: ", dateNew, dateEnd, dateNew == dateEnd)
+              if (dateNew == dateEnd) {
+                addNewRepeatingTask();
+                break;
               }
-
-              break;
+              dateInit = dateNew;
             }
-            dateInit = dateNew;
-          }
         }
       }
     });
