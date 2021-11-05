@@ -1,27 +1,41 @@
 const { pool } = require("./config_mysql")
 
 const createRepeatRule = async (repeatDetails) => {
-  console.log("[createRepeatRule model] repeatDetails: ", repeatDetails)
   const [result] = await pool.query("INSERT INTO repeated_task SET ?", [repeatDetails])
-  console.log(result)
   return result.insertId
 }
 
 const updateRepeatRule = async (repeatDetails, taskId) => {
-    console.log("[updateRepeatRule model ] repeatDetails: ", repeatDetails)
   const updateQuery = [repeatDetails].concat(taskId)
   const [ result ] = await pool.query("UPDATE repeated_task SET ? WHERE task_id = ?", updateQuery)
   return result.info
 }
 
 const getRepeatRule = async (taskId) => {
-    console.log("[getRepeatRule model] taskId: ", taskId)
   const [ result ] = await pool.query("SELECT * FROM repeated_task WHERE task_id = ?", taskId)
   return result[0]
+}
+
+const saveNewRepeatedTask = async (originId, status, dueDate, dueDateUnix) => {
+  const query = `
+  INSERT INTO task (title, description, milestone_id, user_id, status, due_date, due_date_unix, \`repeat\`, origin_id) 
+  SELECT title, description, milestone_id, user_id, ? , ?, ?, ?, ?
+  from task
+  WHERE id = ?;`
+  const queryData = [status, dueDate, dueDateUnix, 0, originId, originId]
+  const [result] = await pool.query(query, queryData)
+  return result.insertId
+}
+
+const deleteSavedRepeatedTask = async (taskId) => {
+  const [ result ] = await pool.query("UPDATE task SET status = -1 WHERE id = ?", taskId)
+  return result.info
 }
 
 module.exports = {
   createRepeatRule,
   updateRepeatRule,
-  getRepeatRule
+  getRepeatRule,
+  saveNewRepeatedTask,
+  deleteSavedRepeatedTask
 }
