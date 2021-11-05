@@ -37,9 +37,9 @@ app.use("/api",[
   require("./server/routes/api/goal_route"),
   require("./server/routes/api/milestone_route"),
   require("./server/routes/api/task_route"),
-  require("./server/routes/api/events_route")
+  require("./server/routes/api/events_route"),
+  require("./server/routes/api/repeated_task_route")
 ]
-  
 )
 
 //error handler

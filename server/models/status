@@ -14,8 +14,9 @@ const GOAL_PUBLISH = {
 
 //table: task
 const TASK_REPEAT = {
-  YES: 1,
-  NO: 0,
+  ORIGIN_TASK_REPEAT: 1,
+  ORIGIN_TASK_NO_REPEAT: 0,
+  REPEATED_TASK:2
 };
 
 //table: repeated_task
