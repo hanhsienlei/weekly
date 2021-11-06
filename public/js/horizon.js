@@ -88,7 +88,7 @@ const renderEvents = async (date) => {
               task.t_status,
               task.t_due_date,
               task.t_description,
-              task.t_parent.join("·"),
+              task.t_parent.join(">"),
               repeated_frequency,
               task.r_end_date,
               task.m_id,
@@ -108,7 +108,7 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join("·"),
+              milestone.m_parent.join(">"),
               null,
               null,
               null,
@@ -128,7 +128,7 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join("·"),
+              goal.g_parent.join(">"),
               null,
               null,
               null,
@@ -152,7 +152,7 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join("·"),
+                task.t_parent.join(">"),
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
@@ -172,7 +172,7 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join("·"),
+              milestone.m_parent.join(">"),
               null,
               null,
               null,
@@ -192,7 +192,7 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join("·"),
+              goal.g_parent.join(">"),
               null,
               null,
               null,
@@ -216,7 +216,7 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join("·"),
+                task.t_parent.join(">"),
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
@@ -236,7 +236,7 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join("·"),
+              milestone.m_parent.join(">"),
               null,
               null,
               null,
@@ -256,7 +256,7 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join("·"),
+              goal.g_parent.join(">"),
               null,
               null,
               null,
@@ -279,7 +279,7 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join("·"),
+                task.t_parent.join(">"),
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
@@ -300,7 +300,7 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join("·"),
+              milestone.m_parent.join(">"),
               null,
               null,
               null,
@@ -319,7 +319,7 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join("·"),
+              goal.g_parent.join(">"),
               null,
               null,
               null,
@@ -347,9 +347,9 @@ const addNewEvent = (timeScale, eventType) => {
   body[`${eventType}_due_date`] = dueDate;
   body[`${eventType}_due_date_unix`] = dueDateUnix;
 
-  if (!title) {
-    return alert(`Please name the ${eventType} before adding!`);
-  }
+  // if (!title) {
+  //   return alert(`Please name the ${eventType} before adding!`);
+  // }
   fetch(`/api/${eventType}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -539,7 +539,7 @@ const createEventComponent = (
   eventTitle.setAttribute("contenteditable", "true");
   eventTitle.textContent = title;
   eventParents.classList.add("event-parents", "mt-1", "mb-2", "text-muted");
-  eventParents.textContent = parents != "··" ? parents : null;
+  eventParents.textContent = parents != ">>" ? parents : null;
   eventInfoButtonContainer.classList.add(
     "event-info-button-container",
     "col-2"
@@ -548,8 +548,12 @@ const createEventComponent = (
   editButton.setAttribute("type", "button");
   editButton.setAttribute("data-bs-toggle", "collapse");
   editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
+  //editButton.setAttribute("style", "opacity: 0");
   editButton.textContent = "✍";
   eventEditor.classList.add("event-editor", "row", "collapse");
+  if(!title){
+    eventEditor.classList.remove("collapse")
+  }
   eventEditor.setAttribute("id", `editor-${eventType}-${id}`);
   eventDueDateContainer.classList.add(
     "event-due-date-container",
@@ -590,6 +594,19 @@ const createEventComponent = (
     ? description
     : `Description of this ${eventType}...`;
 
+  eventOuterContainer.addEventListener("input", () =>{
+    const repeatedOriginChangeNote = eventOuterContainer.querySelector(".origin-change-note")
+    const isRepeated = Number(taskRepeatSelector.value)>0
+    console.log("changed", taskRepeatSelector, Number(taskRepeatSelector.value), Number(taskRepeatSelector.value)>0, !repeatedOriginChangeNote)
+    
+    if (taskRepeatSelector && isRepeated && !repeatedOriginChangeNote){
+      console.log("ready to add the nooottteee")
+      const NewRepeatedOriginChangeNote = document.createElement("div")
+      NewRepeatedOriginChangeNote.classList.add("origin-change-note", "row", "mb-3")
+      NewRepeatedOriginChangeNote.textContent = "Changes on task contents only apply to future reoccurring tasks"
+      eventDescriptionContainer.after(NewRepeatedOriginChangeNote)
+    }
+  })
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
   eventSaveButton.classList.add(
@@ -601,6 +618,7 @@ const createEventComponent = (
   );
   eventSaveButton.setAttribute("type", "button");
   eventSaveButton.setAttribute("data-bs-toggle", "collapse");
+
   eventSaveButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
   eventSaveButton.addEventListener("click", (e) => {
     const body = {};
@@ -682,6 +700,11 @@ const createEventComponent = (
     "data-bs-target",
     `#editor-${eventType}-${id}`
   );
+  if(task_repeat_frequency > 0){
+    eventCancelButton.setAttribute("data-bs-toggle", "tooltip");
+    eventCancelButton.setAttribute("data-bs-placement", "top");
+    eventCancelButton.setAttribute("title", "Will delete the future reoccurring tasks too.");
+  }
   eventCancelButton.addEventListener("click", (e) => {
     if (eventType === "task") {
       fetch(`/api/${eventType}?${eventType}_id=${id}`, {
@@ -699,7 +722,7 @@ const createEventComponent = (
       console.log(eventType, "not deleted");
     }
 
-    editButton.setAttribute("data-bs-toggle", "collapse");
+    //editButton.setAttribute("data-bs-toggle", "collapse");
   });
 
   eventFooterContainer.append(eventSaveButton, eventCancelButton);

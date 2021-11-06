@@ -42,11 +42,18 @@ const updateTask = async (req, res) => {
       }
       res.status(200).send({ task_id: taskId });
     } else {
-      const updateResult = await Task.updateTask(taskDetails, body.task_id);
       if (body.task_repeat) {
         console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
-        await handleRepeatRule(repeatDetails, body.task_id);
+        const repeatedRuleResult = await handleRepeatRule(repeatDetails, body.task_id);
+        console.log("repeatedRuleResult: ", repeatedRuleResult)
+        const taskContent = {
+          title: body.task_title,
+          description: body.task_description
+        }
+        const repeatedTasksResult = await RepeatedTask.updateRepeatedTasks(taskContent, body.task_id)
+        console.log("repeatedTasksResult: ", repeatedTasksResult)
       }
+      const updateResult = await Task.updateTask(taskDetails, body.task_id);
       res.status(200).send({ message: `Update succeeded (${updateResult})` });
     }
   }
@@ -87,7 +94,7 @@ const deleteTask = async (req, res) => {
   if (!taskId) {
     return res.status(400).send("task id is required.");
   } else {
-    const result = await Task.deleteTask(taskId);
+    const result = [await Task.deleteTask(taskId), await RepeatedTask.deleteRepeatedTasks(taskId)]
     return res.status(200).send(result);
   }
 };

@@ -13,6 +13,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* .edit-button {
+  opacity: 0;
+}
+.edit-button :hover {
+  opacity: 100;
+} */
 
 .goal-outer-container {
   background-color: rgb(210, 210, 210);

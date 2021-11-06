@@ -32,10 +32,22 @@ const deleteSavedRepeatedTask = async (taskId) => {
   return result.info
 }
 
+const updateRepeatedTasks = async (updateData, OriginId) => {
+  const [ result ] = await pool.query("UPDATE task SET ? WHERE origin_id = ?", [updateData, OriginId])
+  return result.info
+}
+
+const deleteRepeatedTasks = async (OriginId) => {
+  const [ result ] = await pool.query("UPDATE task SET status=-1 WHERE origin_id = ?", OriginId)
+  return result.info
+}
+
 module.exports = {
   createRepeatRule,
   updateRepeatRule,
   getRepeatRule,
   saveNewRepeatedTask,
-  deleteSavedRepeatedTask
+  deleteSavedRepeatedTask,
+  updateRepeatedTasks,
+  deleteRepeatedTasks
 }
