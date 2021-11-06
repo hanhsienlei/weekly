@@ -3,7 +3,7 @@ const { wrapAsync } = require("../../../utils/util");
 
 const {
   saveNewRepeatedTask,
-  saveSavedRepeatedTask,
+  deleteNewRepeatedTask,
   updateSavedRepeatedTask,
   deleteSavedRepeatedTask,
   stopRepeatTask,
@@ -12,6 +12,7 @@ const {
 router
   .route("/repeated-task/new")
   .post(wrapAsync(saveNewRepeatedTask))
+  .delete(wrapAsync(deleteNewRepeatedTask))
 
 router
   .route("/repeated-task/saved")

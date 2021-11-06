@@ -2,26 +2,43 @@ const Task = require("../models/task_model");
 const RepeatedTask = require("../models/repeated_task_model");
 
 const stopRepeatTask = async (req, res) => {
-  const body = req.body;
+  const query = req.query
   const repeatDetails = {
-    task_id: body.task_origin_id,
-    end_date: body.task_r_end_date,
-    end_date_unix: Math.ceil(new Date(body.task_r_end_date + "T23:59:59")),
+    end_date: query.task_r_end_date,
+    end_date_unix: Math.ceil(new Date(query.task_r_end_date + "T23:59:59")),
   };
-
+console.log(repeatDetails)
   const result = await RepeatedTask.updateRepeatRule(
     repeatDetails,
-    body.task_origin_id
+    query.task_origin_id
   );
   res.status(200).send({ result: result });
 };
 
-//update or delete, depends on the status
 const saveNewRepeatedTask = async (req, res) => {
+  console.log("[saveNewRepeatedTask controller ] req.body: ", req.body)
   const originId = req.body.task_origin_id;
   const dueDate = req.body.task_due_date;
   const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
   const status = req.body.task_status;
+  const returnedId = await RepeatedTask.saveNewRepeatedTask(
+    originId,
+    status,
+    dueDate,
+    dueDateUnix
+  );
+  res.status(200).send({ newTaskId: returnedId });
+};
+
+const deleteNewRepeatedTask = async (req, res) => {
+  const originId = req.query.task_origin_id;
+  const dueDate = req.query.task_due_date;
+  const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
+  const status = -1;
+  console.log(originId,
+    status,
+    dueDate,
+    dueDateUnix)
   const returnedId = await RepeatedTask.saveNewRepeatedTask(
     originId,
     status,
@@ -70,7 +87,7 @@ const updateSavedRepeatedTask = async (req, res) => {
 
 const deleteSavedRepeatedTask = async (req, res) => {
   //delete the repeated task
-  const taskId = req.body.task_id;
+  const taskId = req.query.task_id;
   const deleteResult = await Task.deleteTask(taskId);
   res.status(200).send({ deleteResult: deleteResult });
 };
@@ -93,6 +110,7 @@ const handleRepeatRule = async (repeatDetails, taskId) => {
 
 module.exports = {
   saveNewRepeatedTask,
+  deleteNewRepeatedTask,
   updateSavedRepeatedTask,
   deleteSavedRepeatedTask,
   stopRepeatTask,

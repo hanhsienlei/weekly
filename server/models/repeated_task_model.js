@@ -24,6 +24,8 @@ const saveNewRepeatedTask = async (originId, status, dueDate, dueDateUnix) => {
   WHERE id = ?;`
   const queryData = [status, dueDate, dueDateUnix, 0, originId, originId]
   const [result] = await pool.query(query, queryData)
+  console.log("[model saveNewRepeatedTask] result :", result)
+  console.log("[status, dueDate, dueDateUnix, 0, originId, originId]", queryData)
   return result.insertId
 }
 
@@ -32,8 +34,8 @@ const deleteSavedRepeatedTask = async (taskId) => {
   return result.info
 }
 
-const updateRepeatedTasks = async (updateData, OriginId) => {
-  const [ result ] = await pool.query("UPDATE task SET ? WHERE origin_id = ?", [updateData, OriginId])
+const updateRepeatedTasks = async (repeatDetails, taskId) => {
+  const [ result ] = await pool.query("UPDATE repeated_task SET ? WHERE task_id = ?", [repeatDetails, taskId])
   return result.info
 }
 

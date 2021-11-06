@@ -206,9 +206,6 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_id,
           t_title,
           t_description,
-          t_status,
-          r_frequency,
-          t_repeat,
           m_id,
           g_id,
         } = row;
@@ -217,12 +214,9 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_title,
           t_description,
           t_due_date: dateEnd,
-          t_status,
+          t_status: 0,
           t_parent: [row.p_title, row.g_title, row.m_title],
-          t_repeat,
           t_origin_id: t_id,
-          r_frequency,
-          r_end_date,
           m_id,
           m_due_date,
           g_id,
@@ -280,6 +274,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
         }
       }
     });
+    console.log(data)
     return data;
   }
 };
