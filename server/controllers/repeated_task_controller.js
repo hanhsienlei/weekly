@@ -1,16 +1,23 @@
 const Task = require("../models/task_model");
 const RepeatedTask = require("../models/repeated_task_model");
+const {
+  getDateYMD,
+  getDateObjectFromYMD,
+} = require("../../utils/date_converter");
 
 const stopRepeatTask = async (req, res) => {
-  const query = req.query
+  const queryDate = req.query.task_r_end_date
+  const queryDateObject = getDateObjectFromYMD(queryDate)
+  const endDateObject = new Date(queryDateObject.valueOf() - (60 * 60 * 24 * 1000))
+  const ednDate = getDateYMD(endDateObject)
   const repeatDetails = {
-    end_date: query.task_r_end_date,
-    end_date_unix: Math.ceil(new Date(query.task_r_end_date + "T23:59:59")),
+    end_date: ednDate,
+    end_date_unix: Math.ceil(new Date(ednDate + "T23:59:59")),
   };
 console.log(repeatDetails)
   const result = await RepeatedTask.updateRepeatRule(
     repeatDetails,
-    query.task_origin_id
+    req.query.task_origin_id
   );
   res.status(200).send({ result: result });
 };

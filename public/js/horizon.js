@@ -506,7 +506,7 @@ const createEventComponent = (
   const eventSaveButton = document.createElement("button");
   const eventCancelButton = document.createElement("button");
   console.log("[STOPPPPP]", parentContainer, task_origin_id, dueDate)
-  const stopRepeatButton = !id ? createStopTodayButton(parentContainer, task_origin_id, dueDate) :null 
+  const stopRepeatButton = !id ? createStopTodayButton(parentContainer,eventOuterContainer, task_origin_id, dueDate) :null 
   const goalDeleteButton =
     eventType === "goal" ? createDeleteGoalButton(id) : null;
   const milestoneDeleteButton =
@@ -998,7 +998,7 @@ const createDeleteMilestoneButton = (milestoneId, goalId) => {
 
   return button;
 };
-const createStopTodayButton = (parentContainer, originId, dueDate) => {
+const createStopTodayButton = (parentContainer,eventOuterContainer, originId, dueDate) => {
   console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate)
   const button = document.createElement("button");
   button.setAttribute("type", "button");
