@@ -107,7 +107,7 @@ const getUserProfile = async (req, res) => {
         data: {
             provider: req.user.provider,
             name: req.user.name,
-            birthday: req.user.birthday,
+            birthday: getDateYMD(new Date (req.user.birthday)),
             email: req.user.email,
             picture: req.user.picture
         }

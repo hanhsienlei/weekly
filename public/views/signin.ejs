@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <title>Sign in</title>
+  </head>
+
+  <body>
+    <div class="container" style="max-width: 400px">
+      <%- include("partials/signin_signup_header") %>
+      <form class="row g-3">
+        <div class="email-cotnainer col-12">
+          <label for="email" class="form-label">E-mail</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="name@example.com"
+            required
+          />
+        </div>
+        <div class="password-cotnainer col-12">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="password"
+            required
+          />
+        </div>
+        <div class="col-12">
+          <button class="btn btn-secondary w-100" type="submit">Sign in</button>
+        </div>
+      </form>
+      <div class="row signup-signin-switch">
+        <div class="col-auto"><span>No account yet?</span></div>
+        <div class="col-auto"><a href="/signup">Sign up here</a></div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../js/signin.js"></script>
+  </body>
+</html>
