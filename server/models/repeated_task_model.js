@@ -34,8 +34,8 @@ const deleteSavedRepeatedTask = async (taskId) => {
   return result.info
 }
 
-const updateRepeatedTasks = async (repeatDetails, taskId) => {
-  const [ result ] = await pool.query("UPDATE repeated_task SET ? WHERE task_id = ?", [repeatDetails, taskId])
+const updateRepeatedTasks = async (taskContent, taskId) => {
+  const [ result ] = await pool.query("UPDATE task SET ? WHERE origin_id = ?", [taskContent, taskId])
   return result.info
 }
 

@@ -242,7 +242,6 @@ const createMilestoneContainer = (
   milestoneSaveButton.textContent = "Save milestone";
   milestoneSaveButton.addEventListener("click", (e) => {
     const body = {};
-    body.user_id = 1;
     body.milestone_id = milestoneId;
     body.milestone_title = milestoneTitle.textContent.trim();
     body.milestone_description = milestoneDescription.textContent.trim();
@@ -304,7 +303,6 @@ const createMilestoneContainer = (
       return alert("Please name the task before adding");
     }
     const body = {};
-    body.user_id = 1;
     body.task_title = newTaskTitle;
     body.task_due_date = milestoneDueDate.value;
     body.task_milestone_id = milestoneId;
@@ -516,7 +514,6 @@ const createTaskComponent = (
   eventSaveButton.setAttribute("data-bs-target", `#modal-task-editor-${id}`);
   eventSaveButton.addEventListener("click", (e) => {
     const body = {};
-    body.user_id = 1;
     body.task_id = id;
     body.task_title = eventTitle.textContent;
     body.task_description = eventDescription.textContent;

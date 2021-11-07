@@ -380,9 +380,7 @@ const addNewEvent = (timeScale, eventType) => {
   const title = input.value.trim();
   const dueDate = document.querySelector(`.${timeScale}-value`).dataset.dueDate;
   const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
-  const body = {
-    user_id: 1,
-  };
+  const body = {};
   body[`${eventType}_title`] = title;
   body[`${eventType}_due_date`] = dueDate;
   body[`${eventType}_due_date_unix`] = dueDateUnix;
@@ -546,7 +544,6 @@ const createEventComponent = (
   const goalEditorButton = goal_id ? createViewGoalButton(goal_id) : null;
   const saveEvent = () => {
     const body = {};
-    body.user_id = 1;
     body[`${eventType}_id`] = id;
     body[`${eventType}_title`] = eventTitle.textContent;
     body[`${eventType}_description`] = eventDescription.textContent;
