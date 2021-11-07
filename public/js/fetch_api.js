@@ -1,4 +1,4 @@
-
+const accessToken = localStorage.getItem("access_token");
 //for goal editor
 function saveGoal(goalId) {
   const modal = document.querySelector(`#modal-goal`);
@@ -20,7 +20,8 @@ function saveGoal(goalId) {
   };
   fetch("/api/goal", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${accessToken}`,
+    "Content-Type": "application/json" },
     body: JSON.stringify(body),
   })
     .then(response => response.json())
@@ -50,7 +51,8 @@ function saveMilestone(milestoneId, goalId) {
   console.log(body);
   fetch("/api/milestone", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { 
+      Authorization: `Bearer ${accessToken}`,"Content-Type": "application/json" },
     body: JSON.stringify(body),
   })
     .then(response => response.json())
@@ -77,7 +79,8 @@ function updateTask(taskId, MilestoneId) {
   console.log(body);
   fetch("/api/task", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${accessToken}`,
+    "Content-Type": "application/json" },
     body: JSON.stringify(body),
   })
     .then(response => response.json())
@@ -104,7 +107,8 @@ function createMilestone() {
 
   fetch("/api/milestone", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${accessToken}`,
+    "Content-Type": "application/json" },
     body: JSON.stringify(body),
   })
     .then(response => response.json())
@@ -116,7 +120,9 @@ function createMilestone() {
 
 //for goal editor
 function getGoalWithPlan(goalId) {
-  fetch(`/api/goal/plan?goal_id=${goalId}`)
+  fetch(`/api/goal/plan?goal_id=${goalId}`,{headers: {
+      Authorization: `Bearer ${accessToken}`,
+    }})
     .then(response => response.json())
     .then(data => console.log(data))
     .catch((err) => {

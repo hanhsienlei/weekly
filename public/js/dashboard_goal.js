@@ -1,6 +1,11 @@
 const goalSelector = document.querySelector(".goal-selector");
+const accessToken = localStorage.getItem("access_token");
 const renderGoalProgress = async (goal_id) => {
-  fetch(`/api/goal/progress?goal_id=${goal_id}`)
+  fetch(`/api/goal/progress?goal_id=${goal_id}`,
+  {headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
     .then((response) => response.json())
     .then((data) => {
       const progressGoalTitle = document.querySelector(".progress-goal-title");
@@ -106,27 +111,35 @@ const renderGoalProgress = async (goal_id) => {
           ],
         },
       });
-      const progressGoalEditorButtonContainer = document.querySelector(".progress-goal-editor-button-container")
-      const progressGoalEditorButton= createGoalButton(g_id)
-      progressGoalEditorButtonContainer.appendChild(progressGoalEditorButton)
+      const progressGoalEditorButtonContainer = document.querySelector(
+        ".progress-goal-editor-button-container"
+      );
+      const progressGoalEditorButton = createGoalButton(g_id);
+      progressGoalEditorButtonContainer.appendChild(progressGoalEditorButton);
       progressGoalTitle.textContent = g_title;
       progressGoalDueDate.textContent = `Due date: ${g_due_date}`;
       progressMilestoneSum.textContent = `${g_summary.milestone[0]} / ${g_summary.milestone[1]} milestones`;
       progressTaskSum.textContent = `${g_summary.task[0]} / ${g_summary.task[1]} tasks`;
+      console.log("goalSelector: ", goalSelector)
       goalSelector.addEventListener("change", (e) => {
         doughnut.destroy();
         bar.destroy();
-        progressGoalEditorButtonContainer.innerHTML = ""
-        renderGoalProgress(e.target.value);
+        progressGoalEditorButtonContainer.innerHTML = "";
       });
+      
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
-const renderGoalSelector = async (user_id) => {
-  fetch(`/api/goals?user_id=${user_id}`)
+const renderGoalSelector = async () => {
+  const accessToken = localStorage.getItem("access_token");
+  fetch(`/api/goals`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -138,6 +151,11 @@ const renderGoalSelector = async (user_id) => {
           option.textContent = g_title;
           goalSelector.appendChild(option);
         });
+        console.log("goalSelector: ", goalSelector)
+      goalSelector.addEventListener("change", (e) => {
+        console.log(goalSelector.value)
+        renderGoalProgress(goalSelector.value);
+      });
       } else {
         alert("No goals found");
       }
@@ -194,7 +212,7 @@ const createTaskRepeatSelector = (
     const optionOnceAWeek = document.createElement("option");
     const optionOnceAMonth = document.createElement("option");
     const repeatEndDateContainer = document.createElement("div");
-    const repeatEndDateDescription = document.createElement("span")
+    const repeatEndDateDescription = document.createElement("span");
     const repeatEndDate = document.createElement("input");
     selector.classList.add("task-repeat-selector", "form-selector", "mb-3");
     optionNoRepeat.setAttribute("value", 0);
@@ -212,10 +230,10 @@ const createTaskRepeatSelector = (
       "row",
       "mb-3"
     );
-    repeatEndDateDescription.textContent = "Repeat until..."
+    repeatEndDateDescription.textContent = "Repeat until...";
     repeatEndDate.classList.add("event-due-date");
     repeatEndDate.setAttribute("type", "date");
-    if(!task_repeat_frequency){
+    if (!task_repeat_frequency) {
       repeatEndDate.setAttribute("disabled", "true");
     }
     repeatEndDate.value = task_repeat_end_date;
@@ -258,5 +276,5 @@ const createTaskRepeatSelector = (
   return container;
 };
 
-window.onload = renderGoalProgress(1);
-window.onload = renderGoalSelector(1);
+//window.onload = renderGoalProgress();
+window.onload = renderGoalSelector();

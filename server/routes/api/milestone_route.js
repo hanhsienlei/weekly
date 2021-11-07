@@ -1,11 +1,15 @@
 const router = require("express").Router();
-const { wrapAsync } = require("../../../utils/util");
+const { authentication, wrapAsync } = require("../../../utils/util");
 
 const { saveMilestone, getMilestone, deleteMilestoneAndChildren } = require("../../controllers/milestone_controller");
 
+const {
+    USER_ROLE
+} = require('../../models/user_model');
+
 router
   .route("/milestone")
-  .post(wrapAsync(saveMilestone))
-  .delete(wrapAsync(deleteMilestoneAndChildren))
+  .post(authentication(USER_ROLE.ALL), wrapAsync(saveMilestone))
+  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteMilestoneAndChildren))
 
 module.exports = router

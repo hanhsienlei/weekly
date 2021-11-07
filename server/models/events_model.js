@@ -75,10 +75,10 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     LEFT JOIN repeated_task r ON t.id = r.task_id
     WHERE (t.user_id=? or g.user_id=?)  
     AND
-    (t.due_date BETWEEN ? AND ?) 
+    ((t.due_date BETWEEN ? AND ?) 
     OR (m.due_date  BETWEEN ? AND ?) 
     OR (g.due_date  BETWEEN ? AND ?)
-    OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?)
+    OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?))
     UNION ALL
     SELECT 
 	  t.user_id user_id,
@@ -113,10 +113,10 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     LEFT JOIN purpose p on g.purpose_id = p.id    
     WHERE (t.user_id=? or g.user_id=?)  
     AND
-    (t.due_date BETWEEN ? AND ?) 
+    ((t.due_date BETWEEN ? AND ?) 
     OR (m.due_date  BETWEEN ? AND ?) 
     OR (g.due_date  BETWEEN ? AND ?)
-    OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?)
+    OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?))
     ;  
   `, queryConditions) 
   console.log("[event model] result: ", result)
@@ -124,6 +124,5 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
 }
 
 module.exports = {
-  getEventsByDate,
   getEventsByDateRange
 }

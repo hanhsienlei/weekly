@@ -1,11 +1,19 @@
 const renderGoalEditor = (goalId) => {
-  fetch(`/api/goal/plan?goal_id=${goalId}`)
+  const accessToken = localStorage.getItem("access_token");
+  console.log(accessToken);
+  fetch(`/api/goal/plan?goal_id=${goalId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       const modal = document.querySelector("#modal-goal");
       const goalTitle = modal.querySelector(".goal-title");
-      const deleteGoalButton = modal.querySelector(".editor-delete-goal-button")
+      const deleteGoalButton = modal.querySelector(
+        ".editor-delete-goal-button"
+      );
       const goalDueDate = modal.querySelector(".goal-due-date");
       const goalDescription = modal.querySelector(".goal-description");
       //const purposeSelector = modal.querySelector(".purpose-selector");
@@ -24,9 +32,13 @@ const renderGoalEditor = (goalId) => {
           goal_description: goalDescription.textContent.trim(),
           //goal_purpose_id: goalPurposeId,
         };
+
         fetch("/api/goal", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(body),
         })
           .then((response) => response.json())
@@ -48,7 +60,10 @@ const renderGoalEditor = (goalId) => {
         console.log(body);
         fetch("/api/milestone", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(body),
         })
           .then((response) => response.json())
@@ -64,8 +79,11 @@ const renderGoalEditor = (goalId) => {
       };
 
       modal.dataset.goalId = goalId;
-      goalTitle.textContent = data.g_title? data.g_title : "Goal title...";
-      deleteGoalButton.setAttribute("onclick",`deleteGoalAndChildren(${goalId})`)
+      goalTitle.textContent = data.g_title ? data.g_title : "Goal title...";
+      deleteGoalButton.setAttribute(
+        "onclick",
+        `deleteGoalAndChildren(${goalId})`
+      );
       goalDueDate.value = data.g_due_date;
       goalDescription.textContent = data.g_description
         ? data.g_description
@@ -81,28 +99,28 @@ const renderGoalEditor = (goalId) => {
         data.milestones.forEach((milestone) => {
           const milestoneId = milestone.m_id;
           const milestoneDueDate = milestone.m_deu_date;
-          if(milestone.m_status > -1){
-          createMilestoneContainer(
-            milestoneId,
-            milestone.m_title,
-            milestone.m_due_date,
-            milestone.m_description
-          );
+          if (milestone.m_status > -1) {
+            createMilestoneContainer(
+              milestoneId,
+              milestone.m_title,
+              milestone.m_due_date,
+              milestone.m_description
+            );
           }
           if (milestone.tasks) {
             milestone.tasks.forEach((task) => {
-              if(task.t_status > -1){
-              createTaskComponent(
-                milestoneId,
-                task.t_id,
-                task.t_title,
-                task.t_status,
-                task.t_due_date,
-                task.t_description,
-                task.r_frequency,
-                task.r_end_date,
-                milestoneDueDate
-              );
+              if (task.t_status > -1) {
+                createTaskComponent(
+                  milestoneId,
+                  task.t_id,
+                  task.t_title,
+                  task.t_status,
+                  task.t_due_date,
+                  task.t_description,
+                  task.r_frequency,
+                  task.r_end_date,
+                  milestoneDueDate
+                );
               }
             });
           }
@@ -130,7 +148,7 @@ const createMilestoneContainer = (
   title,
   dueDate = null,
   description = null,
-  goalDueDate = null,
+  goalDueDate = null
 ) => {
   const parent = document.querySelector(".milestones-container");
   const containerOuter = document.createElement("div");
@@ -237,7 +255,10 @@ const createMilestoneContainer = (
     console.log("body: ", body);
     fetch(`/api/milestone`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
@@ -260,13 +281,14 @@ const createMilestoneContainer = (
     "btn-primary"
   );
   milestoneDeleteButton.textContent = "Delete the whole milestone";
-  milestoneDeleteButton.addEventListener("click", e=>{
-    deleteMilestoneAndChildren(milestoneId)
-    const currentContainer = parent.querySelector(`.milestone-outer-container-${milestoneId}`)
-    console.log(parent, currentContainer)
-    parent.removeChild(currentContainer)
-  })
-  
+  milestoneDeleteButton.addEventListener("click", (e) => {
+    deleteMilestoneAndChildren(milestoneId);
+    const currentContainer = parent.querySelector(
+      `.milestone-outer-container-${milestoneId}`
+    );
+    console.log(parent, currentContainer);
+    parent.removeChild(currentContainer);
+  });
 
   tasksContainer.classList.add("tasks-container", "row", "border-top", "pt-3");
   addNewTaskContainer.classList.add("add-new-task-container", "row", "px-2");
@@ -290,7 +312,10 @@ const createMilestoneContainer = (
     console.log("body: ", body);
     fetch(`/api/task`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
@@ -429,7 +454,10 @@ const createTaskComponent = (
     console.log("[checkbox] body: ", body);
     fetch(`/api/task`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
@@ -513,7 +541,10 @@ const createTaskComponent = (
     console.log("body: ", body);
     fetch(`/api/task`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
@@ -552,7 +583,6 @@ const createTaskComponent = (
   eventOuterContainer.append(eventHeaderContainer, eventEditor);
   parentContainer.appendChild(eventOuterContainer);
 };
-
 
 const resetModal = () => {
   const modal = document.querySelector("#modal-goal");

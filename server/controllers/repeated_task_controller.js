@@ -82,7 +82,7 @@ const updateSavedRepeatedTask = async (req, res) => {
     delete taskDetails.milestone_id;
   }
 
-  taskDetails.user_id = body.user_id;
+  taskDetails.user_id = req.user.id;
   
   const NewTaskId = await Task.createTask(taskDetails);
   if (body.task_repeat) {

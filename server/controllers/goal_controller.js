@@ -4,7 +4,7 @@ const { getDateYMD } = require("../../utils/date_converter");
 const saveGoal = async (req, res) => {
   const body = req.body;
   const goalDetails = {
-    user_id:body.user_id,
+    user_id: req.user.id,
     title: body.goal_title,
     description: body.goal_description,
     due_date: body.goal_due_date,
@@ -129,6 +129,7 @@ const getGoalWithPlan = async (req, res) => {
     }
   }
 };
+
 const getGoalProgress = async (req, res) => {
   const goalId = req.query.goal_id;
   console.log("goalId: ", goalId);
@@ -136,6 +137,7 @@ const getGoalProgress = async (req, res) => {
     return res.status(400).send({ message: "goal id is required." });
   } else {
     const result = await Goal.getGoalWithPlan(goalId);
+    console.log("goal controller, Goal.getGoalWithPlan(goalId): result: ", result)
     const { user_id, g_id, g_title, g_description } = result[0];
     const g_due_date = result[0].g_due_date
       ? getDateYMD(result[0].g_due_date)
@@ -210,10 +212,11 @@ const getGoalProgress = async (req, res) => {
     } else {
       return res.status(200).json(goalProgress);
     }
-  }
+  } 
 };
+
 const getGoalsByUser = async (req, res) => {
-  const userId = req.query.user_id;
+  const userId = req.user.id;
   if (!userId) {
     return res.status(400).send("user id is required.");
   } else {

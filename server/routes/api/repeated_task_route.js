@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { wrapAsync } = require("../../../utils/util");
+const { authentication, wrapAsync } = require("../../../utils/util");
 
 const {
   saveNewRepeatedTask,
@@ -9,16 +9,20 @@ const {
   stopRepeatTask,
 } = require("../../controllers/repeated_task_controller");
 
+const {
+    USER_ROLE
+} = require('../../models/user_model');
+
 router
   .route("/repeated-task/new")
-  .post(wrapAsync(saveNewRepeatedTask))
-  .delete(wrapAsync(deleteNewRepeatedTask))
+  .post(authentication(USER_ROLE.ALL), wrapAsync(saveNewRepeatedTask))
+  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteNewRepeatedTask))
 
 router
   .route("/repeated-task/saved")
-  .post(wrapAsync(updateSavedRepeatedTask))
-  .delete(wrapAsync(deleteSavedRepeatedTask));
+  .post(authentication(USER_ROLE.ALL), wrapAsync(updateSavedRepeatedTask))
+  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteSavedRepeatedTask));
 
-router.route("/repeated-task/stop").post(wrapAsync(stopRepeatTask));
+router.route("/repeated-task/stop").post(authentication(USER_ROLE.ALL), wrapAsync(stopRepeatTask));
 
 module.exports = router;

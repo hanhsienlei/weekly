@@ -13,8 +13,8 @@ const {
 const { getGoalsAndMilestonesByUser } = require("../models/goal_model");
 
 const getEventsByDate = async (req, res) => {
-  //做完登入登出後要換成token驗證取userId
-  const userId = Number(req.query.user_id);
+  const userId = req.user.id;
+  console.log("[event controller]: ", userId)
   const targetDate = req.params.date;
   const data = {
     user_id: userId,

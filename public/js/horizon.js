@@ -1,6 +1,10 @@
 const deleteGoalAndChildren = (goalId) => {
+  const accessToken = localStorage.getItem("access_token");
   fetch(`/api/goal?goal_id=${goalId}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   })
     .then((response) => response.json())
     .then((data) => console.log(data))
@@ -9,8 +13,12 @@ const deleteGoalAndChildren = (goalId) => {
     });
 };
 const deleteMilestoneAndChildren = (milestoneId) => {
+  const accessToken = localStorage.getItem("access_token");
   fetch(`/api/milestone?milestone_id=${milestoneId}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   })
     .then((response) => response.json())
     .then((data) => console.log(data))
@@ -20,7 +28,12 @@ const deleteMilestoneAndChildren = (milestoneId) => {
 };
 
 const renderEvents = async (date) => {
-  fetch(`/api/events/${date}?user_id=1`)
+  const accessToken = localStorage.getItem("access_token");
+  fetch(`/api/events/${date}`, {
+    headers: new Headers({
+      Authorization: `Bearer ${accessToken}`,
+    }),
+  })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
@@ -78,7 +91,12 @@ const renderEvents = async (date) => {
       if (data.date.tasks) {
         data.date.tasks.forEach((task) => {
           const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          console.log("render event: task.t_id, repeated_frequency, task.r_end_date, ", task.t_id, repeated_frequency, task.r_end_date);
+          console.log(
+            "render event: task.t_id, repeated_frequency, task.r_end_date, ",
+            task.t_id,
+            repeated_frequency,
+            task.r_end_date
+          );
           if (task.t_status > -1) {
             createEventComponent(
               "date",
@@ -357,6 +375,7 @@ const renderEvents = async (date) => {
 };
 
 const addNewEvent = (timeScale, eventType) => {
+  const accessToken = localStorage.getItem("access_token");
   const input = document.querySelector(`.${timeScale}-new-${eventType}-title`);
   const title = input.value.trim();
   const dueDate = document.querySelector(`.${timeScale}-value`).dataset.dueDate;
@@ -373,7 +392,10 @@ const addNewEvent = (timeScale, eventType) => {
   // }
   fetch(`/api/${eventType}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(body),
   })
     .then((response) => response.json())
@@ -444,21 +466,24 @@ const createEventComponent = (
   goal_due_date = null,
   task_origin_id = null
 ) => {
-  console.log(timeScale,
-  eventType,
-  id,
-  title,
-  status,
-  dueDate,
-  description,
-  parents,
-  task_repeat_frequency,
-  task_repeat_end_date,
-  milestone_id,
-  milestone_due_date,
-  goal_id,
-  goal_due_date,
-  task_origin_id)
+  console.log(
+    timeScale,
+    eventType,
+    id,
+    title,
+    status,
+    dueDate,
+    description,
+    parents,
+    task_repeat_frequency,
+    task_repeat_end_date,
+    milestone_id,
+    milestone_due_date,
+    goal_id,
+    goal_due_date,
+    task_origin_id
+  );
+  const accessToken = localStorage.getItem("access_token");
   //如果移動要改parentContainer所以用let
   let parentContainer = document.querySelector(
     `.${timeScale}-events-container`
@@ -505,8 +530,15 @@ const createEventComponent = (
   const eventFooterContainer = document.createElement("div");
   const eventSaveButton = document.createElement("button");
   const eventCancelButton = document.createElement("button");
-  console.log("[STOPPPPP]", parentContainer, task_origin_id, dueDate)
-  const stopRepeatButton = !id ? createStopTodayButton(parentContainer,eventOuterContainer, task_origin_id, dueDate) :null 
+  console.log("[STOPPPPP]", parentContainer, task_origin_id, dueDate);
+  const stopRepeatButton = !id
+    ? createStopTodayButton(
+        parentContainer,
+        eventOuterContainer,
+        task_origin_id,
+        dueDate
+      )
+    : null;
   const goalDeleteButton =
     eventType === "goal" ? createDeleteGoalButton(id) : null;
   const milestoneDeleteButton =
@@ -562,7 +594,10 @@ const createEventComponent = (
     console.log("apiEndpoint: ", apiEndpoint);
     fetch(apiEndpoint, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(body),
     })
       .then((response) => response.json())
@@ -763,7 +798,10 @@ const createEventComponent = (
         apiEndpoint = `/api/task?task_id=${id}`;
       }
       console.log("apiEndpoint: ", apiEndpoint);
-      fetch(apiEndpoint, { method: "DELETE" })
+      fetch(apiEndpoint, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
         .then((response) => response.json())
         .then((data) => {
           console.log("return from delete", data);
@@ -780,8 +818,8 @@ const createEventComponent = (
   });
 
   eventFooterContainer.append(eventSaveButton, eventCancelButton);
-  if(stopRepeatButton){
-    eventFooterContainer.append(stopRepeatButton)
+  if (stopRepeatButton) {
+    eventFooterContainer.append(stopRepeatButton);
   }
   if (eventType === "goal") {
     eventFooterContainer.append(goalDeleteButton);
@@ -816,7 +854,7 @@ const createEventComponent = (
     eventTitle.after(repeatIcon);
   }
   eventInfoButtonContainer.appendChild(editButton);
-  
+
   eventInfoContainer.append(tagsContainer, EventTitleContainer, eventParents);
   eventHeaderContainer.append(eventInfoContainer);
   eventOuterContainer.append(eventHeaderContainer, eventEditor);
@@ -998,25 +1036,33 @@ const createDeleteMilestoneButton = (milestoneId, goalId) => {
 
   return button;
 };
-const createStopTodayButton = (parentContainer,eventOuterContainer, originId, dueDate) => {
-  console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate)
+const createStopTodayButton = (
+  parentContainer,
+  eventOuterContainer,
+  originId,
+  dueDate
+) => {
+  console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate);
   const button = document.createElement("button");
   button.setAttribute("type", "button");
   button.classList.add("btn", "btn-light");
   button.textContent = "stop today";
 
   button.addEventListener("click", (e) => {
-      const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_r_end_date=${dueDate}`;
-      console.log("apiEndpoint: ", apiEndpoint);
-      fetch(apiEndpoint, { method: "POST" })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("return from stop: ", data);
-          parentContainer.removeChild(eventOuterContainer);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_r_end_date=${dueDate}`;
+    console.log("apiEndpoint: ", apiEndpoint);
+    fetch(apiEndpoint, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}` },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("return from stop: ", data);
+        parentContainer.removeChild(eventOuterContainer);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
   return button;

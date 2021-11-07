@@ -25,7 +25,7 @@ const updateTask = async (req, res) => {
   console.log("taskDetails: ", taskDetails);
 
   if (!body.task_id) {
-    taskDetails.user_id = Number(body.user_id);
+    taskDetails.user_id = req.user.id;
     console.log("taskDetails with user id: ", taskDetails);
     const taskId = await Task.createTask(taskDetails);
     res.status(200).send({ task_id: taskId });
@@ -34,7 +34,7 @@ const updateTask = async (req, res) => {
     console.log("repeatDetails: ", repeatDetails);
     const row = await Task.getTask(body.task_id);
     if (!row) {
-      taskDetails.user_id = body.user_id;
+      taskDetails.user_id = req.user.id;
       const taskId = await Number(Task.createTask(taskDetails));
       if (body.task_repeat) {
         console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
