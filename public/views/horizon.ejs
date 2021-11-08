@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/reset.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="../css/header.css">
@@ -17,7 +18,7 @@
 <body>
   <%- include("partials/header") %>
     <div class="main">
-      <div class="container-xl my-3">
+      <div class="my-3">
         <!-- <div class="row justify-content-center section purpose">
           <div class="row section-title border-top border-secondary mt-4 py-2">
             Purpose
@@ -28,12 +29,12 @@
             <div>Maybe save the earth too</div>
           </div>
         </div> -->
-        <div class="horizon-container row justify-content-between">
+        <div class="horizon-container px-3 row justify-content-between">
           <div class="date-container col-3">
             <div class="date-header-container d-flex justify-content-center mt-1">
               <h4 onclick=renderEventsToday()>TODAY</h4>
             </div>
-            <div class="date-title-container row border-top border-secondary mt-2">
+            <div class="date-title-container row border-top border-secondary mt-2  pt-2 pb-2">
               <div class="date-before before col-2 text-center btn">&lt;</div>
               <div class="date-value col-8 text-center"></div>
               <div class="date-after after col-2 text-center btn">&gt;</div>
@@ -41,21 +42,19 @@
             <div class="date-sub-title-container row mb-2">
               <div class="date-sub-title text-center"></div>
             </div>
-            <div class="date-events-container events-container row px-2 overflow-auto smooth-scroll">
+            <div class="date-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll">
 
             </div>
-            <div class="date-add-new-container row px-2">
-              <div class="col-10">
-                <input type="text" class="date-new-task-title" placeholder="add new task">
-              </div>
-              <button class="add-new-task btn col-2" onclick="addNewEvent('date', 'task')">+</button>
+            <div class="date-add-new-container row ps-4">
+                <input type="text" class="date-new-task-title col-10 " placeholder="add new task">
+              <button class="add-new-task btn col-1" onclick="addNewEvent('date', 'task')">+</button>
             </div>
           </div>
           <div class="week-container col-3">
             <div class="week-header-container d-flex justify-content-center mt-1">
               <h4>WEEK</h4>
             </div>
-            <div class="week-title-container row border-top border-secondary mt-2">
+            <div class="week-title-container row border-top border-secondary mt-2  pt-2 pb-2">
               <div class="week-before before col-2 text-center btn">&lt;</div>
               <div class="week-value col-8 text-center"></div>
               <div class="week-after after col-2 text-center btn">&gt;</div>
@@ -63,12 +62,10 @@
             <div class="week-sub-title-container row mb-2">
               <div class="week-sub-title text-center"></div>
             </div>
-            <div class="week-events-container events-container row px-2 overflow-auto smooth-scroll">
+            <div class="week-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll">
             </div>
-            <div class="week-add-new-container row px-2">
-              <div class="col-10">
-                <input type="text" class="week-new-task-title" placeholder="add new task">
-              </div>
+            <div class="week-add-new-container row ps-4">
+                <input type="text" class="week-new-task-title  col-10" placeholder="add new task">
               <button class="add-new-task btn col-2" onclick="addNewEvent('week', 'task')">+</button>
             </div>
 
@@ -77,7 +74,7 @@
             <div class="month-header-container d-flex justify-content-center mt-1">
               <h4>MONTH</h4>
             </div>
-            <div class="month-title-container row border-top border-secondary mt-2">
+            <div class="month-title-container row border-top border-secondary mt-2  pt-2 pb-2">
               <div class="month-before before col-2 text-center btn">&lt;</div>
               <div class="month-value col-8 text-center"></div>
               <div class="month-after after col-2 text-center btn">&gt;</div>
@@ -85,11 +82,9 @@
             <div class="month-sub-title-container row mb-2">
               <div class="month-sub-title text-center"></div>
             </div>
-            <div class="month-events-container events-container row px-2 overflow-auto smooth-scroll"></div>
-            <div class="month-add-new-container row px-2">
-              <div class="col-10">
-                <input type="text" class="month-new-task-title" placeholder="add new task">
-              </div>
+            <div class="month-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll"></div>
+            <div class="month-add-new-container row ps-4">
+                <input type="text" class="month-new-task-title  col-10" placeholder="add new task">
               <button class="add-new-task btn col-2" onclick="addNewEvent('month', 'task')">+</button>
             </div>
           </div>
@@ -97,7 +92,7 @@
             <div class="year-header-container d-flex justify-content-center mt-1">
               <h4>YEAR</h4>
             </div>
-            <div class="year-title-container row border-top border-secondary mt-2">
+            <div class="year-title-container row border-top border-secondary mt-2  pt-2 pb-2">
               <div class="year-before before col-2 text-center btn">&lt;</div>
               <div class="year-value col-8 text-center"></div>
               <div class="year-after after col-2 text-center btn">&gt;</div>
@@ -105,11 +100,9 @@
             <div class="year-sub-title-container row mb-2">
               <div class="year-sub-title text-center"></div>
             </div>
-            <div class="year-events-container events-container row px-2 overflow-auto smooth-scroll"></div>
-            <div class="year-add-new-container row px-2">
-              <div class="col-10">
-                <input type="text" class="year-new-goal-title" placeholder="add new goal">
-              </div>
+            <div class="year-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll"></div>
+            <div class="year-add-new-container row ps-4">
+              <input type="text" class="year-new-goal-title col-10" placeholder="add new goal">
               <button class="add-new-goal btn col-2" onclick="addNewEvent('year', 'goal')">+</button>
             </div>
           </div>
@@ -119,15 +112,15 @@
 
     <!-- Modal -->
     <%- include("partials/goal_editor_modal") %>
-    <%- include("partials/delete_goal_modal") %>
-    <%- include("partials/delete_milestone_modal") %>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-        <script src="../js/header.js"></script>
-      <script src="../js/horizon.js"></script>
-      <script src="../js/fetch_api.js"></script>
-      <script src="../js/goal_editor_modal.js"></script>
+      <%- include("partials/delete_goal_modal") %>
+        <%- include("partials/delete_milestone_modal") %>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+          <script src="../js/header.js"></script>
+          <script src="../js/horizon.js"></script>
+          <script src="../js/fetch_api.js"></script>
+          <script src="../js/goal_editor_modal.js"></script>
 </body>
 
 </html>
