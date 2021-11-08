@@ -44,7 +44,8 @@ const renderEvents = (goals) => {
     target.classList.add("highlight")
     target.setAttribute("title", goal.title)
     const link = document.createElement("a")
-    link.setAttribute("href", `/dashboard/goal?id=${id}`)
+    link.setAttribute("href", `/dashboard/goal?id=${goal.id}`)
+  //還沒做完
   })
 }
 
