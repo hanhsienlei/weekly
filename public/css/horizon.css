@@ -12,6 +12,23 @@
 border: solid gainsboro 1ps ;
 border-radius: 5px;
 }
+.date-add-new-container, .week-add-new-container, .month-add-new-container {
+  box-sizing: border-box;
+  background-color: gainsboro;
+  padding: 5px 2px;
+  margin: 5px 10px;
+  border: solid gainsboro 1ps ;
+border-radius: 3px;
+}
+
+.year-add-new-container {
+  box-sizing: border-box;
+  background-color: #FD6E6E;
+  padding: 5px 2px;
+  margin: 0 10px;
+  border: solid gainsboro 1ps ;
+border-radius: 3px;
+}
 .event-title {
   white-space: nowrap;
   overflow: hidden;
