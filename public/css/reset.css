@@ -101,18 +101,3 @@ input, select {
     vertical-align:middle;
 }
 
-/* reset end */
-
-/* css for all */
-.main {
-    margin-top: 100px;
-}
-
-a {
-  text-decoration: none;
-  color: #111111;
-}
-a:hover {
-  text-decoration: none;
-  color: #111111;
-}

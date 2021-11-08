@@ -1,0 +1,18 @@
+.main {
+    margin-top: 100px;
+}
+
+a {
+  text-decoration: none;
+  color: #111111;
+}
+a:hover {
+  text-decoration: none;
+  color: #111111;
+}
+button {
+    margin: 3px;
+}
+[contenteditable="true"]  :matches(:hover, :focus){
+border: grey slid 1x;
+}

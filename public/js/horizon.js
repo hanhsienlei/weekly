@@ -698,7 +698,7 @@ const createEventComponent = (
     "event-due-date-container",
     "row",
     "mb-3"
-  );
+      );
   eventDueDate.classList.add("event-due-date", `due-date-${eventType}-${id}`);
   eventDueDate.setAttribute("type", "date");
   eventDueDate.value = dueDate;
@@ -717,7 +717,8 @@ const createEventComponent = (
   );
   eventDescription.classList.add(
     "event-description",
-    `event-description-${eventType}-${id}`
+    `event-description-${eventType}-${id}`,
+    "border"
   );
 
   eventDueDate.addEventListener("change", () => {
