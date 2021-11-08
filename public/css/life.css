@@ -1,24 +1,48 @@
 
+h3 {
+  margin-bottom:20px;
+}
 .main {
-  color: blue;
   display: flex;
   flex-direction: column; 
-  justify-content: center;
+  /* justify-content: end; */
   align-items: center;
+  margin-bottom: 50px;
 }
 
 .one-year {
   display: flex;
+  justify-content: center;
+  align-items:baseline;
 }
 .one-week {
   height: 8px;
   width: 8px;
-  border: solid gray 1px;
+  border: solid rgb(165, 165, 165) 1px;
   border-radius: 50%;
-  background-color: gray;
-  margin: 6px 3px;
+  background-color: rgb(173, 173, 173);
+  margin: 3px 3px;
 }
-.year-label {
-  height: 8px;
+.one-week :hover {
+  transform: scale(1.5);
+  cursor:pointer
+}
+
+.week13, .week26, .week39 {
+  margin-right: 8px;
+}
+
+.label-age, .label-year {
   width: 20px;
+  margin: 0 10px;
+}
+.past {
+  background-color: rgb(56, 56, 56);
+}
+.no-display {
+  visibility: hidden;
+}
+.highlight {
+  background-color: #FD6E6E;
+  border: #FD6E6E solid 1px;
 }
