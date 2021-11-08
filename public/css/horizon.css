@@ -8,10 +8,15 @@
 .events-container {
   max-height: 70vh;
 }
+.date-container, .week-container, .month-container, .year-container {
+border: solid gainsboro 1ps ;
+border-radius: 5px;
+}
 .event-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: large;
 }
 /* .edit-button {
   opacity: 0;

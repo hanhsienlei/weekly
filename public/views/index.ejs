@@ -16,21 +16,20 @@
 <body>
   <div class="container" style="max-width: 400px;  margin-top:20vh">
     <%- include("partials/signin_signup_header") %>
-      <div class="row g-3 mb-3 border-bottom pb-3">
-        <span style="font-size: 2rem;">A life planner for big dreamer with the memory of fish </span>
+      <div class="row g-3 mb-3 border-bottom pb-4">
+        <span style="font-size: 2rem;" class="mb-3 ">Life is short, make every week counts. </span>
         <div class="col-12">
-          <button class="btn btn-secondary w-100"><a href="/signup">Start now</a></button>
+          <a class="btn btn-secondary w-100" href="/signup" role="button">Start now</a>
         </div>
       </div>
       <div class="row signup-signin-switch">
-        <div class="col-auto"><span>Already have an account?</span></div>
-        <a href="/signin"><div class="col-auto">Sign in here</div></a>
+        <div class="col-auto"><span class="pe-3">Already have an account?</span><a href="/signin">Sign in here</a></div>
+        
       </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
-  <script src="../js/signin.js"></script>
-</body>
+  </body>
 
 </html>

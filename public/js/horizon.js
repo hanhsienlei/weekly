@@ -299,32 +299,27 @@ const renderEvents = async (date) => {
         });
       }
       if (data.year.tasks) {
-        data.year.tasks.forEach((task) => {
-          if (task.t_status > -1) {
-            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-            if (task.t_id) {
-              createEventComponent(
-                "year",
-                "task",
-                task.t_id,
-                task.t_title,
-                task.t_status,
-                task.t_due_date,
-                task.t_description,
-                task.t_parent.join(">"),
-                repeated_frequency,
-                task.r_end_date,
-                task.m_id,
-                task.m_due_date,
-                task.g_id,
-                task.g_due_id,
-                task.g_due_date,
-                task.t_origin_id
-              );
-            }
+        data.year.goals.forEach((goal) => {
+          if (goal.g_status > -1) {
+            createEventComponent(
+              "year",
+              "goal",
+              goal.g_id,
+              goal.g_title,
+              goal.g_status,
+              goal.g_due_date,
+              goal.g_description,
+              goal.g_parent.join(">"),
+              null,
+              null,
+              null,
+              null,
+              goal.g_id,
+              null,
+              null
+            );
           }
         });
-
         data.year.milestones.forEach((milestone) => {
           if (milestone.m_status > -1) {
             createEventComponent(
@@ -346,25 +341,28 @@ const renderEvents = async (date) => {
             );
           }
         });
-        data.year.goals.forEach((goal) => {
-          if (goal.g_status > -1) {
-            createEventComponent(
-              "year",
-              "goal",
-              goal.g_id,
-              goal.g_title,
-              goal.g_status,
-              goal.g_due_date,
-              goal.g_description,
-              goal.g_parent.join(">"),
-              null,
-              null,
-              null,
-              null,
-              goal.g_id,
-              null,
-              null
-            );
+        data.year.tasks.forEach((task) => {
+          if (task.t_status > -1) {
+            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+            if (task.t_id) {
+              createEventComponent(
+                "year",
+                "task",
+                task.t_id,
+              task.t_title,
+              task.t_status,
+              task.t_due_date,
+              task.t_description,
+              task.t_parent.join(">"),
+              repeated_frequency,
+              task.r_end_date,
+              task.m_id,
+              task.m_due_date,
+              task.g_id,
+              task.g_due_date,
+              task.t_origin_id
+              );
+            }
           }
         });
       }
@@ -464,23 +462,23 @@ const createEventComponent = (
   goal_due_date = null,
   task_origin_id = null
 ) => {
-  console.log(
-    timeScale,
-    eventType,
-    id,
-    title,
-    status,
-    dueDate,
-    description,
-    parents,
-    task_repeat_frequency,
-    task_repeat_end_date,
-    milestone_id,
-    milestone_due_date,
-    goal_id,
-    goal_due_date,
-    task_origin_id
-  );
+  // console.log(
+  //   timeScale,
+  //   eventType,
+  //   id,
+  //   title,
+  //   status,
+  //   dueDate,
+  //   description,
+  //   parents,
+  //   task_repeat_frequency,
+  //   task_repeat_end_date,
+  //   milestone_id,
+  //   milestone_due_date,
+  //   goal_id,
+  //   goal_due_date,
+  //   task_origin_id
+  // );
   const accessToken = localStorage.getItem("access_token");
   //如果移動要改parentContainer所以用let
   let parentContainer = document.querySelector(
@@ -683,13 +681,13 @@ const createEventComponent = (
     "event-info-button-container",
     "col-2"
   );
-  editButton.classList.add("btn", "btn-light", "edit-button");
+  editButton.classList.add("btn", "btn-sm", "btn-outline-secondary", "edit-button");
   editButton.setAttribute("type", "button");
   editButton.setAttribute("data-bs-toggle", "collapse");
   editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
   //editButton.setAttribute("style", "opacity: 0");
   editButton.textContent = "✍";
-  eventEditor.classList.add("event-editor", "row", "collapse");
+  eventEditor.classList.add("event-editor", "col", "collapse", "px-2");
   if (!title) {
     eventEditor.classList.remove("collapse");
   }
@@ -742,7 +740,7 @@ const createEventComponent = (
       ? Number(taskRepeatSelector.value) > 0
       : 0;
 
-    if (taskRepeatSelector && isRepeated && !repeatedOriginChangeNote) {
+    if (!task_origin_id && taskRepeatSelector && isRepeated && !repeatedOriginChangeNote) {
       console.log("ready to add the nooottteee");
       const NewRepeatedOriginChangeNote = document.createElement("div");
       NewRepeatedOriginChangeNote.classList.add(
@@ -758,9 +756,9 @@ const createEventComponent = (
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
   eventSaveButton.classList.add(
-    "col-4",
+    "col-12",
     "btn",
-    "btn-light",
+    "btn-outline-secondary",
     "save-button",
     `save-button-${eventType}-${id}`
   );
@@ -770,7 +768,7 @@ const createEventComponent = (
   eventSaveButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
   eventSaveButton.addEventListener("click", saveEvent);
   eventCancelButton.textContent = eventType === "task" ? "delete" : "close";
-  eventCancelButton.classList.add("col-4", "btn", "btn-light", "cancel-button");
+  eventCancelButton.classList.add("col-12", "btn", "btn-outline-secondary", "cancel-button");
   eventCancelButton.setAttribute("type", "button");
   eventCancelButton.setAttribute("data-bs-toggle", "collapse");
   eventCancelButton.setAttribute(
@@ -915,7 +913,7 @@ const createTaskRepeatSelector = (
       "mb-3"
     );
     repeatEndDateDescription.textContent = "Repeat until...";
-    repeatEndDate.classList.add("event-due-date");
+    repeatEndDate.classList.add("event-due-date", "col");
     repeatEndDate.setAttribute("type", "date");
     if (!task_repeat_frequency) {
       repeatEndDate.setAttribute("disabled", "true");
@@ -961,7 +959,7 @@ const createTaskRepeatSelector = (
 };
 const createViewGoalButton = (goal_id) => {
   const button = document.createElement("button");
-  button.classList.add("btn", "btn-info", "edit-goal-button");
+  button.classList.add("btn", "btn-outline-secondary", "edit-goal-button");
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#modal-goal");
@@ -974,7 +972,7 @@ const createDeleteGoalButton = (goalId) => {
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#deleteGoalModal");
-  button.classList.add("btn", "btn-light");
+  button.classList.add("btn", "btn-outline-secondary");
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
@@ -1006,7 +1004,7 @@ const createDeleteMilestoneButton = (milestoneId, goalId) => {
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#deleteMilestoneModal");
-  button.classList.add("btn", "btn-light");
+  button.classList.add("btn", "btn-outline-secondary");
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
@@ -1043,7 +1041,7 @@ const createStopTodayButton = (
   console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate);
   const button = document.createElement("button");
   button.setAttribute("type", "button");
-  button.classList.add("btn", "btn-light");
+  button.classList.add("btn", "btn-outline-secondary");
   button.textContent = "stop today";
 
   button.addEventListener("click", (e) => {

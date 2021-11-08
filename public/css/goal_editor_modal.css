@@ -1,9 +1,17 @@
 .goal-modal-body{
 height: 90vh;
+background-color: rgb(210, 210, 210);
 }
-
+.goal-title {
+font-size: larger;
+}
 .milestone {
   border: solid grey 1px;
+}
+
+
+.milestone-title {
+  font-size:large
 }
 
 .edit-button, .btn {

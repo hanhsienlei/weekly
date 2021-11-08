@@ -126,17 +126,6 @@ const renderGoalEditor = (goalId) => {
           }
         });
       }
-
-      //有空再做render purpose selector and set default value
-      // purposes.forEach((purpose) => {
-      //   const option = document.createElement("option");
-      //   option.value = purpose.purpose_id;
-      //   option.textContent = purpose.purpose_title;
-      //   if (purpose.purpose_id == goalPurposeId) {
-      //     option.setAttribute("Selected", "");
-      //   }
-      //   purposeSelector.appendChild(option);
-      // });
     })
     .catch((err) => {
       console.log(err);
@@ -162,9 +151,9 @@ const createMilestoneContainer = (
   const milestoneDescriptionContainer = document.createElement("div");
   const milestoneDescription = document.createElement("p");
   const milestoneTagsContainer = document.createElement("div");
-  const milestoneSaveButtonContainer = document.createElement("div");
+  // const milestoneSaveButtonContainer = document.createElement("div");
   const milestoneSaveButton = document.createElement("button");
-  const milestoneDeleteButtonContainer = document.createElement("div");
+  // const milestoneDeleteButtonContainer = document.createElement("div");
   const milestoneDeleteButton = document.createElement("button");
   const tasksContainer = document.createElement("div");
   const addNewTaskContainer = document.createElement("div");
@@ -177,20 +166,17 @@ const createMilestoneContainer = (
     "col-4",
     "overflow-auto",
     "smooth-scroll",
-    `milestone-outer-container-${milestoneId}`
+    `milestone-outer-container-${milestoneId}`,
+    "mr-2"
   );
   containerOuter.dataset.milestoneId = milestoneId;
   containerInner.classList.add("milestone-container", "card-body");
   milestoneContainer.classList.add("milestone-details", "row");
-  milestoneTitle.classList.add("milestone-title");
+  milestoneTitle.classList.add("milestone-title", "col-9");
   milestoneTitle.setAttribute("contenteditable", "true");
   milestoneTitle.textContent = title;
   milestoneEditButton.classList.add(
-    "btn",
-    "btn-light",
-    "edit-button",
-    "col-auto",
-    "mb-3"
+    "btn", "btn-outline-secondary", "edit-button", "col-2"
   );
   milestoneEditButton.setAttribute("type", "button");
   milestoneEditButton.setAttribute("data-bs-toggle", "collapse");
@@ -219,25 +205,22 @@ const createMilestoneContainer = (
     "row",
     "mb-3"
   );
-  milestoneDescription.classList.add("modal-milestone-description");
+  milestoneDescription.classList.add("modal-milestone-description", "border");
   milestoneDescription.setAttribute("contenteditable", "true");
   milestoneDescription.textContent = description
     ? description
     : "What's special about this milestone?";
-  milestoneTagsContainer.classList.add(
-    "milestone-tags-container",
-    "row",
-    "mb-3"
-  );
-  milestoneSaveButtonContainer.classList.add(
-    "save-milestone-button-container",
-    "col-auto",
-    "mb-3"
-  );
+  
+  // milestoneSaveButtonContainer.classList.add(
+  //   "save-milestone-button-container",
+  //   "col-auto",
+  //   "mb-3"
+  // );
   milestoneSaveButton.classList.add(
     "save-milestone-button",
     "btn",
-    "btn-primary"
+    "btn-outline-secondary",
+    "col"
   );
   milestoneSaveButton.textContent = "Save milestone";
   milestoneSaveButton.addEventListener("click", (e) => {
@@ -269,15 +252,16 @@ const createMilestoneContainer = (
       });
   });
 
-  milestoneDeleteButtonContainer.classList.add(
-    "delete-milestone-button-container",
-    "col-auto",
-    "mb-3"
-  );
+  // milestoneDeleteButtonContainer.classList.add(
+  //   "delete-milestone-button-container",
+  //   "col-auto",
+  //   "mb-3"
+  // );
   milestoneDeleteButton.classList.add(
     "delete-milestone-button",
     "btn",
-    "btn-primary"
+    "btn-outline-secondary",
+    "col"
   );
   milestoneDeleteButton.textContent = "Delete the whole milestone";
   milestoneDeleteButton.addEventListener("click", (e) => {
@@ -291,11 +275,11 @@ const createMilestoneContainer = (
 
   tasksContainer.classList.add("tasks-container", "row", "border-top", "pt-3");
   addNewTaskContainer.classList.add("add-new-task-container", "row", "px-2");
-  newTaskInputContainer.classList.add("new-task-input-container", "col-10");
+  newTaskInputContainer.classList.add("new-task-input-container", "col");
   newTaskInput.setAttribute("type", "text");
   newTaskInput.classList.add("new-task-title");
-  newTaskInput.setAttribute("placeholder", "add new task");
-  newTaskButton.classList.add("add-new-task-button", "btn", "col-2");
+  newTaskInput.setAttribute("placeholder", "add new task", "col");
+  newTaskButton.classList.add("add-new-task-button", "btn", "col-1");
   newTaskButton.textContent = "+";
   newTaskButton.addEventListener("click", (e) => {
     const newTaskTitle = newTaskInput.value.trim();
@@ -354,13 +338,15 @@ const createMilestoneContainer = (
     milestoneDueDateContainer,
     milestoneDescriptionContainer,
     milestoneTagsContainer,
-    milestoneSaveButtonContainer,
-    milestoneDeleteButtonContainer
+    milestoneSaveButton,
+    milestoneDeleteButton
+    // milestoneSaveButtonContainer,
+    // milestoneDeleteButtonContainer
   );
   milestoneDueDateContainer.append(milestoneDueDate);
   milestoneDescriptionContainer.append(milestoneDescription);
-  milestoneSaveButtonContainer.append(milestoneSaveButton);
-  milestoneDeleteButtonContainer.append(milestoneDeleteButton);
+  // milestoneSaveButtonContainer.append(milestoneSaveButton);
+  // milestoneDeleteButtonContainer.append(milestoneDeleteButton);
   addNewTaskContainer.append(newTaskInputContainer, newTaskButton);
   newTaskInputContainer.appendChild(newTaskInput);
 };
@@ -414,14 +400,9 @@ const createTaskComponent = (
     "mb-2"
   );
   eventOuterContainer.setAttribute("id", `task-${id}`);
-  //eventToggle.classList.add("event-toggle");
-  // editButton.addEventListener("click", (e) => {
-  //   e.target.removeAttribute("data-bs-toggle");
-  // });
-  //eventToggle.setAttribute("data-bs-toggle", "collapse");
-  //eventToggle.setAttribute("data-bs-target", `#editor-${eventType}-${id}`)
+  
   eventHeaderContainer.classList.add("event-header-container", "row", "mb-3");
-  eventInfoContainer.classList.add("event-info-container", "col-10");
+  eventInfoContainer.classList.add("event-info-container", "col-9");
   tagsContainer.classList.add("tags-container");
   EventTitleContainer.classList.add("event-title-container", "my-2");
   checkBox.classList.add("form-check-input");
@@ -494,7 +475,7 @@ const createTaskComponent = (
     "row",
     "mb-3"
   );
-  eventDescription.classList.add("event-description");
+  eventDescription.classList.add("event-description", "border");
   eventDescription.setAttribute("contenteditable", "true");
   eventDescription.textContent = description
     ? description
@@ -503,9 +484,9 @@ const createTaskComponent = (
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
   eventSaveButton.classList.add(
-    "col-4",
+    "col-12",
     "btn",
-    "btn-light",
+    "btn-outline-secondary",
     "save-button",
     `save-button-task`
   );
@@ -552,13 +533,27 @@ const createTaskComponent = (
         console.log(err);
       });
   });
-  eventCancelButton.textContent = "x";
-  eventCancelButton.classList.add("col-4", "btn", "btn-light", "cancel-button");
+  eventCancelButton.textContent = "Delete";
+  eventCancelButton.classList.add("col-12", "btn", "btn-outline-secondary", "cancel-button");
   eventCancelButton.setAttribute("type", "button");
   eventCancelButton.setAttribute("data-bs-toggle", "collapse");
   eventCancelButton.setAttribute("data-bs-target", `#modal-task-editor-${id}`);
   eventCancelButton.addEventListener("click", (e) => {
     editButton.setAttribute("data-bs-toggle", "collapse");
+    let apiEndpoint  = `/api/task?task_id=${id}`;
+      console.log("apiEndpoint: ", apiEndpoint);
+      fetch(apiEndpoint, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("return from delete", data);
+          parentContainer.removeChild(eventOuterContainer);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   });
 
   eventFooterContainer.append(eventSaveButton, eventCancelButton);
