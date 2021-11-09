@@ -49,7 +49,7 @@ const getGoalWithPlan = async (goalId) => {
   LEFT JOIN milestone m ON g.id = m.goal_id
   LEFT JOIN task t ON m.id = t.milestone_id
   LEFT JOIN repeated_task r ON t.id = r.task_id
-  WHERE g.id = ?  
+  WHERE g.id = ? and m.status > -1  
   `, goalId)
   return result
 }
@@ -71,7 +71,7 @@ const getGoalsAndMilestonesByUser = async (userId) => {
   FROM goal g
   LEFT JOIN purpose p on g.purpose_id = p.id
   LEFT JOIN milestone m ON g.id = m.goal_id
-  WHERE g.user_id = ? ; 
+  WHERE g.user_id = ?  ; 
   `, userId)
   return result
 }
