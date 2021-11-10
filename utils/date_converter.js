@@ -201,6 +201,15 @@ const getPreviousYearThisDay = (dateObject) => {
   return new Date(yearNew, monthIndexNew, dateNew)
 }
 
+//return date object
+const getUserByeDay = (birthdayObject) => {
+  const userByeYear = birthdayObject.getFullYear() + 80;
+  const userByeMonthIndex = birthdayObject.getMonth();
+  const userByeDate = birthdayObject.getDate();
+  const userByeDay = new Date(userByeYear, userByeMonthIndex, userByeDate);
+  return userByeDay
+}
+
 module.exports = {
   getDateYMD,
   getSundayByDate,
@@ -211,5 +220,6 @@ module.exports = {
   getNextMonthThisDay,
   getPreviousMonthThisDay,
   getNextYearThisDay,
-  getPreviousYearThisDay
+  getPreviousYearThisDay,
+  getUserByeDay
 };

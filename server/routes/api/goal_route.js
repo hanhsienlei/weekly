@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { authentication, wrapAsync } = require("../../../utils/util");
+const { authentication, wrapAsync, validateGoalDueDate } = require("../../../utils/util");
 
 const { saveGoal, getGoal, getGoalWithPlan, getGoalProgress, getGoalsByUser, deleteGoalAndChildren } = require("../../controllers/goal_controller");
 const {
@@ -12,7 +12,7 @@ router
 
 router
   .route("/goal")
-  .post(authentication(USER_ROLE.ALL), wrapAsync(saveGoal))
+  .post(authentication(USER_ROLE.ALL), validateGoalDueDate(), wrapAsync(saveGoal))
   .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteGoalAndChildren))
 
 router

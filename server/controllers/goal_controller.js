@@ -229,6 +229,7 @@ const getGoalsByUser = async (req, res) => {
     }
   }
 };
+
 const deleteGoalAndChildren = async (req, res) => {
   const goalId = req.query.goal_id;
   if (!goalId) {

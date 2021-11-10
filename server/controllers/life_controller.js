@@ -2,15 +2,13 @@ const Goal = require("../models/goal_model");
 const {
   getDateYMD,
   getWeekNumberByDate,
+  getUserByeDay
 } = require("../../utils/date_converter");
 
 const getGoalsLife = async (req, res) => {
   const userId = req.user.id;
   const userBirthday = new Date(req.user.birthday);
-  const userByeYear = userBirthday.getFullYear() + 80;
-  const userByeMonthIndex = userBirthday.getMonth();
-  const userByeDate = userBirthday.getDate();
-  const userByeDay = new Date(userByeYear, userByeMonthIndex, userByeDate);
+  const userByeDay = getUserByeDay(userBirthday);
   const getWeekForLife = (dateObject) => {
     const weekNumber = getWeekNumberByDate(dateObject).weekNumber;
     if (weekNumber === 53) {
