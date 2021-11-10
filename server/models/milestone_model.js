@@ -57,7 +57,7 @@ const getMilestonesByGoalId = async (GoalId) => {
 }
 
 
-const GetGoalByMilestone = async (milestoneId) => {
+const getGoalByMilestone = async (milestoneId) => {
   const [ result ] = await pool.query(`
   SELECT 
     m.id m_id,
@@ -74,7 +74,7 @@ const GetGoalByMilestone = async (milestoneId) => {
   return result
 }
 
-const GetTasksByMilestone = async (milestoneId) => {
+const getTasksByMilestone = async (milestoneId) => {
   const [ result ] = await pool.query(`
   SELECT 
     m.id m_id,
@@ -102,8 +102,8 @@ module.exports = {
   getMilestoneWithChildrenIds,
   deleteMilestoneAndChildren,
   getMilestonesByGoalId,
-  GetGoalByMilestone,
-  GetTasksByMilestone
+  getGoalByMilestone,
+  getTasksByMilestone
 }
 
 

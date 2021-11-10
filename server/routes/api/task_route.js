@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { authentication, wrapAsync } = require("../../../utils/util");
+const { authentication, wrapAsync, validateTaskDueDate } = require("../../../utils/util");
 
 const { updateTask, getTask, deleteTask } = require("../../controllers/task_controller");
 const {
@@ -9,7 +9,7 @@ const {
 
 router
   .route("/task")
-  .post(authentication(USER_ROLE.ALL), wrapAsync(updateTask))
+  .post(authentication(USER_ROLE.ALL), validateTaskDueDate(), wrapAsync(updateTask))
   .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteTask))
 
 module.exports = router

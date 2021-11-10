@@ -8,10 +8,13 @@ const {
   getUserByeDay,
 } = require("./date_converter");
 const {
+  getMilestone,
   getMilestonesByGoalId,
-  GetGoalByMilestone,
-  GetTasksByMilestone,
+  getGoalByMilestone,
+  getTasksByMilestone,
 } = require("../server/models/milestone_model");
+const { getTask } = require("../server/models/task_model");
+const { getRepeatRule } = require("../server/models/repeated_task_model");
 
 // reference: https://thecodebarbarian.com/80-20-guide-to-express-error-handling
 const wrapAsync = (fn) => {
@@ -131,18 +134,18 @@ const validateMilestoneDueDate = () => {
     }
     try {
       // goal
-      const goal = await GetGoalByMilestone(milestoneId);
+      const goal = await getGoalByMilestone(milestoneId);
       const goalDueDate = new Date(goal[0].g_due_date);
       const goalDueDateYMD = getDateYMD(goalDueDate);
       const goalTitle = goal[0].g_title;
       if (milestoneDueDate > goalDueDate) {
         res.status(400).send({
-          error: `Milestone shouldn't due before its milestones ${goalTitle} (${goalDueDateYMD}).`,
+          error: `Milestone shouldn't due after its goal ${goalTitle} (${goalDueDateYMD}).`,
         });
         return;
       }
       // task
-      const tasks = await GetTasksByMilestone(milestoneId);
+      const tasks = await getTasksByMilestone(milestoneId);
       if (!tasks.length) {
         next();
       }
@@ -176,9 +179,99 @@ const validateMilestoneDueDate = () => {
   };
 };
 
+const validateTaskDueDate = () => {
+  return async function (req, res, next) {
+    const userBirthday = new Date(req.user.birthday);
+    const userByeDay = getUserByeDay(userBirthday);
+    const taskDueDate = getDateObjectFromYMD(req.body.task_due_date);
+    const taskId = req.body.task_id;
+
+    //task due date
+    if (taskDueDate < userBirthday) {
+      res.status(400).send({ error: "You were not born yet." });
+      return;
+    }
+
+    if (taskDueDate > userByeDay) {
+      res
+        .status(400)
+        .send({ error: "Let's plan something before 80 year old." });
+      return;
+    }
+
+    //repeat end date
+    if (req.body.task_repeat) {
+      const taskRepeatEndDate = getDateObjectFromYMD(req.body.task_r_end_date);
+      if (taskDueDate > taskRepeatEndDate) {
+        res.status(400).send({
+          error: `Task shouldn't due after its repeat end date (${getDateYMD(
+            taskRepeatEndDate
+          )}).`,
+        });
+        return;
+      }
+      if (taskRepeatEndDate < userBirthday) {
+        res.status(400).send({ error: "You were not born yet." });
+        return;
+      }
+
+      if (taskRepeatEndDate > userByeDay) {
+        res
+          .status(400)
+          .send({ error: "Let's plan something before 80 year old." });
+        return;
+      }
+    }
+
+    //new task
+    if (!taskId) {
+      console.log("it's a new task")
+      next();
+    }
+    try {
+      // milestone
+      const task = await getTask(taskId);
+      if (!task) {
+        next();
+      }
+      const milestoneId = task.milestone_id;
+      console.log("task", task);
+      if (milestoneId) {
+        const milestone = await getMilestone(milestoneId);
+        const milestoneDueDate = new Date(milestone.due_date);
+        const milestoneDueDateYMD = getDateYMD(milestoneDueDate);
+        const milestoneTitle = milestone.title;
+        if (taskDueDate > milestoneDueDate) {
+          res.status(400).send({
+            error: `Task shouldn't due after its milestone ${milestoneTitle} (${milestoneDueDateYMD}).`,
+          });
+          return;
+        }
+        if (req.body.task_repeat) {
+          const taskRepeatEndDate = getDateObjectFromYMD(
+            req.body.task_r_end_date
+          );
+          if (taskRepeatEndDate > milestoneDueDate) {
+            res.status(400).send({
+              error: `Task can only repeat until when its milestone dues: ${milestoneTitle} (${milestoneDueDateYMD}).`,
+            });
+            return;
+          }
+        }
+      }
+      next();
+    } catch (err) {
+      console.log(err);
+      res.status(500).send({ error: "Something went wrong." });
+      return;
+    }
+  };
+};
+
 module.exports = {
   wrapAsync,
   authentication,
   validateGoalDueDate,
   validateMilestoneDueDate,
+  validateTaskDueDate,
 };
