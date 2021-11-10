@@ -83,7 +83,7 @@ const getGoalWithPlan = async (req, res) => {
       const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
-      if (row.m_id) {
+      if (row.m_id && row.m_status > -1) {
         if (!Object.keys(milestoneIndexes).includes(String(row.m_id))) {
           const { m_id, m_title, m_description, m_status } = row;
           const newMilestone = {
@@ -97,9 +97,9 @@ const getGoalWithPlan = async (req, res) => {
           goalPlan.milestones.push(newMilestone);
           milestoneIndexes[row.m_id] = goalPlan.milestones.length - 1;
         }
-      }
+      
 
-      if (row.t_id) {
+      if (row.t_id && row.t_status > -1) {
         const index = milestoneIndexes[row.m_id];
         const {
           t_id,
@@ -121,9 +121,10 @@ const getGoalWithPlan = async (req, res) => {
         };
         goalPlan.milestones[index].tasks.push(newTask);
       }
+      }
     });
     if (!result) {
-      return res.status(400).send("goal id doesn't exist.");
+      return res.status(400).send({message:"goal id doesn't exist."});
     } else {
       return res.status(200).json(goalPlan);
     }

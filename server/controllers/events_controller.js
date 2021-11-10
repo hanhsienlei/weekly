@@ -206,6 +206,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_id,
           t_title,
           t_description,
+          r_frequency,
           m_id,
           g_id,
         } = row;
@@ -217,6 +218,8 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
           t_status: 0,
           t_parent: [row.p_title, row.g_title, row.m_title],
           t_origin_id: t_id,
+          r_frequency,
+          r_end_date,
           m_id,
           m_due_date,
           g_id,
@@ -224,8 +227,9 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
         };
 
         data.tasks.push(newTask);
+        repeatedTaskIds.push(t_id)
         console.log("[repeat] newTask: ", newTask);
-        console.log("repeated task added!!!!t_id: ", t_id);
+        console.log("repeated task added!!!!t_origin_id: ", t_id);
       }
 
       const isRepeatedTaskRecorded = repeatedTaskIds.includes(row.t_id);

@@ -49,8 +49,9 @@ const getGoalWithPlan = async (goalId) => {
   LEFT JOIN milestone m ON g.id = m.goal_id
   LEFT JOIN task t ON m.id = t.milestone_id
   LEFT JOIN repeated_task r ON t.id = r.task_id
-  WHERE g.id = ? and m.status > -1  
+  WHERE (g.id = ?) 
   `, goalId)
+  console.log(result)
   return result
 }
 

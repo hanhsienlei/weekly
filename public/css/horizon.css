@@ -68,3 +68,8 @@ a:hover {
 .date-header-container:hover {
 cursor: pointer;
 }
+
+.event-parents:hover {
+  color: #FD6E6E;
+  cursor:pointer;
+}
