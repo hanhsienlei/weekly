@@ -107,7 +107,6 @@ const deleteGoalAndChildren = async (goalId) => {
 }
 
 
-
 module.exports = {
   createGoal,
   saveGoal,

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { authentication, wrapAsync } = require("../../../utils/util");
+const { authentication, wrapAsync, validateMilestoneDueDate } = require("../../../utils/util");
 
 const { saveMilestone, getMilestone, deleteMilestoneAndChildren } = require("../../controllers/milestone_controller");
 
@@ -9,7 +9,7 @@ const {
 
 router
   .route("/milestone")
-  .post(authentication(USER_ROLE.ALL), wrapAsync(saveMilestone))
+  .post(authentication(USER_ROLE.ALL), validateMilestoneDueDate(), wrapAsync(saveMilestone))
   .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteMilestoneAndChildren))
 
 module.exports = router

@@ -16,7 +16,6 @@ const getTask = async (taskId) => {
   return result[0]
 }
 
-
 const deleteTask = async (taskId) => {
   const [ result ] = await pool.query(`
   UPDATE task 

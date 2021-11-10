@@ -57,7 +57,42 @@ const getMilestonesByGoalId = async (GoalId) => {
 }
 
 
+const GetGoalByMilestone = async (milestoneId) => {
+  const [ result ] = await pool.query(`
+  SELECT 
+    m.id m_id,
+    m.title m_title,
+    m.due_date m_due_date,
+    g.id g_id,
+    g.title g_title,
+    g.due_date g_due_date
+  FROM milestone m 
+  JOIN goal g ON (g.id = m.goal_id)
+  WHERE m.id = ? ;
+  `, milestoneId)
+  console.log(result)
+  return result
+}
 
+const GetTasksByMilestone = async (milestoneId) => {
+  const [ result ] = await pool.query(`
+  SELECT 
+    m.id m_id,
+    m.title m_title,
+    m.due_date m_due_date,
+    t.id t_id,
+    t.title t_title,
+    t.due_date t_due_date,
+    t.repeat t_repeat,
+    r.end_date r_end_date
+  FROM task t
+  LEFT JOIN milestone m  ON (t.milestone_id = m.id)
+  LEFT JOIN repeated_task r ON (t.id = r.task_id)
+  WHERE m.id = ? AND t.status > -1;
+  `, milestoneId)
+  console.log(result)
+  return result
+}
 
 
 module.exports = {
@@ -66,7 +101,9 @@ module.exports = {
   getMilestone,
   getMilestoneWithChildrenIds,
   deleteMilestoneAndChildren,
-  getMilestonesByGoalId
+  getMilestonesByGoalId,
+  GetGoalByMilestone,
+  GetTasksByMilestone
 }
 
 
