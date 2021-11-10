@@ -15,7 +15,7 @@ const {
 
 router
   .route("/repeated-task/new")
-  .post(authentication(USER_ROLE.ALL), wrapAsync(saveNewRepeatedTask))
+  .post(authentication(USER_ROLE.ALL), validateTaskDueDate(), wrapAsync(saveNewRepeatedTask))
   .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteNewRepeatedTask))
 
 router
