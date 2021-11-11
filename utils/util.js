@@ -227,7 +227,7 @@ const validateTaskDueDate = () => {
     if (!taskId) {
       console.log("it's a new task")
       next();
-    }
+    } else{
     try {
       // milestone
       const task = await getTask(taskId);
@@ -264,6 +264,7 @@ const validateTaskDueDate = () => {
       console.log(err);
       res.status(500).send({ error: "Something went wrong." });
       return;
+    }
     }
   };
 };

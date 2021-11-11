@@ -40,7 +40,7 @@ const getEventsByDate = async (userId, date) => {
 }
 
 const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
-  const queryConditions = [userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd]
+  const queryConditions = [userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart, userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart]
   const [result] = await pool.query(`
     SELECT 
 	  g.user_id user_id,
