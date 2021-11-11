@@ -249,7 +249,7 @@ const getEventsByDate = async (req, res) => {
             break;
           case 7:
             const dateStartRepeatValue = new Date(t_due_date).valueOf();
-            const dateEndValue = new Date(dateEnd).valueOf();
+            const dateEndValue = new Date(targetDate).valueOf();
             const sevenDaysInMilliSecond = 60 * 60 * 24 * 1000 * 7;
             const isWeekly =
               (dateEndValue - dateStartRepeatValue) % sevenDaysInMilliSecond ===
@@ -261,10 +261,10 @@ const getEventsByDate = async (req, res) => {
             break;
           case 30:
             let dateInit = t_due_date;
-            while (dateInit <= dateEnd) {
+            while (dateInit <= targetDate) {
               let dateNew = getDateYMD(getNextMonthThisDay(new Date(dateInit)));
               //console.log("month: ", dateNew, dateEnd, dateNew == dateEnd)
-              if (dateNew == dateEnd) {
+              if (dateNew == targetDate) {
                 addNewRepeatingTask();
                 break;
               }
