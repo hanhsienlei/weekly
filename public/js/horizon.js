@@ -755,7 +755,9 @@ const createEventComponent = (
       }
     }
   });
-  eventDescription.setAttribute("contenteditable", "true");
+  if(id && !task_origin_id){
+    eventDescription.setAttribute("contenteditable", "true");
+  }
   eventDescription.textContent = description
     ? description
     : `Description of this ${eventType}...`;
