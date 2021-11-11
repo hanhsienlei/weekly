@@ -106,6 +106,10 @@ const deleteGoalAndChildren = async (goalId) => {
   return result
 }
 
+const getUserByGoal = async (goalId) => {
+  const [ result ] = await pool.query("SELECT user_id FROM goal WHERE id = ?", goalId)
+  return result[0]
+}
 
 module.exports = {
   createGoal,
@@ -114,5 +118,6 @@ module.exports = {
   getGoalWithPlan,
   getGoalsAndMilestonesByUser,
   getGoalsByUser,
-  deleteGoalAndChildren
+  deleteGoalAndChildren,
+  getUserByGoal
 }

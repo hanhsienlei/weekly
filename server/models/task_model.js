@@ -25,6 +25,10 @@ const deleteTask = async (taskId) => {
   return result
 }
 
+const getUserByTask = async (taskId) => {
+  const [ result ] = await pool.query("SELECT user_id FROM task WHERE id = ?", taskId)
+  return result[0]
+}
 
 
 module.exports = {
@@ -32,4 +36,5 @@ module.exports = {
   updateTask,
   getTask,
   deleteTask,
+  getUserByTask
 }
