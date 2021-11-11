@@ -92,7 +92,7 @@ const renderEvents = async (date) => {
         data.date.tasks.forEach((task) => {
           let repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           if (!task.t_id) {
-            repeated_frequency = task.r_frequency
+            repeated_frequency = task.r_frequency;
           }
           console.log(
             "render event: task.t_id, repeated_frequency, task.r_end_date, ",
@@ -606,27 +606,39 @@ const createEventComponent = (
       .then((response) => response.json())
       .then((data) => {
         console.log("return from save: ", data);
-        const currentContainerDueDate = parentContainer.dataset.dueDate;
-        const currentContainerStartDate = parentContainer.dataset.startDate;
+        const currentContainerDueDate = new Date(
+          parentContainer.dataset.dueDate
+        );
+        const currentContainerStartDate = new Date(
+          parentContainer.dataset.startDate
+        );
+        const newEventDueDate = new Date(eventDueDate.value);
         const eventContainers = document.querySelectorAll(".events-container");
+        console.log(
+          newEventDueDate,
+          currentContainerDueDate,
+          currentContainerStartDate
+        );
+        
         if (
-          eventDueDate.value < currentContainerStartDate &&
-          eventDueDate.value > currentContainerDueDate
+          newEventDueDate < currentContainerStartDate ||
+          newEventDueDate > currentContainerDueDate
         ) {
           parentContainer.removeChild(eventOuterContainer);
-        }
-        for (let i = 0; i < eventContainers.length; i++) {
-          const containerDueDate = eventContainers[i].dataset.dueDate;
-          const containerStartDate = eventContainers[i].dataset.startDate;
-          const isTargetContainer =
-            eventDueDate.value <= containerDueDate &&
-            eventDueDate.value >= containerStartDate;
-          const isCurrentContainer = parentContainer === eventContainers[i];
-          if (isTargetContainer && !isCurrentContainer) {
-            eventContainers[i].appendChild(eventOuterContainer);
-            parentContainer = eventContainers[i];
-            console.log("event appended to  ", eventContainers[i]);
-            return;
+          for (let i = 0; i < eventContainers.length; i++) {
+            const containerDueDate = new Date(eventContainers[i].dataset.dueDate);
+            const containerStartDate = new Date( eventContainers[i].dataset.startDate);
+            const isTargetContainer =
+              newEventDueDate <= containerDueDate &&
+              newEventDueDate >= containerStartDate;
+            const isCurrentContainer = parentContainer === eventContainers[i];
+            console.log(containerDueDate, containerStartDate, isTargetContainer, isCurrentContainer)
+            if (isTargetContainer && !isCurrentContainer) {
+              eventContainers[i].appendChild(eventOuterContainer);
+              parentContainer = eventContainers[i];
+              console.log("event appended to  ", eventContainers[i]);
+              return;
+            }
           }
         }
       })
@@ -683,21 +695,22 @@ const createEventComponent = (
   eventTitle.textContent = title;
 
   eventParents.classList.add("event-parents", "mt-1", "mb-2", "text-muted");
-  
-  
+
   if (parents != ">>") {
     eventParents.setAttribute("data-bs-toggle", "modal");
     eventParents.setAttribute("data-bs-target", "#modal-goal");
     eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-    eventParents.textContent = parents + " 🔍"
-  } 
-  if (eventType === "goal"){
+    eventParents.textContent = parents + " 🔍";
+  }
+  if (eventType === "goal") {
     eventParents.setAttribute("data-bs-toggle", "modal");
     eventParents.setAttribute("data-bs-target", "#modal-goal");
     eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
-    eventParents.textContent = ">check goal 🔍"
+    eventParents.textContent = ">check goal 🔍";
   }
-  if (parents == null){eventParents.textContent = null}
+  if (parents == null) {
+    eventParents.textContent = null;
+  }
 
   eventInfoButtonContainer.classList.add(
     "event-info-button-container",
@@ -736,8 +749,8 @@ const createEventComponent = (
       break;
   }
   if (eventType === "task" && !id) {
-      eventDueDate.setAttribute("disabled", "true");
-    }
+    eventDueDate.setAttribute("disabled", "true");
+  }
   eventDescriptionContainer.classList.add(
     "event-description-container",
     "row",
@@ -757,7 +770,7 @@ const createEventComponent = (
       }
     }
   });
-  if(id && !task_origin_id){
+  if (id && !task_origin_id) {
     eventDescription.setAttribute("contenteditable", "true");
   }
   eventDescription.textContent = description
@@ -809,10 +822,10 @@ const createEventComponent = (
   if (stopRepeatButton) {
     eventFooterContainer.append(stopRepeatButton);
   }
-if (eventType === "task") {
+  if (eventType === "task") {
     eventFooterContainer.append(taskDeleteButton);
   }
-  
+
   if (eventType === "goal") {
     eventFooterContainer.append(goalDeleteButton);
   }
@@ -839,7 +852,7 @@ if (eventType === "task") {
     eventInfoButtonContainer
   );
   if (task_repeat_frequency > 0 || task_origin_id) {
-    console.log(id, task_repeat_frequency, task_origin_id)
+    console.log(id, task_repeat_frequency, task_origin_id);
     const repeatIcon = document.createElement("span");
     repeatIcon.textContent = " ⟳";
     eventTitle.after(repeatIcon);
@@ -859,7 +872,7 @@ const createTaskRepeatSelector = (
   min_date,
   max_date,
   task_due_date_element,
-  task_origin_id,
+  task_origin_id
 ) => {
   const container = document.createElement("div");
   container.classList.add(
