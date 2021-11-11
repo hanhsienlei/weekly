@@ -683,11 +683,13 @@ const createEventComponent = (
   eventTitle.textContent = title;
 
   eventParents.classList.add("event-parents", "mt-1", "mb-2", "text-muted");
-  eventParents.textContent = parents != ">>" ? parents + " 🔍" : null;
+  
+  
   if (parents != ">>") {
     eventParents.setAttribute("data-bs-toggle", "modal");
     eventParents.setAttribute("data-bs-target", "#modal-goal");
     eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
+    eventParents.textContent = parents + " 🔍"
   } 
   if (eventType === "goal"){
     eventParents.setAttribute("data-bs-toggle", "modal");
@@ -695,7 +697,7 @@ const createEventComponent = (
     eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
     eventParents.textContent = ">check goal 🔍"
   }
-  
+  if (parents == null){eventParents.textContent = null}
 
   eventInfoButtonContainer.classList.add(
     "event-info-button-container",
