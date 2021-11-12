@@ -548,6 +548,7 @@ const createEventComponent = (
     eventType === "goal" ? createDeleteGoalButton(id) : null;
   const milestoneDeleteButton =
     eventType === "milestone" ? createDeleteMilestoneButton(id, goal_id) : null;
+
   const saveEvent = () => {
     const body = {};
     body[`${eventType}_id`] = id;
@@ -606,40 +607,40 @@ const createEventComponent = (
       .then((response) => response.json())
       .then((data) => {
         console.log("return from save: ", data);
-        const currentContainerDueDate = new Date(
-          parentContainer.dataset.dueDate
-        );
-        const currentContainerStartDate = new Date(
-          parentContainer.dataset.startDate
-        );
         const newEventDueDate = new Date(eventDueDate.value);
         const eventContainers = document.querySelectorAll(".events-container");
-        console.log(
-          newEventDueDate,
-          currentContainerDueDate,
-          currentContainerStartDate
-        );
-        
-        if (
-          newEventDueDate < currentContainerStartDate ||
-          newEventDueDate > currentContainerDueDate
+        const containerDueDates = [] 
+        eventContainers.forEach((c) => containerDueDates.push(c.dataset.dueDate));
+        console.log(newEventDueDate, containerDueDates);
+
+        const relocateEvent = (index) => {
+          if (parentContainer === eventContainers[index]) return;
+          parentContainer.removeChild(eventOuterContainer);
+          eventContainers[index].appendChild(eventOuterContainer);
+          parentContainer = eventContainers[index];
+        };
+        if (eventDueDate.value === containerDueDates[0]) {
+          relocateEvent(0);
+        } else if (
+          newEventDueDate > new Date(containerDueDates[0]) &&
+          newEventDueDate < new Date(containerDueDates[1])
+        ) {
+          relocateEvent(1);
+        } else if (
+          newEventDueDate > new Date(containerDueDates[0]) &&
+          newEventDueDate < new Date(containerDueDates[2])
+        ) {
+          relocateEvent(2);
+        } else if (
+          newEventDueDate > new Date(containerDueDates[0]) &&
+          newEventDueDate < new Date(containerDueDates[3])
+        ) {
+          relocateEvent(3);
+        } else if (
+          newEventDueDate < new Date(containerDueDates[0]) ||
+          newEventDueDate > new Date(containerDueDates[3])
         ) {
           parentContainer.removeChild(eventOuterContainer);
-          for (let i = 0; i < eventContainers.length; i++) {
-            const containerDueDate = new Date(eventContainers[i].dataset.dueDate);
-            const containerStartDate = new Date( eventContainers[i].dataset.startDate);
-            const isTargetContainer =
-              newEventDueDate <= containerDueDate &&
-              newEventDueDate >= containerStartDate;
-            const isCurrentContainer = parentContainer === eventContainers[i];
-            console.log(containerDueDate, containerStartDate, isTargetContainer, isCurrentContainer)
-            if (isTargetContainer && !isCurrentContainer) {
-              eventContainers[i].appendChild(eventOuterContainer);
-              parentContainer = eventContainers[i];
-              console.log("event appended to  ", eventContainers[i]);
-              return;
-            }
-          }
         }
       })
       .catch((err) => {
