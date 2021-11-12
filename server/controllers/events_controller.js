@@ -102,6 +102,7 @@ const getEventsByDate = async (req, res) => {
         const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
         const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
         const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+        const t_origin_date = row.t_origin_date ? getDateYMD(row.t_origin_date) : null;
         for (let i = 0; i < 4; i++) {
           const range = loopConditions[i].range;
           const dateStart = loopConditions[i].dateStart;
@@ -183,13 +184,16 @@ const getEventsByDate = async (req, res) => {
                 g_id,
                 g_due_date,
               };
+              if(row.t_origin_id){
+                newTask.t_origin_date = t_origin_date
+              }
               data[range].tasks.push(newTask);
               console.log("task!")
             }
-            if (row.t_origin_id) {
+          }
+          if (t_origin_date >= dateStart && t_origin_date <= dateEnd) {
               repeatedTaskIds.push(row.t_origin_id);
             }
-          }
         }
 
         // console.log("repeatedTaskIds", repeatedTaskIds);
@@ -213,6 +217,7 @@ const getEventsByDate = async (req, res) => {
           t_status: 0,
           t_parent: [row.p_title, row.g_title, row.m_title],
           t_origin_id: t_id,
+          t_origin_date: targetDate,
           r_frequency,
           r_end_date,
           m_id,
@@ -230,7 +235,7 @@ const getEventsByDate = async (req, res) => {
       const isRepeatedTaskRecorded = repeatedTaskIds.includes(row.t_id);
       const isTaskListed = records.taskIds.includes(row.t_id);
       const isInDateRange = t_due_date < targetDate && r_end_date >= targetDate;
-      console.log(t_due_date, targetDate, "...", r_end_date, targetDate);
+      console.log(t_due_date, targetDate, "...", row.t_repeat, r_end_date, targetDate);
       //console.log(row.t_id, "isRepeatedTaskRecorded, isTaskListed, isInDateRange: ", isRepeatedTaskRecorded, isTaskListed, isInDateRange)
       //console.log(row.t_repeat == 1 && !isTaskListed && !isRepeatedTaskRecorded && isInDateRange)
       if (

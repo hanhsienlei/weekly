@@ -27,6 +27,7 @@ const getEventsByDate = async (userId, date) => {
     t.status t_status,
     t.repeat t_repeat,
     t.origin_id t_origin_id,
+    t.origin_date t_origin_date,
     r.frequency r_frequency,
     r.end_date r_end_date
     FROM goal g
@@ -40,7 +41,7 @@ const getEventsByDate = async (userId, date) => {
 }
 
 const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
-  const queryConditions = [userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart, userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart]
+  const queryConditions = [userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart, userId, userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart]
   const [result] = await pool.query(`
     SELECT 
 	  g.user_id user_id,
@@ -66,6 +67,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     t.status t_status,
     t.repeat t_repeat,
     t.origin_id t_origin_id,
+    t.origin_date t_origin_date,
     r.frequency r_frequency,
     r.end_date r_end_date
     FROM goal g
@@ -76,6 +78,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     WHERE (t.user_id=? or g.user_id=?)  
     AND
     ((t.due_date BETWEEN ? AND ?) 
+    OR (t.origin_date BETWEEN ? AND ?) 
     OR (m.due_date  BETWEEN ? AND ?) 
     OR (g.due_date  BETWEEN ? AND ?)
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?))
@@ -104,6 +107,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     t.status t_status,
     t.repeat t_repeat,
     t.origin_id t_origin_id,
+    t.origin_date t_origin_date,
     r.frequency r_frequency,
     r.end_date r_end_date
     FROM task t
@@ -114,6 +118,7 @@ const getEventsByDateRange = async (userId, dateStart, dateEnd) => {
     WHERE (t.user_id=? or g.user_id=?)  
     AND
     ((t.due_date BETWEEN ? AND ?) 
+    OR (t.origin_date BETWEEN ? AND ?) 
     OR (m.due_date  BETWEEN ? AND ?) 
     OR (g.due_date  BETWEEN ? AND ?)
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?))
