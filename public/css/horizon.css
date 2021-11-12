@@ -18,7 +18,7 @@ border-radius: 5px;
   padding: 5px 2px;
   margin: 5px 10px;
   border: solid gainsboro 1ps ;
-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .year-add-new-container {
@@ -27,12 +27,9 @@ border-radius: 3px;
   padding: 5px 2px;
   margin: 0 10px;
   border: solid gainsboro 1ps ;
-border-radius: 3px;
+  border-radius: 3px;
 }
 .event-title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-size: large;
 }
 /* .edit-button {

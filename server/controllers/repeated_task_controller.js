@@ -24,44 +24,46 @@ console.log(repeatDetails)
 
 const saveNewRepeatedTask = async (req, res) => {
   console.log("[saveNewRepeatedTask controller ] req.body: ", req.body)
+  
   const originId = req.body.task_origin_id;
+  const title = req.body.task_title;
+  const description = req.body.task_description;
   const dueDate = req.body.task_due_date;
   const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
+  const originDate = req.body.task_origin_date;
+  const originDateUnix = Math.ceil(new Date(originDate + "T23:59:59"));
   const status = req.body.task_status;
   const returnedId = await RepeatedTask.saveNewRepeatedTask(
     originId,
+    title,
+    description,
     status,
     dueDate,
-    dueDateUnix
+    dueDateUnix,
+    originDate,
+    originDateUnix
   );
   res.status(200).send({ newTaskId: returnedId });
 };
 
 const deleteNewRepeatedTask = async (req, res) => {
   const originId = req.query.task_origin_id;
-  const dueDate = req.query.task_due_date;
-  const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
-  const status = -1;
+  const originDate = req.query.task_origin_date;
+  const originDateUnix = Math.ceil(new Date(originDate + "T23:59:59"));
   console.log(originId,
-    status,
-    dueDate,
-    dueDateUnix)
-  const returnedId = await RepeatedTask.saveNewRepeatedTask(
+    originDate,
+    originDateUnix)
+  const returnedId = await RepeatedTask.deleteNewRepeatedTask(
     originId,
-    status,
-    dueDate,
-    dueDateUnix
+    originDate,
+    originDateUnix
   );
   res.status(200).send({ newTaskId: returnedId });
 };
 
 //delete the repeated task and create a regular task
 const updateSavedRepeatedTask = async (req, res) => {
-  //delete the repeated task
   const taskId = req.body.task_id;
-  const deleteResult = await RepeatedTask.deleteSavedRepeatedTask(taskId);
-
-  //create a new regular task
   const body = req.body;
   const taskDetails = {
     title: body.task_title,
@@ -69,27 +71,11 @@ const updateSavedRepeatedTask = async (req, res) => {
     status: body.task_status,
     due_date: body.task_due_date,
     due_date_unix: Math.ceil(new Date(body.task_due_date + "T23:59:59")),
-    milestone_id: body.task_milestone_id,
-    repeat: body.task_repeat,
-  };
-  const repeatDetails = {
-    frequency: body.task_r_frequency,
-    end_date: body.task_r_end_date,
-    end_date_unix: Math.ceil(new Date(body.task_r_end_date + "T23:59:59")),
   };
 
-  if (!taskDetails.milestone_id) {
-    delete taskDetails.milestone_id;
-  }
-
-  taskDetails.user_id = req.user.id;
+  const result = await Task.updateTask(taskDetails, taskId);
   
-  const NewTaskId = await Task.createTask(taskDetails);
-  if (body.task_repeat) {
-    await handleRepeatRule(repeatDetails, NewTaskId);
-  }
-  
-  res.status(200).send({ task_id: NewTaskId });
+  res.status(200).send({ result });
 };
 
 const deleteSavedRepeatedTask = async (req, res) => {
@@ -97,22 +83,6 @@ const deleteSavedRepeatedTask = async (req, res) => {
   const taskId = req.query.task_id;
   const deleteResult = await Task.deleteTask(taskId);
   res.status(200).send({ deleteResult: deleteResult });
-};
-
-const handleRepeatRule = async (repeatDetails, taskId) => {
-  //only fired when task repeat = true
-  //if rule exist, update rule
-  if (taskId > 0) {
-    const repeatRule = await RepeatedTask.getRepeatRule(taskId);
-    if (!repeatRule) {
-      repeatDetails.task_id = taskId;
-      const ruleId = await RepeatedTask.createRepeatRule(repeatDetails);
-      console.log("create new repeat rule: ", ruleId);
-    } else {
-      const result = await RepeatedTask.updateRepeatRule(repeatDetails, taskId);
-      console.log("update repeat rule: ", result);
-    }
-  }
 };
 
 module.exports = {

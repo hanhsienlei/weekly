@@ -116,7 +116,8 @@ const renderEvents = async (date) => {
               task.m_due_date,
               task.g_id,
               task.g_due_date,
-              task.t_origin_id
+              task.t_origin_id,
+              task.t_origin_date
             );
           }
         });
@@ -137,6 +138,7 @@ const renderEvents = async (date) => {
               null,
               milestone.g_id,
               milestone.g_due_date,
+              null,
               null
             );
           }
@@ -157,6 +159,7 @@ const renderEvents = async (date) => {
               null,
               null,
               goal.g_id,
+              null,
               null,
               null
             );
@@ -184,7 +187,8 @@ const renderEvents = async (date) => {
                 task.m_due_date,
                 task.g_id,
                 task.g_due_date,
-                task.t_origin_id
+                task.t_origin_id,
+                task.t_origin_date
               );
             }
           }
@@ -206,6 +210,7 @@ const renderEvents = async (date) => {
               null,
               milestone.g_id,
               milestone.g_due_date,
+              null,
               null
             );
           }
@@ -226,6 +231,7 @@ const renderEvents = async (date) => {
               null,
               null,
               goal.g_id,
+              null,
               null,
               null
             );
@@ -253,7 +259,8 @@ const renderEvents = async (date) => {
                 task.m_due_date,
                 task.g_id,
                 task.g_due_date,
-                task.t_origin_id
+                task.t_origin_id,
+                task.t_origin_date
               );
             }
           }
@@ -275,6 +282,7 @@ const renderEvents = async (date) => {
               null,
               milestone.g_id,
               milestone.g_due_date,
+              null,
               null
             );
           }
@@ -295,6 +303,7 @@ const renderEvents = async (date) => {
               null,
               null,
               goal.g_id,
+              null,
               null,
               null
             );
@@ -319,6 +328,7 @@ const renderEvents = async (date) => {
               null,
               goal.g_id,
               null,
+              null,
               null
             );
           }
@@ -340,6 +350,7 @@ const renderEvents = async (date) => {
               null,
               milestone.g_id,
               milestone.g_due_date,
+              null,
               null
             );
           }
@@ -363,7 +374,8 @@ const renderEvents = async (date) => {
                 task.m_due_date,
                 task.g_id,
                 task.g_due_date,
-                task.t_origin_id
+                task.t_origin_id,
+                task.t_origin_date
               );
             }
           }
@@ -463,7 +475,8 @@ const createEventComponent = (
   milestone_due_date = null,
   goal_id = null,
   goal_due_date = null,
-  task_origin_id = null
+  task_origin_id = null,
+  task_origin_date = null
 ) => {
   // console.log(
   //   timeScale,
@@ -480,7 +493,8 @@ const createEventComponent = (
   //   milestone_due_date,
   //   goal_id,
   //   goal_due_date,
-  //   task_origin_id
+  //   task_origin_id,
+  //   task_origin_date
   // );
   const accessToken = localStorage.getItem("access_token");
   //如果移動要改parentContainer所以用let
@@ -531,6 +545,7 @@ const createEventComponent = (
   const taskDeleteButton = createDeleteTaskButton(
     id,
     task_origin_id,
+    task_origin_date,
     dueDate,
     task_repeat_frequency,
     parentContainer,
@@ -559,10 +574,9 @@ const createEventComponent = (
     body[`${eventType}_due_date_unix`] = Math.ceil(
       new Date(eventDueDate.value + "T23:59:59")
     );
-
-    if (!id || task_origin_id) {
-      body.task_origin_id = task_origin_id;
-    }
+    body.task_origin_id = task_origin_id;
+    body.task_origin_date = task_origin_date;
+    
 
     if (taskRepeatSelector) {
       const task_r_frequency =
@@ -609,8 +623,10 @@ const createEventComponent = (
         console.log("return from save: ", data);
         const newEventDueDate = new Date(eventDueDate.value);
         const eventContainers = document.querySelectorAll(".events-container");
-        const containerDueDates = [] 
-        eventContainers.forEach((c) => containerDueDates.push(c.dataset.dueDate));
+        const containerDueDates = [];
+        eventContainers.forEach((c) =>
+          containerDueDates.push(c.dataset.dueDate)
+        );
         console.log(newEventDueDate, containerDueDates);
 
         const relocateEvent = (index) => {
@@ -749,8 +765,9 @@ const createEventComponent = (
       eventDueDate.setAttribute("max", milestone_due_date);
       break;
   }
-  if (eventType === "task" && !id) {
-    eventDueDate.setAttribute("disabled", "true");
+
+  if (task_origin_date) {
+    eventDueDate.setAttribute("data-origin-date", task_origin_date);
   }
   eventDescriptionContainer.classList.add(
     "event-description-container",
@@ -771,39 +788,39 @@ const createEventComponent = (
       }
     }
   });
-  if (id && !task_origin_id) {
-    eventDescription.setAttribute("contenteditable", "true");
-  }
+
+  eventDescription.setAttribute("contenteditable", "true");
+
   eventDescription.textContent = description
     ? description
     : `Description of this ${eventType}...`;
 
-  eventOuterContainer.addEventListener("input", () => {
-    const repeatedOriginChangeNote = eventOuterContainer.querySelector(
-      ".origin-change-note"
-    );
-    const isRepeated = taskRepeatSelector
-      ? Number(taskRepeatSelector.value) > 0
-      : 0;
+  // eventOuterContainer.addEventListener("input", () => {
+  //   const repeatedOriginChangeNote = eventOuterContainer.querySelector(
+  //     ".origin-change-note"
+  //   );
+  //   const isRepeated = taskRepeatSelector
+  //     ? Number(taskRepeatSelector.value) > 0
+  //     : 0;
 
-    if (
-      !task_origin_id &&
-      taskRepeatSelector &&
-      isRepeated &&
-      !repeatedOriginChangeNote
-    ) {
-      console.log("ready to add the nooottteee");
-      const NewRepeatedOriginChangeNote = document.createElement("div");
-      NewRepeatedOriginChangeNote.classList.add(
-        "origin-change-note",
-        "row",
-        "mb-3"
-      );
-      NewRepeatedOriginChangeNote.textContent =
-        "Changes on task contents only apply to future reoccurring tasks";
-      eventDescriptionContainer.after(NewRepeatedOriginChangeNote);
-    }
-  });
+  //   if (
+  //     !task_origin_id &&
+  //     taskRepeatSelector &&
+  //     isRepeated &&
+  //     !repeatedOriginChangeNote
+  //   ) {
+  //     console.log("ready to add the nooottteee");
+  //     const NewRepeatedOriginChangeNote = document.createElement("div");
+  //     NewRepeatedOriginChangeNote.classList.add(
+  //       "origin-change-note",
+  //       "row",
+  //       "mb-3"
+  //     );
+  //     NewRepeatedOriginChangeNote.textContent =
+  //       "Changes on task contents only apply to future reoccurring tasks";
+  //     eventDescriptionContainer.after(NewRepeatedOriginChangeNote);
+  //   }
+  // });
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
   eventSaveButton.classList.add(
@@ -882,7 +899,7 @@ const createTaskRepeatSelector = (
     "row",
     "mb-3"
   );
-  if (!task_id || task_origin_id) {
+  if (task_origin_id) {
     switch (task_repeat_frequency) {
       // case 0:
       //   container.textContent = "Repeated task";
@@ -920,7 +937,7 @@ const createTaskRepeatSelector = (
     repeatEndDateContainer.classList.add(
       "repeat-end-date-container",
       "row",
-      "mb-3"
+      "mb-3", "w-100"
     );
     repeatEndDateDescription.textContent = "Repeat until...";
     repeatEndDate.classList.add("event-due-date", "col");
@@ -984,6 +1001,7 @@ const createViewGoalButton = (goal_id) => {
 const createDeleteTaskButton = (
   id,
   task_origin_id,
+  task_origin_date,
   dueDate,
   task_repeat_frequency,
   parentContainer,
@@ -1011,7 +1029,7 @@ const createDeleteTaskButton = (
   button.addEventListener("click", (e) => {
     let apiEndpoint = "";
     if (!id && task_origin_id) {
-      apiEndpoint = `/api/repeated-task/new?task_origin_id=${task_origin_id}&task_due_date=${dueDate}`;
+      apiEndpoint = `/api/repeated-task/new?task_origin_id=${task_origin_id}&task_origin_date=${task_origin_date}`;
     } else if (task_origin_id) {
       apiEndpoint = `/api/repeated-task/saved?task_id=${id}`;
     } else {
