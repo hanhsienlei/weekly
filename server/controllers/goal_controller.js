@@ -35,11 +35,11 @@ const saveGoal = async (req, res) => {
 const getGoal = async (req, res) => {
   const goalId = req.body.goal_id;
   if (!goalId) {
-    return res.status(400).send("goal id is required.");
+    return res.status(400).send({error:"goal id is required."});
   } else {
     const result = await Goal.getGoal(goalId);
     if (!result) {
-      return res.status(400).send("goal id doesn't exist.");
+      return res.status(400).send({error:"goal id doesn't exist."});
     } else {
       return res.status(200).send(result);
     }
@@ -50,7 +50,7 @@ const getGoalWithPlan = async (req, res) => {
   const goalId = req.query.goal_id;
   console.log("goalId: ", goalId);
   if (!goalId) {
-    return res.status(400).send({ message: "goal id is required." });
+    return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.getGoalWithPlan(goalId);
     const {
@@ -124,7 +124,7 @@ const getGoalWithPlan = async (req, res) => {
       }
     });
     if (!result) {
-      return res.status(400).send({message:"goal id doesn't exist."});
+      return res.status(400).send({error:"goal id doesn't exist."});
     } else {
       return res.status(200).json(goalPlan);
     }
@@ -135,7 +135,7 @@ const getGoalProgress = async (req, res) => {
   const goalId = req.query.goal_id;
   console.log("goalId: ", goalId);
   if (!goalId) {
-    return res.status(400).send({ message: "goal id is required." });
+    return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.getGoalWithPlan(goalId);
     console.log("goal controller, Goal.getGoalWithPlan(goalId): result: ", result)
@@ -209,7 +209,7 @@ const getGoalProgress = async (req, res) => {
     );
     goalProgress.g_summary.task.push(sumOfTaskDone, sumOfTask);
     if (!result) {
-      return res.status(400).send({message: "goal id doesn't exist."});
+      return res.status(400).send({error: "goal id doesn't exist."});
     } else {
       return res.status(200).json(goalProgress);
     }
@@ -219,11 +219,11 @@ const getGoalProgress = async (req, res) => {
 const getGoalsByUser = async (req, res) => {
   const userId = req.user.id;
   if (!userId) {
-    return res.status(400).send("user id is required.");
+    return res.status(400).send({error:"user id is required."});
   } else {
     const result = await Goal.getGoalsByUser(userId);
     if (!result) {
-      return res.status(400).send("user id doesn't exist.");
+      return res.status(400).send({error:"user id doesn't exist."});
     } else {
       return res.status(200).send(result);
     }
@@ -233,7 +233,7 @@ const getGoalsByUser = async (req, res) => {
 const deleteGoalAndChildren = async (req, res) => {
   const goalId = req.query.goal_id;
   if (!goalId) {
-    return res.status(400).send("goal id is required.");
+    return res.status(400).send({error:"goal id is required."});
   } else {
     const result = await Goal.deleteGoalAndChildren(goalId);
     console.log(goalId, result)

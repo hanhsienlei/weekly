@@ -62,11 +62,11 @@ const updateTask = async (req, res) => {
 const getTask = async (req, res) => {
   const taskId = req.body.task_id;
   if (!taskId) {
-    return res.status(400).send("task id is required.");
+    return res.status(400).send({error: "task id is required."});
   } else {
     const result = await Task.getTask(Number(taskId));
     if (!result) {
-      return res.status(400).send("Task id doesn't exist.");
+      return res.status(400).send({error:"Task id doesn't exist."});
     } else {
       return res.status(200).send(result);
     }
@@ -92,7 +92,7 @@ const handleRepeatRule = async (repeatDetails, taskId) => {
 const deleteTask = async (req, res) => {
   const taskId = req.query.task_id;
   if (!taskId) {
-    return res.status(400).send("task id is required.");
+    return res.status(400).send({error:"task id is required."});
   } else {
     const result = [await Task.deleteTask(taskId), await RepeatedTask.deleteRepeatedTasks(taskId)]
     return res.status(200).send(result);

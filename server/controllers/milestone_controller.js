@@ -19,7 +19,7 @@ const saveMilestone = async (req, res) => {
     console.log("body.milestone_id: ", body.milestone_id);
     const row = await Milestone.getMilestone(body.milestone_id);
     if (!row) {
-      res.status(400).send("Milestone id doesn't exist.");
+      res.status(400).send({error:"Milestone id doesn't exist."});
     } else {
       const updateResult = await Milestone.saveMilestone(milestoneDetails, body.milestone_id);
       res.status(200).send({message: `Update succeeded (${updateResult})`});
@@ -45,7 +45,7 @@ const getMilestone = async (req, res) => {
 const deleteMilestoneAndChildren = async (req, res) => {
   const milestoneId = req.query.milestone_id;
   if (!milestoneId) {
-    return res.status(400).send("milestone id is required.");
+    return res.status(400).send({error:"milestone id is required."});
   } else {
     const result = await Milestone.deleteMilestoneAndChildren(milestoneId);
     console.log(milestoneId, result)

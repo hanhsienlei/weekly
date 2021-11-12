@@ -546,19 +546,20 @@ const createEventComponent = (
     id,
     task_origin_id,
     task_origin_date,
-    dueDate,
+    title,
     task_repeat_frequency,
     parentContainer,
     eventOuterContainer
   );
-  const stopRepeatButton = !id
-    ? createStopTodayButton(
-        parentContainer,
-        eventOuterContainer,
-        task_origin_id,
-        dueDate
-      )
-    : null;
+  const stopRepeatButton =
+    task_origin_id && !id
+      ? createStopTodayButton(
+          parentContainer,
+          eventOuterContainer,
+          task_origin_id,
+          dueDate
+        )
+      : null;
   const goalDeleteButton =
     eventType === "goal" ? createDeleteGoalButton(id) : null;
   const milestoneDeleteButton =
@@ -576,27 +577,25 @@ const createEventComponent = (
     );
     body.task_origin_id = task_origin_id;
     body.task_origin_date = task_origin_date;
-    
 
     if (taskRepeatSelector) {
       const task_r_frequency =
         taskRepeatSelector.options[taskRepeatSelector.selectedIndex].value;
       const task_repeat = task_r_frequency != 0 ? 1 : 0;
-      const task_r_end_date = taskRepeatEndDate.value || taskRepeatEndDate.max;
+      const task_r_end_date = taskRepeatEndDate.value
       body.task_repeat = task_repeat;
       body.task_r_frequency = task_r_frequency;
-      //task due date > repeat end date的話，repeat end date設為task due date
+      body.task_r_end_date = task_r_end_date;
+      //task due date > repeat end date的話，error
       if (task_r_end_date < eventDueDate.value) {
-        body.task_r_end_date = eventDueDate.value;
-        body.task_r_end_date_unix = Math.ceil(
-          new Date(eventDueDate.value + "T23:59:59")
-        );
+        Swal.fire({
+          title: "Invalid repeat rule",
+          text: "Repeat end date should be later than starting date. ",
+          icon: "error",
+          showCancelButton: false,
+        });
+        return;
       }
-      console.log("task repeat date set to new task due date by system!");
-      body.task_r_end_date = task_r_end_date || "2100-01-01";
-      body.task_r_end_date_unix = Math.ceil(
-        new Date(task_r_end_date + "T23:59:59")
-      );
     }
     console.log("body: ", body);
 
@@ -621,6 +620,21 @@ const createEventComponent = (
       .then((response) => response.json())
       .then((data) => {
         console.log("return from save: ", data);
+        if (data.error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.error,
+          });
+          return;
+        }
+
+        Swal.fire({
+          icon: "success",
+          title: "All good!",
+          text: "Update successfully",
+        });
+
         const newEventDueDate = new Date(eventDueDate.value);
         const eventContainers = document.querySelectorAll(".events-container");
         const containerDueDates = [];
@@ -639,17 +653,17 @@ const createEventComponent = (
           relocateEvent(0);
         } else if (
           newEventDueDate > new Date(containerDueDates[0]) &&
-          newEventDueDate < new Date(containerDueDates[1])
+          newEventDueDate <= new Date(containerDueDates[1])
         ) {
           relocateEvent(1);
         } else if (
           newEventDueDate > new Date(containerDueDates[0]) &&
-          newEventDueDate < new Date(containerDueDates[2])
+          newEventDueDate <= new Date(containerDueDates[2])
         ) {
           relocateEvent(2);
         } else if (
           newEventDueDate > new Date(containerDueDates[0]) &&
-          newEventDueDate < new Date(containerDueDates[3])
+          newEventDueDate <= new Date(containerDueDates[3])
         ) {
           relocateEvent(3);
         } else if (
@@ -920,7 +934,6 @@ const createTaskRepeatSelector = (
     const optionEveryday = document.createElement("option");
     const optionOnceAWeek = document.createElement("option");
     const optionOnceAMonth = document.createElement("option");
-    const repeatEndDateContainer = document.createElement("div");
     const repeatEndDateDescription = document.createElement("span");
     const repeatEndDate = document.createElement("input");
     selector.classList.add("task-repeat-selector", "form-selector", "mb-3");
@@ -933,12 +946,6 @@ const createTaskRepeatSelector = (
     optionOnceAWeek.textContent = "Once a week";
     optionOnceAMonth.setAttribute("value", 30);
     optionOnceAMonth.textContent = "Once a month";
-
-    repeatEndDateContainer.classList.add(
-      "repeat-end-date-container",
-      "row",
-      "mb-3", "w-100"
-    );
     repeatEndDateDescription.textContent = "Repeat until...";
     repeatEndDate.classList.add("event-due-date", "col");
     repeatEndDate.setAttribute("type", "date");
@@ -978,8 +985,8 @@ const createTaskRepeatSelector = (
       optionOnceAWeek,
       optionOnceAMonth
     );
-    repeatEndDateContainer.append(repeatEndDateDescription, repeatEndDate);
-    container.append(selector, repeatEndDateContainer);
+
+    container.append(selector, repeatEndDateDescription, repeatEndDate);
   }
 
   return container;
@@ -1002,7 +1009,7 @@ const createDeleteTaskButton = (
   id,
   task_origin_id,
   task_origin_date,
-  dueDate,
+  title,
   task_repeat_frequency,
   parentContainer,
   eventOuterContainer
@@ -1027,27 +1034,50 @@ const createDeleteTaskButton = (
     );
   }
   button.addEventListener("click", (e) => {
-    let apiEndpoint = "";
-    if (!id && task_origin_id) {
-      apiEndpoint = `/api/repeated-task/new?task_origin_id=${task_origin_id}&task_origin_date=${task_origin_date}`;
-    } else if (task_origin_id) {
-      apiEndpoint = `/api/repeated-task/saved?task_id=${id}`;
-    } else {
-      apiEndpoint = `/api/task?task_id=${id}`;
-    }
-    console.log("apiEndpoint: ", apiEndpoint);
-    fetch(apiEndpoint, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${accessToken}` },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("return from delete", data);
-        parentContainer.removeChild(eventOuterContainer);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: `"${title}" will be gone for good.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let apiEndpoint = "";
+        if (!id && task_origin_id) {
+          apiEndpoint = `/api/repeated-task/new?task_origin_id=${task_origin_id}&task_origin_date=${task_origin_date}`;
+        } else if (task_origin_id) {
+          apiEndpoint = `/api/repeated-task/saved?task_id=${id}`;
+        } else {
+          apiEndpoint = `/api/task?task_id=${id}`;
+        }
+        console.log("apiEndpoint: ", apiEndpoint);
+        fetch(apiEndpoint, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              Swal.fire({
+                icon: "success",
+                title: "Deleted!",
+                showConfirmButton: false,
+              });
+              parentContainer.removeChild(eventOuterContainer);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Something went wrong...",
+                showConfirmButton: false,
+              });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
   });
 
   return button;
@@ -1139,6 +1169,20 @@ const createStopTodayButton = (
       .then((response) => response.json())
       .then((data) => {
         console.log("return from stop: ", data);
+
+        if (data.error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.error,
+          });
+          return;
+        }
+        Swal.fire({
+          icon: "success",
+          title: "All good",
+          text: "this task will no longer repeat. Other older or edited tasks from this series remain the same.",
+        });
         parentContainer.removeChild(eventOuterContainer);
       })
       .catch((err) => {
@@ -1147,12 +1191,6 @@ const createStopTodayButton = (
   });
 
   return button;
-};
-
-//還沒做完
-const createTagComponent = () => {
-  const tag = document.createElement("span");
-  tag.classList.add("tag", "badge", "rounded-pill");
 };
 
 const renderEventsToday = () => {

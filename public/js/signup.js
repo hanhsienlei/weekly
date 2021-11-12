@@ -17,15 +17,19 @@ submitButton.addEventListener("click", (e) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      if(data.error){
-        alert(data.error)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.error,
+        });
       } else {
-        const access_token = data.data.access_token
-        localStorage.setItem("access_token", access_token)
-        window.location.href="/life"
+        const access_token = data.data.access_token;
+        localStorage.setItem("access_token", access_token);
+        window.location.href = "/life";
       }
     })
     .catch((err) => {

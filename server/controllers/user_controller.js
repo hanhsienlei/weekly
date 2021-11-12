@@ -1,12 +1,28 @@
 require('dotenv').config();
 const validator = require('validator');
 const User = require('../models/user_model');
-const  {getDateYMD} = require("../../utils/date_converter");
+const  {getDateYMD, getDateObjectFromYMD} = require("../../utils/date_converter");
 
 const signUp = async (req, res) => {
     let {name} = req.body;
     const {email, birthday, password} = req.body;
     console.log("[signup controller] ", req.body)
+
+    const checkBirthday = (birthday) => {
+        const birthdayNumbers = birthday.split("-")
+        const birthdayObject = getDateObjectFromYMD(birthday)
+        const year = birthdayObject.getFullYear()
+        const month = birthdayObject.getMonth() + 1
+        const date = birthdayObject.getDate()
+        const result = birthdayNumbers[0] == year && birthdayNumbers[1] == month && birthdayNumbers[2] == date && year >= 1950 && year <= 2020
+        console.log(birthday, birthdayNumbers, birthdayObject, result)
+        return result
+    }
+
+    if(!checkBirthday(birthday)){
+        res.status(400).send({error:'Please enter a date between 1950-01-01 and 2020-12-31.'});
+        return;
+    }
 
     if(!name || !email || !password || !birthday) {
         res.status(400).send({error:'Request Error: name, email, birthday and password are required.'});
@@ -22,6 +38,7 @@ const signUp = async (req, res) => {
 
     const result = await User.signUp(name, birthday, User.USER_ROLE.USER, email, password);
     if (result.error) {
+        console.log(result.error)
         res.status(403).send({error: result.error});
         return;
     }
@@ -63,10 +80,11 @@ const nativeSignIn = async (email, password) => {
 
 const signIn = async (req, res) => {
     const data = req.body;
-
+    console.log("req.body", data)
     let result;
     switch (data.provider) {
         case 'native':
+            console.log("data.email, data.password", data.email, data.password)
             result = await nativeSignIn(data.email, data.password);
             break;
         default:
@@ -75,6 +93,10 @@ const signIn = async (req, res) => {
 
     if (result.error) {
         const status_code = result.status ? result.status : 403;
+        console.log(result.error)
+        result.error = result.error == "Password is wrong" ? "Password is wrong" : "Email doesn't exist"
+
+        
         res.status(status_code).send({error: result.error});
         return;
     }
