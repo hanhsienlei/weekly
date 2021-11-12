@@ -587,7 +587,7 @@ const createEventComponent = (
       body.task_r_frequency = task_r_frequency;
       body.task_r_end_date = task_r_end_date;
       //task due date > repeat end date的話，error
-      if (task_r_end_date < eventDueDate.value) {
+      if (task_repeat && task_r_end_date < eventDueDate.value) {
         Swal.fire({
           title: "Invalid repeat rule",
           text: "Repeat end date should be later than starting date. ",
@@ -597,6 +597,7 @@ const createEventComponent = (
         return;
       }
     }
+    
     console.log("body: ", body);
 
     let apiEndpoint = "";
