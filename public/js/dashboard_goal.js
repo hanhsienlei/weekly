@@ -153,7 +153,7 @@ const renderGoalProgress = async (goal_id) => {
       progressGoalTitle.textContent = g_title;
       progressGoalButton.setAttribute("onclick", `renderGoalEditor(${g_id})`);
       progressGoalDueDate.textContent = `🗓 ${g_due_date}`;
-      progressWeeksFromNowValue.textContent = "💭 " + weeksFromNowValue;
+      progressWeeksFromNowValue.textContent = "🕰 " + weeksFromNowValue;
       progressWeeksFromNowText.textContent = weeksFromNowText;
       progressTaskSum.textContent = `${g_summary.task[0]} / ${g_summary.task[1]} tasks done`;
       progressMilestoneSum.textContent = `${g_summary.milestone[0]} / ${g_summary.milestone[1]} milestones achieved`;

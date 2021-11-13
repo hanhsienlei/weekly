@@ -26,7 +26,7 @@
 .progress-weeks-from-now-value, .progress-weeks-from-now-text, .progress-goal-due-date {
   font-size: 1.5rem;
 }
-.progress-weeks-from-now-value, .progress-goal-due-date {
+.progress-goal-due-date {
   margin-right: 1rem;
 }
 .progress-milestone-progress, .progress-task-progress{
