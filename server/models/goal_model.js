@@ -88,7 +88,7 @@ const getGoalsByUser = async (userId) => {
     g.publish g_publish,
     g.purpose_id p_id
   FROM goal g
-  WHERE g.user_id = ? ; 
+  WHERE g.user_id = ? AND g.status > -1; 
   `, userId)
   return result
 }

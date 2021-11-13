@@ -7,7 +7,37 @@ const deleteGoalAndChildren = (goalId) => {
     },
   })
     .then((response) => response.json())
-    .then((data) => console.log(data))
+    .then((data) => {
+      console.log(data);
+      if (data.error) {
+        //something went wrong
+        Swal.fire({
+          title: "Something went wrong.",
+          text: "Please try again",
+          icon: "error",
+          showCancelButton: false,
+        });
+        return;
+      }
+      if (data.affectedRows > 0) {
+        //all deleted
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          showConfirmButton: false,
+        });
+        const currentDate =
+          document.querySelector(".date-value").dataset.dueDate;
+        renderEvents(currentDate);
+      } else {
+        //nothing changed
+        Swal.fire({
+          icon: "warning",
+          title: "Seems like this goal has already be gone.",
+          showConfirmButton: false,
+        });
+      }
+    })
     .catch((err) => {
       console.log(err);
     });
@@ -21,7 +51,37 @@ const deleteMilestoneAndChildren = (milestoneId) => {
     },
   })
     .then((response) => response.json())
-    .then((data) => console.log(data))
+    .then((data) => {
+      console.log(data);
+      if (data.error) {
+        //something went wrong
+        Swal.fire({
+          title: "Something went wrong.",
+          text: "Please try again",
+          icon: "error",
+          showCancelButton: false,
+        });
+        return;
+      }
+      if (data.affectedRows > 0) {
+        //all deleted
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          showConfirmButton: false,
+        });
+        const currentDate =
+          document.querySelector(".date-value").dataset.dueDate;
+        renderEvents(currentDate);
+      } else {
+        //nothing changed
+        Swal.fire({
+          icon: "warning",
+          title: "Seems like this milestone has already be gone.",
+          showConfirmButton: false,
+        });
+      }
+    })
     .catch((err) => {
       console.log(err);
     });
@@ -582,7 +642,7 @@ const createEventComponent = (
       const task_r_frequency =
         taskRepeatSelector.options[taskRepeatSelector.selectedIndex].value;
       const task_repeat = task_r_frequency != 0 ? 1 : 0;
-      const task_r_end_date = taskRepeatEndDate.value
+      const task_r_end_date = taskRepeatEndDate.value;
       body.task_repeat = task_repeat;
       body.task_r_frequency = task_r_frequency;
       body.task_r_end_date = task_r_end_date;
@@ -597,7 +657,7 @@ const createEventComponent = (
         return;
       }
     }
-    
+
     console.log("body: ", body);
 
     let apiEndpoint = "";
@@ -629,12 +689,17 @@ const createEventComponent = (
           });
           return;
         }
-        const alertText = task_origin_id? "Update successfully. The rest of the repeating tasks remain the same.":"Update successfully"
+        const alertText = task_origin_id
+          ? "Update successfully. The rest of the repeating tasks remain the same."
+          : "Update successfully";
         Swal.fire({
           icon: "success",
           title: "All good!",
           text: alertText,
         });
+        const currentDate =
+          document.querySelector(".date-value").dataset.dueDate;
+        renderEvents(currentDate);
 
         const newEventDueDate = new Date(eventDueDate.value);
         const eventContainers = document.querySelectorAll(".events-container");
@@ -993,7 +1058,7 @@ const createTaskRepeatSelector = (
   return container;
 };
 
-//modal 用的
+//打開modal 用的
 const createViewGoalButton = (goal_id) => {
   const button = document.createElement("button");
   button.classList.add("btn", "btn-outline-secondary", "edit-goal-button");
@@ -1065,7 +1130,10 @@ const createDeleteTaskButton = (
                 title: "Deleted!",
                 showConfirmButton: false,
               });
-              parentContainer.removeChild(eventOuterContainer);
+              //parentContainer.removeChild(eventOuterContainer);
+              const currentDate =
+                document.querySelector(".date-value").dataset.dueDate;
+              renderEvents(currentDate);
             } else {
               Swal.fire({
                 icon: "error",
@@ -1083,6 +1151,7 @@ const createDeleteTaskButton = (
 
   return button;
 };
+
 const createDeleteGoalButton = (goalId) => {
   const button = document.createElement("button");
   button.setAttribute("type", "button");
@@ -1148,6 +1217,7 @@ const createDeleteMilestoneButton = (milestoneId, goalId) => {
 
   return button;
 };
+
 const createStopTodayButton = (
   parentContainer,
   eventOuterContainer,
@@ -1184,7 +1254,10 @@ const createStopTodayButton = (
           title: "All good",
           text: "this task will no longer repeat. Other older or edited tasks from this series remain the same.",
         });
-        parentContainer.removeChild(eventOuterContainer);
+        //parentContainer.removeChild(eventOuterContainer);
+        const currentDate =
+          document.querySelector(".date-value").dataset.dueDate;
+        renderEvents(currentDate);
       })
       .catch((err) => {
         console.log(err);
