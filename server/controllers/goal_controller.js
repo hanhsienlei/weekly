@@ -160,7 +160,7 @@ const getGoalProgress = async (req, res) => {
     const reducer = (previousValue, currentValue) =>
       previousValue + currentValue;
     result.forEach((row) => {
-      if (row.m_id) {
+      if (row.m_id && row.m_status > -1) {
         if (!Object.keys(milestoneIndexes).includes(String(row.m_id))) {
           const { m_id, m_title } = row;
           const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
