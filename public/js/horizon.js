@@ -629,11 +629,11 @@ const createEventComponent = (
           });
           return;
         }
-
+        const alertText = task_origin_id? "Update successfully. The rest of the repeating tasks remain the same.":"Update successfully"
         Swal.fire({
           icon: "success",
           title: "All good!",
-          text: "Update successfully",
+          text: alertText,
         });
 
         const newEventDueDate = new Date(eventDueDate.value);
