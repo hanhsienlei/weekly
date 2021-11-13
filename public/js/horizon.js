@@ -43,6 +43,7 @@ const deleteGoalAndChildren = (goalId) => {
     });
 };
 const deleteMilestoneAndChildren = (milestoneId) => {
+  console.log("delete milestone : ", milestoneId)
   const accessToken = localStorage.getItem("access_token");
   fetch(`/api/milestone?milestone_id=${milestoneId}`, {
     method: "DELETE",

@@ -34,7 +34,7 @@ const deleteMilestoneAndChildren = async (milestoneId) => {
   const [ result ] = await pool.query(`
   UPDATE 
   milestone m 
-  RIGHT JOIN task t ON (m.id = t.milestone_id)
+  LEFT JOIN task t ON (m.id = t.milestone_id)
   SET
   m.status = -1, t.status = -1
   WHERE m.id = ? ;
