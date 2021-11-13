@@ -43,7 +43,7 @@ const deleteGoalAndChildren = (goalId) => {
     });
 };
 const deleteMilestoneAndChildren = (milestoneId) => {
-  console.log("delete milestone : ", milestoneId)
+  console.log("delete milestone : ", milestoneId);
   const accessToken = localStorage.getItem("access_token");
   fetch(`/api/milestone?milestone_id=${milestoneId}`, {
     method: "DELETE",
@@ -1280,3 +1280,9 @@ const renderEventsToday = () => {
 };
 
 document.onload = renderEventsToday();
+
+$("#modal-goal").on("hidden.bs.modal", () => {
+  console.log("listen!")
+  const currentDate = document.querySelector(".date-value").dataset.dueDate;
+  renderEvents(currentDate);
+});
