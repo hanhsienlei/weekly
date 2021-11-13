@@ -1,7 +1,61 @@
 .main {
-  min-height: 90vh;
+  height: 90vh;
   margin-top: 100px;
 }
 * {
-    /* border: solid grey 1px; */
+  color: #474749;
+  font-size: 1rem;
+}
+
+.list-group-item:hover {
+  color: #fd6e6e;
+  background-color: #d8d8e0;
+  cursor: pointer;
+}
+.list-group-item.selected {
+  color: #474749;
+  background-color: #ffafaf;
+}
+.progress-goal-title {
+  font-size: 2rem;
+}
+.progress-view-goal-button:hover {
+  color: #fd6e6e;
+  cursor: pointer;
+}
+.progress-weeks-from-now-value, .progress-weeks-from-now-text, .progress-goal-due-date {
+  font-size: 1.5rem;
+}
+.progress-weeks-from-now-value, .progress-goal-due-date {
+  margin-right: 1rem;
+}
+.progress-milestone-progress, .progress-task-progress{
+  font-size: 1.5rem;
+}
+.dashboard-doughnut {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.goal-percentage-container, #doughnut{
+  width:100%;
+  position: absolute;
+  margin-top: 150%;
+}
+.goal-percentage-container {
+  width: fluid;
+  padding: auto; 
+  z-index: 20;
+  align-items: center;
+}
+.goal-percentage {
+  line-height: 100%;
+  font-size: 3rem;
+  color: #fd6e6e;
+}
+.percentage {
+ line-height: 100%;
+ padding-left:0.5rem;
+ padding-top:1rem;
+  color: #fd6e6e;
 }

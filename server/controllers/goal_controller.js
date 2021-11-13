@@ -1,5 +1,8 @@
 const Goal = require("../models/goal_model");
-const { getDateYMD } = require("../../utils/date_converter");
+const {
+  getDateYMD,
+  getDateObjectFromYMD,
+} = require("../../utils/date_converter");
 
 const saveGoal = async (req, res) => {
   const body = req.body;
@@ -35,11 +38,11 @@ const saveGoal = async (req, res) => {
 const getGoal = async (req, res) => {
   const goalId = req.body.goal_id;
   if (!goalId) {
-    return res.status(400).send({error:"goal id is required."});
+    return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.getGoal(goalId);
     if (!result) {
-      return res.status(400).send({error:"goal id doesn't exist."});
+      return res.status(400).send({ error: "goal id doesn't exist." });
     } else {
       return res.status(200).send(result);
     }
@@ -97,34 +100,33 @@ const getGoalWithPlan = async (req, res) => {
           goalPlan.milestones.push(newMilestone);
           milestoneIndexes[row.m_id] = goalPlan.milestones.length - 1;
         }
-      
 
-      if (row.t_id && row.t_status > -1) {
-        const index = milestoneIndexes[row.m_id];
-        const {
-          t_id,
-          t_title,
-          t_description,
-          t_status,
-          t_repeat,
-          r_frequency,
-        } = row;
-        const newTask = {
-          t_id,
-          t_title,
-          t_description,
-          t_due_date,
-          t_status,
-          t_repeat,
-          r_end_date,
-          r_frequency,
-        };
-        goalPlan.milestones[index].tasks.push(newTask);
-      }
+        if (row.t_id && row.t_status > -1) {
+          const index = milestoneIndexes[row.m_id];
+          const {
+            t_id,
+            t_title,
+            t_description,
+            t_status,
+            t_repeat,
+            r_frequency,
+          } = row;
+          const newTask = {
+            t_id,
+            t_title,
+            t_description,
+            t_due_date,
+            t_status,
+            t_repeat,
+            r_end_date,
+            r_frequency,
+          };
+          goalPlan.milestones[index].tasks.push(newTask);
+        }
       }
     });
     if (!result) {
-      return res.status(400).send({error:"goal id doesn't exist."});
+      return res.status(400).send({ error: "goal id doesn't exist." });
     } else {
       return res.status(200).json(goalPlan);
     }
@@ -138,17 +140,27 @@ const getGoalProgress = async (req, res) => {
     return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.getGoalWithPlan(goalId);
-    console.log("goal controller, Goal.getGoalWithPlan(goalId): result: ", result)
+    console.log(
+      "goal controller, Goal.getGoalWithPlan(goalId): result: ",
+      result
+    );
     const { user_id, g_id, g_title, g_description } = result[0];
     const g_due_date = result[0].g_due_date
       ? getDateYMD(result[0].g_due_date)
       : null;
+    const todayValue = new Date().valueOf();
+    const weekInMilliSecond = 60 * 60 * 24 * 1000 * 7;
+    const GoalDueDateValue = getDateObjectFromYMD(g_due_date);
+    const GoalWeeksFromNow = Math.ceil(
+      (GoalDueDateValue - todayValue) / weekInMilliSecond
+    );
     const goalProgress = {
       user_id,
       g_id,
       g_title,
       g_description,
       g_due_date,
+      g_weeks_from_now: GoalWeeksFromNow,
       g_summary: { milestone: [], task: [] },
       m_ids: [],
       m_titles: [],
@@ -199,31 +211,35 @@ const getGoalProgress = async (req, res) => {
       return count;
     };
     const numberOfMilestoneDone = milestonesCalculator();
-    const taskLength = goalProgress.m_number_of_task.length
-    const taskDoneLength = goalProgress.m_number_of_task_done.length
-    const sumOfTask = taskLength ? goalProgress.m_number_of_task.reduce(reducer) : 0;
-    const sumOfTaskDone = taskDoneLength? goalProgress.m_number_of_task_done.reduce(reducer): 0;
+    const taskLength = goalProgress.m_number_of_task.length;
+    const taskDoneLength = goalProgress.m_number_of_task_done.length;
+    const sumOfTask = taskLength
+      ? goalProgress.m_number_of_task.reduce(reducer)
+      : 0;
+    const sumOfTaskDone = taskDoneLength
+      ? goalProgress.m_number_of_task_done.reduce(reducer)
+      : 0;
     goalProgress.g_summary.milestone.push(
       numberOfMilestoneDone,
       numberOfMilestone
     );
     goalProgress.g_summary.task.push(sumOfTaskDone, sumOfTask);
     if (!result) {
-      return res.status(400).send({error: "goal id doesn't exist."});
+      return res.status(400).send({ error: "goal id doesn't exist." });
     } else {
       return res.status(200).json(goalProgress);
     }
-  } 
+  }
 };
 
 const getGoalsByUser = async (req, res) => {
   const userId = req.user.id;
   if (!userId) {
-    return res.status(400).send({error:"user id is required."});
+    return res.status(400).send({ error: "user id is required." });
   } else {
     const result = await Goal.getGoalsByUser(userId);
     if (!result) {
-      return res.status(400).send({error:"user id doesn't exist."});
+      return res.status(400).send({ error: "user id doesn't exist." });
     } else {
       return res.status(200).send(result);
     }
@@ -233,10 +249,10 @@ const getGoalsByUser = async (req, res) => {
 const deleteGoalAndChildren = async (req, res) => {
   const goalId = req.query.goal_id;
   if (!goalId) {
-    return res.status(400).send({error:"goal id is required."});
+    return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.deleteGoalAndChildren(goalId);
-    console.log(goalId, result)
+    console.log(goalId, result);
     return res.status(200).send(result);
   }
 };
@@ -247,5 +263,5 @@ module.exports = {
   getGoalWithPlan,
   getGoalProgress,
   getGoalsByUser,
-  deleteGoalAndChildren
+  deleteGoalAndChildren,
 };

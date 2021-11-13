@@ -2,52 +2,63 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- <link rel="stylesheet" href="../css/reset.css"> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/header.css">
-  <link rel="stylesheet" href="../css/dashboard_goal.css">
-  <link rel="stylesheet" href="../css/goal_editor_modal.css">
-
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="../css/header.css" />
+  <link rel="stylesheet" href="../css/dashboard_goal.css" />
+  <link rel="stylesheet" href="../css/goal_editor_modal.css" />
   <title>Goal Review</title>
 </head>
 
 <body>
   <%- include("partials/header") %>
     <div class="main">
-      <div class="container-lg my-5 ">
-        <div class="row mb-3 justify-content-center">
-          <div class="col-6">
-            <div class="row mb-3">
-              <select class="goal-selector form-select">
-
-              </select>
-            </div>
-              <div class="row mb-3">
-                <div class="progress-goal-title-container col-12">
-                <h2 class="progress-goal-title"></h2>
-                </div>
-                
-                <h4 class="progress-goal-due-date"></h3>
-              </div>
-              <div class="row mb-3">
-                  <h4 class="progress-milestone-progress"></h4>
-                  <h4 class="progress-task-progress"></h4>
-              </div>
-              <div class="progress-goal-editor-button-container row"></div>
-          </div>
-          <div class="col-3 mb-3">
-            <!-- doughnut chart -->
-            <canvas id="doughnut"></canvas>
-          </div>
+      <div class="row my-5">
+        <div class="sidebar col-2 overflow-auto smooth-scroll pt-3">
+          <ul class="goal-list list-group list-group-flush"></ul>
         </div>
-        <div class="row overflow-auto smooth-scroll mb-3">
-          <!-- bar charts -->
-          <div class="col-12">
-          <canvas id="bar"></canvas>
+        <div class="dashboard col-10 pt-2 px-4">
+          <div class="dashboard-top row mb-3">
+            <div class="dashboard-info col-12">
+              <div class="row">
+                <div class="progress-goal-title-container col-12 mb-3">
+                  <span class="progress-goal-title" data-bs-toggle="modal" data-bs-target="#modal-goal"></span>
+                  <span class="progress-view-goal-button" data-bs-toggle="modal" data-bs-target="#modal-goal">🔍</span>
+                </div>
+                <div class="progress-goal-date-container col-12 mb-3">
+                  <span class="progress-goal-due-date "></span>
+
+                  <span class="progress-weeks-from-now-value "></span><span class="progress-weeks-from-now-text"></span>
+
+                </div>
+                <div class="progress-progress-container row mb-3">
+                  <span class="progress-empty-note "></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dashboard-bottom row overflow-auto smooth-scroll mb-3">
+            <div class="dashboard-doughnut-outer-container col-3 ">
+              <div class="progress-task-progress-container d-flex justify-content-center align-items-end">
+                <span class="progress-task-progress "></span>
+              </div>
+              <div class="dashboard-doughnut">
+                <div class="goal-percentage-container d-flex justify-content-center">
+                  <span class="goal-percentage"></span><span class="percentage">%</span>
+                </div>
+                <canvas id="doughnut"></canvas>
+              </div>
+            </div>
+            <div class="dashboard-bar col-9 mx-auto">
+              <div class="progress-milestone-progress-container d-flex justify-content-center align-items-end">
+                <span class="progress-milestone-progress "></span>
+              </div>
+              <canvas id="bar"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -56,14 +67,13 @@
     <!-- Modal -->
     <%- include("partials/goal_editor_modal") %>
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
       <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <script src="../js/header.js"></script>
       <script src="../js/dashboard_goal.js"></script>
       <script src="../js/goal_editor_modal.js"></script>
-      
-      
 </body>
 
 </html>

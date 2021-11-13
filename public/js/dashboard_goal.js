@@ -1,37 +1,85 @@
-const goalSelector = document.querySelector(".goal-selector");
+const goalList = document.querySelector(".goal-list");
 const accessToken = localStorage.getItem("access_token");
 const renderGoalProgress = async (goal_id) => {
-  fetch(`/api/goal/progress?goal_id=${goal_id}`,
-  {headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
+  fetch(`/api/goal/progress?goal_id=${goal_id}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
     .then((response) => response.json())
     .then((data) => {
       const progressGoalTitle = document.querySelector(".progress-goal-title");
+      const progressGoalButton = document.querySelector(
+        ".progress-view-goal-button"
+      );
+
       const progressGoalDueDate = document.querySelector(
         ".progress-goal-due-date"
+      );
+
+      const progressWeeksFromNowValue = document.querySelector(
+        ".progress-weeks-from-now-value"
+      );
+      const progressWeeksFromNowText = document.querySelector(
+        ".progress-weeks-from-now-text"
+      );
+      const progressTaskSum = document.querySelector(
+        ".progress-task-progress"
       );
       const progressMilestoneSum = document.querySelector(
         ".progress-milestone-progress"
       );
-      const progressTaskSum = document.querySelector(".progress-task-progress");
+      
+      const progressEmptyNote = document.querySelector(".progress-empty-note");
+      const goalPercentageSpan = document.querySelector(".goal-percentage")
       const {
         g_id,
         g_title,
         g_due_date,
+        g_weeks_from_now,
         g_summary,
         m_titles,
         m_number_of_task,
         m_number_of_task_done,
       } = data;
+      const weeksFromNowValue =
+        g_weeks_from_now > 0 ? g_weeks_from_now : Math.abs(g_weeks_from_now);
+      const weeksFromNowText =
+        g_weeks_from_now > 0 ? ` weeks away` : ` weeks ago`;
+      const GoalEmptyNote = m_titles.length
+        ? ""
+        : "⚠️ No plans are made for this goal yet. The charts show how they would look like when you start working on your goals.";
+        
+      const goalDonePercentage =  g_summary.task[1]? Math.ceil((g_summary.task[0] / g_summary.task[1])*100):0
       const numberOfTaskOpen = g_summary.task[1] - g_summary.task[0];
-      const doughnutData = new Array(
-        ...m_number_of_task_done,
-        numberOfTaskOpen
-      );
-      const doughnutLabels = new Array(...m_titles, "Not done yet");
+      let doughnutData = new Array(...m_number_of_task_done, numberOfTaskOpen);
+      let doughnutLabels = new Array(...m_titles, "Not done yet");
+      let barLabels = m_titles;
+      let barDataDone = m_number_of_task_done;
+      let barDataTotal = m_number_of_task;
+      if (!m_titles.length) {
+        doughnutData = [1, 4, 3, 2, 5];
+        doughnutLabels = [
+          "milestone 1",
+          "milestone 2",
+          "milestone 3",
+          "milestone 4",
+          "Not done yet",
+        ];
+        barLabels = [
+          "milestone 1",
+          "milestone 2",
+          "milestone 3",
+          "milestone 4",
+        ];
+        barDataDone = [1, 4, 3, 2];
+        barDataTotal = [2, 4, 4, 5];
+      }
       const doughnutCanvas = document.querySelector("#doughnut");
+      const doughnutBackgroundColor = Array(doughnutLabels.length).fill(
+        "#ffafaf"
+      );
+      doughnutBackgroundColor[doughnutLabels.length - 1] = "#d8d8e0";
       const doughnut = new Chart(doughnutCanvas, {
         type: "doughnut",
         options: {
@@ -47,10 +95,12 @@ const renderGoalProgress = async (goal_id) => {
             {
               data: doughnutData,
               hoverOffset: 4,
+              backgroundColor: doughnutBackgroundColor,
             },
           ],
         },
       });
+
       const barCanvas = document.querySelector("#bar");
       const bar = new Chart(barCanvas, {
         options: {
@@ -78,50 +128,48 @@ const renderGoalProgress = async (goal_id) => {
           },
         },
         data: {
-          labels: m_titles,
+          labels: barLabels,
           datasets: [
             {
               type: "bar",
               label: "done tasks",
-              data: m_number_of_task_done,
+              data: barDataDone,
               fill: false,
-              backgroundColor: "rgba(253,110,110, 0.2)",
+              backgroundColor: "#ffafaf",
               yAxisID: "y0",
             },
             {
               type: "bar",
               label: "total tasks",
-              data: m_number_of_task,
+              data: barDataTotal,
               fill: false,
-               backgroundColor: "rgba(253,110,110, 0.2)",
+              backgroundColor: "#d8d8e0",
               yAxisID: "y1",
             },
           ],
         },
       });
-      const progressGoalEditorButtonContainer = document.querySelector(
-        ".progress-goal-editor-button-container"
-      );
-      const progressGoalEditorButton = createGoalButton(g_id);
-      progressGoalEditorButtonContainer.appendChild(progressGoalEditorButton);
+
       progressGoalTitle.textContent = g_title;
-      progressGoalDueDate.textContent = `Due date: ${g_due_date}`;
-      progressMilestoneSum.textContent = `${g_summary.milestone[0]} / ${g_summary.milestone[1]} milestones`;
-      progressTaskSum.textContent = `${g_summary.task[0]} / ${g_summary.task[1]} tasks`;
-      console.log("goalSelector: ", goalSelector)
-      goalSelector.addEventListener("change", (e) => {
+      progressGoalButton.setAttribute("onclick", `renderGoalEditor(${g_id})`);
+      progressGoalDueDate.textContent = `🗓 ${g_due_date}`;
+      progressWeeksFromNowValue.textContent = "💭 " + weeksFromNowValue;
+      progressWeeksFromNowText.textContent = weeksFromNowText;
+      progressTaskSum.textContent = `${g_summary.task[0]} / ${g_summary.task[1]} tasks done`;
+      progressMilestoneSum.textContent = `${g_summary.milestone[0]} / ${g_summary.milestone[1]} milestones achieved`;
+      goalPercentageSpan.textContent = goalDonePercentage;
+      progressEmptyNote.textContent = GoalEmptyNote;
+      goalList.addEventListener("click", (e) => {
         doughnut.destroy();
         bar.destroy();
-        progressGoalEditorButtonContainer.innerHTML = "";
       });
-      
     })
     .catch((err) => {
       console.log(err);
     });
 };
 
-const renderGoalSelector = async () => {
+const InitializePage = async () => {
   const accessToken = localStorage.getItem("access_token");
   fetch(`/api/goals`, {
     headers: {
@@ -130,22 +178,37 @@ const renderGoalSelector = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      const goalList = document.querySelector(".goal-list");
       if (data.length) {
+        renderGoalProgress(data[0].g_id);
         data.forEach((goal) => {
           const { g_id, g_title } = goal;
-          const option = document.createElement("option");
-          option.setAttribute("value", g_id);
-          option.textContent = g_title;
-          goalSelector.appendChild(option);
+          const goalItem = document.createElement("li");
+          goalItem.setAttribute("data-goal-id", g_id);
+          goalItem.classList.add("list-group-item", "ps-4");
+          goalItem.textContent = g_title;
+          goalList.appendChild(goalItem);
+          if (g_id == data[0].g_id) {
+            goalItem.classList.add("selected");
+          }
         });
-        console.log("goalSelector: ", goalSelector)
-      goalSelector.addEventListener("change", (e) => {
-        console.log(goalSelector.value)
-        renderGoalProgress(goalSelector.value);
-      });
+        goalList.addEventListener("click", (e) => {
+          if (e.target.classList.contains("list-group-item")) {
+            const targetId = e.target.dataset.goalId;
+            renderGoalProgress(targetId);
+            const selectedItem = document.querySelector(".selected");
+            if (selectedItem) {
+              selectedItem.classList.remove("selected");
+            }
+            e.target.classList.add("selected");
+          }
+        });
       } else {
-        alert("No goals found");
+        const goalItem = document.createElement("li");
+
+        goalItem.classList.add("list-group-item");
+        goalItem.textContent = "You don't have any goal yet";
+        goalList.appendChild(goalItem);
       }
     })
     .catch((err) => {
@@ -153,16 +216,6 @@ const renderGoalSelector = async () => {
     });
 };
 
-const createGoalButton = (goal_id) => {
-  const button = document.createElement("button");
-  button.classList.add("btn", "btn-light", "edit-goal-button");
-  button.setAttribute("type", "button");
-  button.setAttribute("data-bs-toggle", "modal");
-  button.setAttribute("data-bs-target", "#modal-goal");
-  button.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-  button.textContent = "check goal";
-  return button;
-};
 const createTaskRepeatSelector = (
   task_id,
   task_repeat_frequency,
@@ -265,4 +318,4 @@ const createTaskRepeatSelector = (
 };
 
 //window.onload = renderGoalProgress();
-window.onload = renderGoalSelector();
+window.onload = InitializePage();
