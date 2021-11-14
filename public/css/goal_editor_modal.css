@@ -1,6 +1,6 @@
 .goal-modal-body{
 height: 90vh;
-background-color: rgb(210, 210, 210);
+/* background-color: rgb(210, 210, 210); */
 }
 .goal-title {
 font-size: larger;
@@ -17,3 +17,11 @@ font-size: larger;
   height: 1.8em;
   line-height: 100%;
 } */
+add-milestone-conatiner {
+border: solid gainsboro 1ps ;
+border-radius: 5px;
+box-sizing: border-box;
+  background-color: #fdf36e;
+  padding: 5px 2px;
+  margin: 5px 10px;
+}

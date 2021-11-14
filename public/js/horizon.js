@@ -87,7 +87,7 @@
 //       console.log(err);
 //     });
 // };
-
+const accessToken = localStorage.getItem("access_token");
 const renderEvents = async (date) => {
   const accessToken = localStorage.getItem("access_token");
   fetch(`/api/events/${date}`, {

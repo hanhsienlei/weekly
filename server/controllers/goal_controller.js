@@ -128,7 +128,7 @@ const getGoalWithPlan = async (req, res) => {
     if (!result) {
       return res.status(400).send({ error: "goal id doesn't exist." });
     } else {
-      return res.status(200).json(goalPlan);
+      return res.status(200).send(goalPlan);
     }
   }
 };

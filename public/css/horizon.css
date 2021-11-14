@@ -14,7 +14,7 @@ border-radius: 5px;
 }
 .date-add-new-container, .week-add-new-container, .month-add-new-container {
   box-sizing: border-box;
-  background-color: gainsboro;
+  background-color: #fdf36e;
   padding: 5px 2px;
   margin: 5px 10px;
   border: solid gainsboro 1ps ;

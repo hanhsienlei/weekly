@@ -411,7 +411,7 @@ const createEventComponent = (
 
   eventParentsIcon.setAttribute("data-bs-toggle", "modal");
     eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
-    eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${id})`);
+    eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
   if (parents != ">>") {
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");

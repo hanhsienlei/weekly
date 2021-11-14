@@ -1,4 +1,4 @@
-const accessToken = localStorage.getItem("access_token");
+// const accessToken = localStorage.getItem("access_token");
 const renderGoalEditor = (goalId) => {
   fetch(`/api/goal/plan?goal_id=${goalId}`, {
     headers: {
