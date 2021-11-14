@@ -16,3 +16,8 @@ button {
 [contenteditable="true"]  :matches(:hover, :focus){
 border: grey slid 1x;
 }
+
+input.off-focus, textarea.off-focus  {
+  background:none;
+  border:none;
+}

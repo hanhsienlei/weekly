@@ -144,7 +144,7 @@ const createEventComponent = (
 
   const checkBox = document.createElement("input");
   const eventTitleContentContainer = document.createElement("div");
-  const eventTitle = document.createElement("span");
+  const eventTitle = document.createElement("input");
 
   const eventInfoButtonContainer = document.createElement("div");
   const editButton = document.createElement("button");
@@ -154,7 +154,7 @@ const createEventComponent = (
   const eventDueDateContainer = document.createElement("div");
   const eventDueDate = document.createElement("input");
   const eventDescriptionContainer = document.createElement("div");
-  const eventDescription = document.createElement("p");
+  const eventDescription = document.createElement("textarea");
   const taskRepeatSelectorContainer =
     eventType === "task"
       ? createTaskRepeatSelector(
@@ -202,8 +202,8 @@ const createEventComponent = (
   const saveEvent = () => {
     const body = {};
     body[`${eventType}_id`] = id;
-    body[`${eventType}_title`] = eventTitle.textContent;
-    body[`${eventType}_description`] = eventDescription.textContent;
+    body[`${eventType}_title`] = eventTitle.value;
+    body[`${eventType}_description`] = eventDescription.value;
     body[`${eventType}_status`] = checkBox.hasAttribute("checked") ? 1 : 0;
     body[`${eventType}_due_date`] = eventDueDate.value;
     body[`${eventType}_due_date_unix`] = Math.ceil(
@@ -367,9 +367,18 @@ const createEventComponent = (
     "event-title-content-container",
     "col-9"
   );
-  eventTitle.classList.add("event-title");
-  eventTitle.setAttribute("contenteditable", "true");
-  eventTitle.textContent = title;
+  eventTitle.classList.add("event-title", "off-focus");
+  eventTitle.setAttribute("type", "text");
+  eventTitle.setAttribute("placeholder", `${eventType} name`);
+  eventTitle.value = title;
+  eventTitle.addEventListener("focus", e => {
+    console.log("click")
+  eventTitle.classList.remove("off-focus")
+  })
+  eventTitle.addEventListener("blur", e => {
+  eventTitle.classList.add("off-focus");
+  })
+
 
   eventParents.classList.add("event-parents", "mt-1", "mb-2", "text-muted");
 
@@ -438,8 +447,17 @@ const createEventComponent = (
   eventDescription.classList.add(
     "event-description",
     `event-description-${eventType}-${id}`,
-    "border"
+    "off-focus"
   );
+  eventDescription.setAttribute("placeholder", `Description of the ${eventType}`)
+  eventDescription.value = description
+  eventDescription.addEventListener("focus", e => {
+    console.log("click")
+  eventDescription.classList.remove("off-focus")
+  })
+  eventDescription.addEventListener("blur", e => {
+  eventDescription.classList.add("off-focus");
+  })
 
   eventDueDate.addEventListener("change", () => {
     if (taskRepeatSelector) {
@@ -449,12 +467,6 @@ const createEventComponent = (
       }
     }
   });
-
-  eventDescription.setAttribute("contenteditable", "true");
-
-  eventDescription.textContent = description
-    ? description
-    : `Description of this ${eventType}...`;
 
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
