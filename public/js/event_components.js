@@ -139,15 +139,18 @@ const createEventComponent = (
   const eventOuterContainer = document.createElement("div");
   const eventHeaderContainer = document.createElement("div");
   const eventInfoContainer = document.createElement("div");
-  const EventTitleContainer = document.createElement("div");
+  const eventLabelContainer = document.createElement("div")
+  const eventLabel = document.createElement("p")
+  const eventInfoButtonContainer = document.createElement("div");
+  const editButton = document.createElement("button");
+  const eventTitleContainer = document.createElement("div");
   const checkBoxContainer = document.createElement("div");
 
   const checkBox = document.createElement("input");
   const eventTitleContentContainer = document.createElement("div");
   const eventTitle = document.createElement("input");
 
-  const eventInfoButtonContainer = document.createElement("div");
-  const editButton = document.createElement("button");
+  
   const eventParents = document.createElement("h6");
 
   const eventEditor = document.createElement("div");
@@ -347,9 +350,26 @@ const createEventComponent = (
   }
   eventOuterContainer.setAttribute("data-goal-due-date", goal_due_date);
   eventOuterContainer.classList.add("event-info-container", "col-10");
-  eventHeaderContainer.classList.add("event-header-container", "row", "mb-3");
-
-  EventTitleContainer.classList.add("event-title-container", "my-2", "d-flex");
+  eventHeaderContainer.classList.add("event-header-container", "row", "mt-1", "mb-3");
+  eventLabelContainer.classList.add("event-label-container", "mb-1");
+  eventLabel.classList.add("event-label", `${eventType}-label`,"badge", "rounded-pill");
+  eventLabel.textContent = eventType
+  eventInfoButtonContainer.classList.add(
+    "event-info-button-container",
+    "ms-auto", "d-inline-block"
+  );
+  editButton.classList.add(
+    "btn",
+    "btn-sm",
+    "btn-outline-secondary",
+    "edit-button"
+  );
+  editButton.setAttribute("type", "button");
+  editButton.setAttribute("data-bs-toggle", "collapse");
+  editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
+  //editButton.setAttribute("style", "opacity: 0");
+  editButton.textContent = "✍";
+  eventTitleContainer.classList.add("event-title-container", "mb-1", "d-flex");
   checkBoxContainer.classList.add("check-box-container", "col-1");
 
   checkBox.classList.add("form-check-input");
@@ -402,21 +422,7 @@ const createEventComponent = (
     eventParents.textContent = null;
   }
 
-  eventInfoButtonContainer.classList.add(
-    "event-info-button-container",
-    "col-2"
-  );
-  editButton.classList.add(
-    "btn",
-    "btn-sm",
-    "btn-outline-secondary",
-    "edit-button"
-  );
-  editButton.setAttribute("type", "button");
-  editButton.setAttribute("data-bs-toggle", "collapse");
-  editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
-  //editButton.setAttribute("style", "opacity: 0");
-  editButton.textContent = "✍";
+  
   eventEditor.classList.add("event-editor", "col", "collapse", "px-2");
   if (!title) {
     eventEditor.classList.remove("collapse");
@@ -514,24 +520,25 @@ const createEventComponent = (
 
   checkBoxContainer.appendChild(checkBox);
   eventTitleContentContainer.appendChild(eventTitle);
+  eventLabelContainer.append(eventLabel, eventInfoButtonContainer)
   if(eventType === "task"){
-    EventTitleContainer.append(
+    eventTitleContainer.append(
     checkBoxContainer,
   );
   }
-  EventTitleContainer.append(
+  eventTitleContainer.append(
     eventTitleContentContainer,
-    eventInfoButtonContainer
+    
   );
   if (task_repeat_frequency > 0 || task_origin_id) {
     console.log(id, task_repeat_frequency, task_origin_id);
     const repeatIcon = document.createElement("span");
     repeatIcon.textContent = " ⟳";
-    eventTitle.after(repeatIcon);
+    eventLabel.after(repeatIcon);
   }
   eventInfoButtonContainer.appendChild(editButton);
 
-  eventInfoContainer.append(EventTitleContainer, eventParents);
+  eventInfoContainer.append(eventLabelContainer, eventTitleContainer, eventParents);
   eventHeaderContainer.append(eventInfoContainer);
   eventOuterContainer.append(eventHeaderContainer, eventEditor);
   parentContainer.appendChild(eventOuterContainer);

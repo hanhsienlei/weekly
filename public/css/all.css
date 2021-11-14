@@ -17,11 +17,44 @@ a:hover {
 /* button {
     margin: 3px;
 } */
-[contenteditable="true"]  :matches(:hover, :focus){
+/* [contenteditable="true"]  :matches(:hover, :focus){
 border: grey slid 1x;
+} */
+
+textarea {
+  border: solid grey 1px;
 }
 
 input.off-focus, textarea.off-focus  {
   background:none;
   border:none;
+}
+textarea.off-focus {
+  border: solid grey 1px;
+  border-radius: 3px;
+}
+.form-check-input {
+  margin-top:8px;
+}
+
+.form-check-input:checked {
+    background-color: #6dfdae;
+    border-color: #6dfdae;
+}
+
+.event-label {
+  margin-bottom:0;
+  padding: 0.2rem 0.6rem;
+}
+.event-label.goal-label {
+  background-color: #fa8181;
+  color: #474749;
+}
+.event-label.milestone-label {
+  background-color: #fdc46e;
+  color: #474749;
+}
+.event-label.task-label {
+  background-color: #fdf36e;
+  color: #474749;
 }
