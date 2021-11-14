@@ -3,6 +3,7 @@ const RepeatedTask = require("../models/repeated_task_model");
 
 const updateTask = async (req, res) => {
   const body = req.body;
+  console.log("updateTask controller, req.body: ", body)
   const taskDetails = {
     title: body.task_title,
     description: body.task_description,

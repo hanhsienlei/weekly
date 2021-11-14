@@ -239,7 +239,9 @@ const validateTaskDueDate = () => {
     const taskId = req.body.task_id;
     const milestoneId = req.body.task_milestone_id;
     const userId = Number(req.user.id);
+    console.log("req.body: ", req.body)
 
+    
     if (taskDueDate < userBirthday) {
       res.status(400).send({ error: "You were not born yet." });
       return;
@@ -253,8 +255,13 @@ const validateTaskDueDate = () => {
     }
     //repeat end date
     if (req.body.task_repeat) {
-      const taskRepeatEndDate = getDateObjectFromYMD(req.body.task_r_end_date);
-      if (taskDueDate > taskRepeatEndDate) {
+      const taskRepeatEndDate = req.body.task_r_end_date?getDateObjectFromYMD(req.body.task_r_end_date): null
+      
+      if(!taskRepeatEndDate && !milestoneId) {
+        req.body.task_r_end_date = getDateYMD(userByeDay)
+        console.log("independent task repeat end date set to forever")
+      }else {
+        if (taskDueDate > taskRepeatEndDate) {
         res.status(400).send({
           error: `Task shouldn't due after its repeat end date (${getDateYMD(
             taskRepeatEndDate
@@ -262,6 +269,7 @@ const validateTaskDueDate = () => {
         });
         return;
       }
+      
       if (taskRepeatEndDate < userBirthday) {
         res.status(400).send({ error: "You were not born yet." });
         return;
@@ -273,6 +281,7 @@ const validateTaskDueDate = () => {
           .send({ error: "Let's plan something before 80 year old." });
         return;
       }
+    }
     }
 
     //user
@@ -334,6 +343,8 @@ const validateTaskDueDate = () => {
               return;
             }
           }
+          next();
+        }else{
           next();
         }
         
