@@ -9,12 +9,11 @@ font-size: larger;
   border: solid grey 1px;
 }
 
-
 .milestone-title {
   font-size:large
 }
 
-.edit-button, .btn {
+/* .edit-button, .btn {
   height: 1.8em;
   line-height: 100%;
-}
+} */

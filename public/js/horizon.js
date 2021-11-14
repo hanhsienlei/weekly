@@ -1066,7 +1066,7 @@ const addNewEvent = (timeScale, eventType) => {
 //打開modal 用的
 const createViewGoalButton = (goal_id) => {
   const button = document.createElement("button");
-  button.classList.add("btn", "btn-outline-secondary", "edit-goal-button");
+  button.classList.add("btn", "btn-outline-primary", "edit-goal-button");
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#modal-goal");
@@ -1162,7 +1162,7 @@ const createDeleteGoalButton = (goalId) => {
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#deleteGoalModal");
-  button.classList.add("btn", "btn-outline-secondary");
+  button.classList.add("btn", "btn-outline-danger", "col-6");
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
@@ -1194,7 +1194,7 @@ const createDeleteMilestoneButton = (milestoneId, goalId) => {
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#deleteMilestoneModal");
-  button.classList.add("btn", "btn-outline-secondary");
+  button.classList.add("btn", "btn-outline-danger", "col-6");
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
@@ -1232,7 +1232,7 @@ const createStopTodayButton = (
   console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate);
   const button = document.createElement("button");
   button.setAttribute("type", "button");
-  button.classList.add("btn", "btn-outline-secondary");
+  button.classList.add("btn", "btn-outline-warning");
   button.textContent = "stop today";
 
   button.addEventListener("click", (e) => {

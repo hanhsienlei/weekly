@@ -94,7 +94,6 @@ const deleteMilestoneAndChildren = (milestoneId) => {
     });
 };
 
-
 const createEventComponent = (
   timeScale,
   eventType,
@@ -139,20 +138,18 @@ const createEventComponent = (
   const eventOuterContainer = document.createElement("div");
   const eventHeaderContainer = document.createElement("div");
   const eventInfoContainer = document.createElement("div");
-  const eventLabelContainer = document.createElement("div")
-  const eventLabel = document.createElement("p")
-  const eventInfoButtonContainer = document.createElement("div");
-  const editButton = document.createElement("button");
+  const eventLabelContainer = document.createElement("div");
+  const eventLabel = document.createElement("p");
+  const editButton = document.createElement("span");
   const eventTitleContainer = document.createElement("div");
   const checkBoxContainer = document.createElement("div");
 
   const checkBox = document.createElement("input");
   const eventTitleContentContainer = document.createElement("div");
   const eventTitle = document.createElement("input");
-
-  
-  const eventParents = document.createElement("h6");
-
+  const eventParentsContainer = document.createElement("div")
+  const eventParents = document.createElement("span");
+  const eventParentsIcon = document.createElement("span");
   const eventEditor = document.createElement("div");
   const eventDueDateContainer = document.createElement("div");
   const eventDueDate = document.createElement("input");
@@ -179,15 +176,18 @@ const createEventComponent = (
 
   const eventFooterContainer = document.createElement("div");
   const eventSaveButton = document.createElement("button");
-  const taskDeleteButton = eventType === "task" ? createDeleteTaskButton(
-    id,
-    task_origin_id,
-    task_origin_date,
-    title,
-    task_repeat_frequency,
-    parentContainer,
-    eventOuterContainer
-  ): null
+  const taskDeleteButton =
+    eventType === "task"
+      ? createDeleteTaskButton(
+          id,
+          task_origin_id,
+          task_origin_date,
+          title,
+          task_repeat_frequency,
+          parentContainer,
+          eventOuterContainer
+        )
+      : null;
   const stopRepeatButton =
     task_origin_id && !id
       ? createStopTodayButton(
@@ -224,10 +224,9 @@ const createEventComponent = (
       body.task_r_frequency = task_r_frequency;
       body.task_r_end_date = task_r_end_date;
       //task due date > repeat end date的話，error
-      console.log(body)
-      if(!task_r_end_date){
-
-      }else if (task_repeat && task_r_end_date < eventDueDate.value) {
+      console.log(body);
+      if (!task_r_end_date) {
+      } else if (task_repeat && task_r_end_date < eventDueDate.value) {
         Swal.fire({
           title: "Invalid repeat rule",
           text: "Repeat end date should be later than starting date. ",
@@ -285,44 +284,45 @@ const createEventComponent = (
 
         const newEventDueDate = new Date(eventDueDate.value);
         if (!window.location.pathname.includes("horizon")) {
-          return
-        }else {
-        const eventContainers = document.querySelectorAll(".events-container");
-        const containerDueDates = [];
-        eventContainers.forEach((c) =>
-          containerDueDates.push(c.dataset.dueDate)
-        );
-        console.log(newEventDueDate, containerDueDates);
+          return;
+        } else {
+          const eventContainers =
+            document.querySelectorAll(".events-container");
+          const containerDueDates = [];
+          eventContainers.forEach((c) =>
+            containerDueDates.push(c.dataset.dueDate)
+          );
+          console.log(newEventDueDate, containerDueDates);
 
-        const relocateEvent = (index) => {
-          if (parentContainer === eventContainers[index]) return;
-          parentContainer.removeChild(eventOuterContainer);
-          eventContainers[index].appendChild(eventOuterContainer);
-          parentContainer = eventContainers[index];
-        };
-        if (eventDueDate.value === containerDueDates[0]) {
-          relocateEvent(0);
-        } else if (
-          newEventDueDate > new Date(containerDueDates[0]) &&
-          newEventDueDate <= new Date(containerDueDates[1])
-        ) {
-          relocateEvent(1);
-        } else if (
-          newEventDueDate > new Date(containerDueDates[0]) &&
-          newEventDueDate <= new Date(containerDueDates[2])
-        ) {
-          relocateEvent(2);
-        } else if (
-          newEventDueDate > new Date(containerDueDates[0]) &&
-          newEventDueDate <= new Date(containerDueDates[3])
-        ) {
-          relocateEvent(3);
-        } else if (
-          newEventDueDate < new Date(containerDueDates[0]) ||
-          newEventDueDate > new Date(containerDueDates[3])
-        ) {
-          parentContainer.removeChild(eventOuterContainer);
-        }
+          const relocateEvent = (index) => {
+            if (parentContainer === eventContainers[index]) return;
+            parentContainer.removeChild(eventOuterContainer);
+            eventContainers[index].appendChild(eventOuterContainer);
+            parentContainer = eventContainers[index];
+          };
+          if (eventDueDate.value === containerDueDates[0]) {
+            relocateEvent(0);
+          } else if (
+            newEventDueDate > new Date(containerDueDates[0]) &&
+            newEventDueDate <= new Date(containerDueDates[1])
+          ) {
+            relocateEvent(1);
+          } else if (
+            newEventDueDate > new Date(containerDueDates[0]) &&
+            newEventDueDate <= new Date(containerDueDates[2])
+          ) {
+            relocateEvent(2);
+          } else if (
+            newEventDueDate > new Date(containerDueDates[0]) &&
+            newEventDueDate <= new Date(containerDueDates[3])
+          ) {
+            relocateEvent(3);
+          } else if (
+            newEventDueDate < new Date(containerDueDates[0]) ||
+            newEventDueDate > new Date(containerDueDates[3])
+          ) {
+            parentContainer.removeChild(eventOuterContainer);
+          }
         }
       })
       .catch((err) => {
@@ -350,25 +350,25 @@ const createEventComponent = (
   }
   eventOuterContainer.setAttribute("data-goal-due-date", goal_due_date);
   eventOuterContainer.classList.add("event-info-container", "col-10");
-  eventHeaderContainer.classList.add("event-header-container", "row", "mt-1", "mb-3");
-  eventLabelContainer.classList.add("event-label-container", "mb-1");
-  eventLabel.classList.add("event-label", `${eventType}-label`,"badge", "rounded-pill");
-  eventLabel.textContent = eventType
-  eventInfoButtonContainer.classList.add(
-    "event-info-button-container",
-    "ms-auto", "d-inline-block"
+  eventHeaderContainer.classList.add(
+    "event-header-container",
+    "row",
+    "mt-1",
+    "mb-3"
   );
-  editButton.classList.add(
-    "btn",
-    "btn-sm",
-    "btn-outline-secondary",
-    "edit-button"
+  eventLabelContainer.classList.add("event-label-container", "mb-1", "col-12");
+  eventLabel.classList.add(
+    "event-label",
+    `${eventType}-label`,
+    "badge",
+    "rounded-pill"
   );
-  editButton.setAttribute("type", "button");
+  eventLabel.textContent = eventType;
+  editButton.classList.add("edit-button", "material-icons", "align-middle");
   editButton.setAttribute("data-bs-toggle", "collapse");
   editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
   //editButton.setAttribute("style", "opacity: 0");
-  editButton.textContent = "✍";
+  editButton.textContent = "mode_edit";
   eventTitleContainer.classList.add("event-title-container", "mb-1", "d-flex");
   checkBoxContainer.classList.add("check-box-container", "col-1");
 
@@ -394,35 +394,46 @@ const createEventComponent = (
   eventTitle.setAttribute("type", "text");
   eventTitle.setAttribute("placeholder", `${eventType} name`);
   eventTitle.value = title;
-  eventTitle.addEventListener("focus", e => {
-    console.log("click")
-  eventTitle.classList.remove("off-focus")
-  })
-  eventTitle.addEventListener("blur", e => {
-  eventTitle.classList.add("off-focus");
-  })
+  eventTitle.addEventListener("focus", (e) => {
+    console.log("click");
+    eventTitle.classList.remove("off-focus");
+  });
+  eventTitle.addEventListener("blur", (e) => {
+    eventTitle.classList.add("off-focus");
+  });
+  eventParentsContainer.classList.add("event-parents-container")
+  eventParents.classList.add("event-parents", "mt-1", "mb-2");
+  eventParentsIcon.classList.add(
+    "material-icons",
+    "align-middle",
+    "event-parents-icon"
+  );
 
-
-  eventParents.classList.add("event-parents", "mt-1", "mb-2", "text-muted");
-
+  eventParentsIcon.setAttribute("data-bs-toggle", "modal");
+    eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
+    eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${id})`);
   if (parents != ">>") {
-    eventParents.setAttribute("data-bs-toggle", "modal");
-    eventParents.setAttribute("data-bs-target", "#modal-goal");
-    eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-    eventParents.textContent = parents + " 🔍";
+    // eventParents.setAttribute("data-bs-toggle", "modal");
+    // eventParents.setAttribute("data-bs-target", "#modal-goal");
+    // eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
+    eventParents.textContent = parents;
+
+    eventParentsIcon.textContent = "zoom_in";
   }
   if (eventType === "goal") {
-    console.log("add check goalll for goallll")
-    eventParents.setAttribute("data-bs-toggle", "modal");
-    eventParents.setAttribute("data-bs-target", "#modal-goal");
-    eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
-    eventParents.textContent = ">check goal 🔍";
-  }
-  if (parents == null) {
-    eventParents.textContent = null;
+    console.log("add check goalll for goallll");
+    // eventParents.setAttribute("data-bs-toggle", "modal");
+    // eventParents.setAttribute("data-bs-target", "#modal-goal");
+    // eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
+    eventParents.textContent = ">check goal";
+    eventParentsIcon.textContent = "zoom_in";
   }
 
-  
+  if (parents == null) {
+    eventParents.textContent = null;
+    eventParentsIcon.textContent = null;
+  }
+
   eventEditor.classList.add("event-editor", "col", "collapse", "px-2");
   if (!title) {
     eventEditor.classList.remove("collapse");
@@ -458,15 +469,18 @@ const createEventComponent = (
     `event-description-${eventType}-${id}`,
     "off-focus"
   );
-  eventDescription.setAttribute("placeholder", `Description of the ${eventType}`)
-  eventDescription.value = description
-  eventDescription.addEventListener("focus", e => {
-    console.log("click")
-  eventDescription.classList.remove("off-focus")
-  })
-  eventDescription.addEventListener("blur", e => {
-  eventDescription.classList.add("off-focus");
-  })
+  eventDescription.setAttribute(
+    "placeholder",
+    `Description of the ${eventType}`
+  );
+  eventDescription.value = description;
+  eventDescription.addEventListener("focus", (e) => {
+    console.log("click");
+    eventDescription.classList.remove("off-focus");
+  });
+  eventDescription.addEventListener("blur", (e) => {
+    eventDescription.classList.add("off-focus");
+  });
 
   eventDueDate.addEventListener("change", () => {
     if (taskRepeatSelector) {
@@ -480,9 +494,9 @@ const createEventComponent = (
   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
   eventSaveButton.textContent = "save";
   eventSaveButton.classList.add(
-    "col-12",
+    "col-6",
     "btn",
-    "btn-outline-secondary",
+    "btn-outline-success",
     "save-button",
     `save-button-${eventType}-${id}`
   );
@@ -493,9 +507,7 @@ const createEventComponent = (
   eventSaveButton.addEventListener("click", saveEvent);
 
   eventFooterContainer.append(eventSaveButton);
-  if (stopRepeatButton) {
-    eventFooterContainer.append(stopRepeatButton);
-  }
+  
   if (eventType === "task") {
     eventFooterContainer.append(taskDeleteButton);
   }
@@ -505,6 +517,9 @@ const createEventComponent = (
   }
   if (eventType === "milestone") {
     eventFooterContainer.append(milestoneDeleteButton);
+  }
+  if (stopRepeatButton) {
+    eventFooterContainer.append(stopRepeatButton);
   }
 
   eventDescriptionContainer.appendChild(eventDescription);
@@ -520,25 +535,32 @@ const createEventComponent = (
 
   checkBoxContainer.appendChild(checkBox);
   eventTitleContentContainer.appendChild(eventTitle);
-  eventLabelContainer.append(eventLabel, eventInfoButtonContainer)
-  if(eventType === "task"){
-    eventTitleContainer.append(
-    checkBoxContainer,
-  );
+  eventLabelContainer.append(eventLabel, editButton);
+  if (eventType === "task") {
+    eventTitleContainer.append(checkBoxContainer);
   }
-  eventTitleContainer.append(
-    eventTitleContentContainer,
-    
-  );
+  eventTitleContainer.append(eventTitleContentContainer);
   if (task_repeat_frequency > 0 || task_origin_id) {
     console.log(id, task_repeat_frequency, task_origin_id);
     const repeatIcon = document.createElement("span");
-    repeatIcon.textContent = " ⟳";
+    repeatIcon.classList.add(
+      "material-icons",
+      "icon-task-repeat",
+      "align-middle"
+    );
+    repeatIcon.textContent = "event_repeat";
     eventLabel.after(repeatIcon);
   }
-  eventInfoButtonContainer.appendChild(editButton);
+  if(eventParents.textContent){
+eventParentsContainer.append(eventParents,eventParentsIcon)
+  }
+  
+  eventInfoContainer.append(
+    eventLabelContainer,
+    eventTitleContainer,
+    eventParentsContainer
+  );
 
-  eventInfoContainer.append(eventLabelContainer, eventTitleContainer, eventParents);
   eventHeaderContainer.append(eventInfoContainer);
   eventOuterContainer.append(eventHeaderContainer, eventEditor);
   parentContainer.appendChild(eventOuterContainer);
@@ -651,10 +673,11 @@ const createDeleteTaskButton = (
   const button = document.createElement("button");
   button.textContent = "delete";
   button.classList.add(
-    "col-12",
+    "col-6",
     "btn",
-    "btn-outline-secondary",
-    "delete-task-button"
+    "ｘ",
+    "delete-task-button",
+    "btn-outline-danger"
   );
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "collapse");

@@ -248,7 +248,7 @@ const createMilestoneContainer = (
   milestoneSaveButton.classList.add(
     "save-milestone-button",
     "btn",
-    "btn-outline-secondary",
+    "btn-outline-success",
     "col-12"
   );
   milestoneSaveButton.textContent = "Save milestone";
@@ -289,7 +289,7 @@ const createMilestoneContainer = (
   milestoneDeleteButton.classList.add(
     "delete-milestone-button",
     "btn",
-    "btn-outline-secondary",
+    "btn-outline-danger",
     "col-12"
   );
   milestoneDeleteButton.textContent = "Delete the whole milestone";
