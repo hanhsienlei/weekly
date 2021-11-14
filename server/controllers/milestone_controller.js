@@ -15,14 +15,17 @@ const saveMilestone = async (req, res) => {
   if (!body.milestone_id) {
     const milestoneId = await Milestone.createMilestone(milestoneDetails);
     res.status(200).json({milestone_id: milestoneId});
+    return
   } else {
     console.log("body.milestone_id: ", body.milestone_id);
     const row = await Milestone.getMilestone(body.milestone_id);
     if (!row) {
       res.status(400).send({error:"Milestone id doesn't exist."});
+      return
     } else {
       const updateResult = await Milestone.saveMilestone(milestoneDetails, body.milestone_id);
       res.status(200).send({message: `Update succeeded (${updateResult})`});
+      return
     }
   }
 };

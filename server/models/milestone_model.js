@@ -2,6 +2,7 @@ const { pool } = require("./config_mysql")
 
 const createMilestone = async (milestoneDetails) => {
   const [result] = await pool.query("INSERT INTO milestone SET ?", milestoneDetails)
+  console.log("[createMilestone model] insertId: ", result.insertId)
   return result.insertId
 }
 

@@ -97,30 +97,34 @@ const validateGoalDueDate = () => {
         .send({ error: "Let's plan something before 80 year old." });
       return;
     }
+
+    //goal id and children
     if (!goalId) {
       next();
-    }
-    try {
-      const milestones = await getMilestonesByGoalId(goalId);
-      if (!milestones.length) {
-        next();
-      }
-
-      for (let i = 0; i < milestones.length; i++) {
-        const milestoneDueDate = new Date(milestones[i].m_due_date);
-        const milestoneDueDateYMD = getDateYMD(milestoneDueDate);
-        const milestoneTitle = milestones[i].m_title;
-        if (goalDueDate < milestoneDueDate) {
-          res.status(400).send({
-            error: `Goal shouldn't due before its milestones ${milestoneTitle} (${milestoneDueDateYMD}).`,
-          });
-          return;
+    } else {
+      try {
+        const milestones = await getMilestonesByGoalId(goalId);
+        if (!milestones.length) {
+          next();
+        } else {
+          for (let i = 0; i < milestones.length; i++) {
+            const milestoneDueDate = new Date(milestones[i].m_due_date);
+            const milestoneDueDateYMD = getDateYMD(milestoneDueDate);
+            const milestoneTitle = milestones[i].m_title;
+            if (goalDueDate < milestoneDueDate) {
+              res.status(400).send({
+                error: `Goal shouldn't due before its milestones ${milestoneTitle} (${milestoneDueDateYMD}).`,
+              });
+              return;
+            }
+          }
+          next();
         }
+
+      } catch (err) {
+        res.status(500).send({ error: "Something went wrong" });
+        return;
       }
-      next();
-    } catch (err) {
-      res.status(500).send({ error: "Something went wrong" });
-      return;
     }
   };
 };
@@ -133,6 +137,18 @@ const validateMilestoneDueDate = () => {
     const milestoneId = req.body.milestone_id;
     const goalId = req.body.milestone_goal_id;
     const userId = Number(req.user.id);
+
+    if (milestoneDueDate < userBirthday) {
+      res.status(400).send({ error: "You were not born yet." });
+      return;
+    }
+
+    if (milestoneDueDate > userByeDay) {
+      res
+        .status(400)
+        .send({ error: "Let's plan something before 80 year old." });
+      return;
+    }
 
     // user
     if (goalId) {
@@ -156,64 +172,61 @@ const validateMilestoneDueDate = () => {
       }
     }
 
-    // milestone id
-    if (milestoneDueDate < userBirthday) {
-      res.status(400).send({ error: "You were not born yet." });
-      return;
-    }
-
-    if (milestoneDueDate > userByeDay) {
-      res
-        .status(400)
-        .send({ error: "Let's plan something before 80 year old." });
-      return;
-    }
+    // milestone's family
+    
     if (!milestoneId) {
       next();
-    }
-    try {
-      // goal
-      const goal = await getGoalByMilestone(milestoneId);
-      const goalDueDate = new Date(goal[0].g_due_date);
-      const goalDueDateYMD = getDateYMD(goalDueDate);
-      const goalTitle = goal[0].g_title;
-      if (milestoneDueDate > goalDueDate) {
-        res.status(400).send({
-          error: `Milestone shouldn't due after its goal ${goalTitle} (${goalDueDateYMD}).`,
-        });
+    } else {
+      try {
+        
+        const goal = await getGoalByMilestone(milestoneId);
+        const goalDueDate = new Date(goal[0].g_due_date);
+        const goalDueDateYMD = getDateYMD(goalDueDate);
+        const goalTitle = goal[0].g_title;
+        const tasks = await getTasksByMilestone(milestoneId);
+
+        // goal
+        if (milestoneDueDate > goalDueDate) {
+          res.status(400).send({
+            error: `Milestone shouldn't due after its goal ${goalTitle} (${goalDueDateYMD}).`,
+          });
+          return;
+        }
+
+        // task
+        
+        if (!tasks.length) {
+          next();
+          return;
+        }else {
+        for (let i = 0; i < tasks.length; i++) {
+          const taskDueDate = new Date(tasks[i].t_due_date);
+          const taskDueDateYMD = getDateYMD(taskDueDate);
+          const taskTitle = tasks[i].t_title;
+          if (milestoneDueDate < taskDueDate) {
+            res.status(400).send({
+              error: `Milestone shouldn't due before its task ${taskTitle} (${taskDueDateYMD}).`,
+            });
+            return;
+          }
+          // task repeat
+          if (tasks[i].t_repeat) {
+            const repeatEndDate = new Date(tasks[i].r_end_date);
+            const repeatEndDateYMD = getDateYMD(repeatEndDate);
+            res.status(400).send({
+              error: `Milestone shouldn't due before its task ${taskTitle} (repeat until ${repeatEndDateYMD}).`,
+            });
+            return;
+          }
+        }
+        next();
+        }
+        
+      } catch (err) {
+        console.log(err);
+        res.status(500).send({ error: "Something went wrong." });
         return;
       }
-      // task
-      const tasks = await getTasksByMilestone(milestoneId);
-      if (!tasks.length) {
-        next();
-      }
-
-      for (let i = 0; i < tasks.length; i++) {
-        const taskDueDate = new Date(tasks[i].t_due_date);
-        const taskDueDateYMD = getDateYMD(taskDueDate);
-        const taskTitle = tasks[i].t_title;
-        if (milestoneDueDate < taskDueDate) {
-          res.status(400).send({
-            error: `Milestone shouldn't due before its task ${taskTitle} (${taskDueDateYMD}).`,
-          });
-          return;
-        }
-        // task repeat
-        if (tasks[i].t_repeat) {
-          const repeatEndDate = new Date(tasks[i].r_end_date);
-          const repeatEndDateYMD = getDateYMD(repeatEndDate);
-          res.status(400).send({
-            error: `Milestone shouldn't due before its task ${taskTitle} (repeat until ${repeatEndDateYMD}).`,
-          });
-          return;
-        }
-      }
-      next();
-    } catch (err) {
-      console.log(err);
-      res.status(500).send({ error: "Something went wrong." });
-      return;
     }
   };
 };
@@ -226,28 +239,7 @@ const validateTaskDueDate = () => {
     const taskId = req.body.task_id;
     const milestoneId = req.body.task_milestone_id;
     const userId = Number(req.user.id);
-    //user
-    if (taskId) {
-      const returnedUserId = await getUserByTask(taskId);
-      if (userId !== returnedUserId.user_id) {
-        res.status(400).send({ error: "This is not your task!" });
-        return;
-      }
-    } else if (milestoneId) {
-      const returnedUserId = await getUserByMilestone(milestoneId);
-      console.log(
-        "milestone id: ",
-        milestoneId,
-        userId,
-        returnedUserId.user_id
-      );
-      if (userId !== returnedUserId.user_id) {
-        res.status(400).send({ error: "This is not your milestone!" });
-        return;
-      }
-    }
 
-    //task due date
     if (taskDueDate < userBirthday) {
       res.status(400).send({ error: "You were not born yet." });
       return;
@@ -259,7 +251,6 @@ const validateTaskDueDate = () => {
         .send({ error: "Let's plan something before 80 year old." });
       return;
     }
-
     //repeat end date
     if (req.body.task_repeat) {
       const taskRepeatEndDate = getDateObjectFromYMD(req.body.task_r_end_date);
@@ -284,20 +275,44 @@ const validateTaskDueDate = () => {
       }
     }
 
+    //user
+    if (taskId) {
+      const returnedUserId = await getUserByTask(taskId);
+      if (userId !== returnedUserId.user_id) {
+        res.status(400).send({ error: "This is not your task!" });
+        return;
+      }
+    } else if (milestoneId) {
+      const returnedUserId = await getUserByMilestone(milestoneId);
+      console.log(
+        "milestone id: ",
+        milestoneId,
+        userId,
+        returnedUserId.user_id
+      );
+      if (userId !== returnedUserId.user_id) {
+        res.status(400).send({ error: "This is not your milestone!" });
+        return;
+      }
+    }
+
+
+    
     //new task
     if (!taskId) {
       console.log("it's a new task");
       next();
+      return;
     } else {
       try {
         // milestone
         const task = await getTask(taskId);
-        if (!task) {
-          next();
-        }
         const milestoneId = task.milestone_id;
         console.log("task", task);
-        if (milestoneId) {
+        if (!task) {
+          next();
+          return;
+        } else if (milestoneId) {
           const milestone = await getMilestone(milestoneId);
           const milestoneDueDate = new Date(milestone.due_date);
           const milestoneDueDateYMD = getDateYMD(milestoneDueDate);
@@ -319,8 +334,9 @@ const validateTaskDueDate = () => {
               return;
             }
           }
+          next();
         }
-        next();
+        
       } catch (err) {
         console.log(err);
         res.status(500).send({ error: "Something went wrong." });

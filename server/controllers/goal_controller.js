@@ -18,7 +18,7 @@ const saveGoal = async (req, res) => {
     delete goalDetails.purpose_id;
   }
 
-  console.log("goalDetails: ", goalDetails);
+  console.log("[savegoal controller] goalDetails: ", goalDetails);
   if (!body.goal_id) {
     const goalId = await Goal.createGoal(goalDetails);
     res.status(200).send({ goal_id: goalId });

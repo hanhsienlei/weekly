@@ -1,5 +1,5 @@
+const accessToken = localStorage.getItem("access_token");
 const renderGoalEditor = (goalId) => {
-  const accessToken = localStorage.getItem("access_token");
   fetch(`/api/goal/plan?goal_id=${goalId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -642,7 +642,5 @@ const resetModal = () => {
   });
 };
 
-const currentDate = document.querySelector(".date-value").dataset.dueDate;
-renderEvents(currentDate);
 
 resetModal();
