@@ -8,21 +8,22 @@
   <!-- <link rel="stylesheet" href="../css/reset.css"> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-    <link rel="stylesheet" href="../css/signin_signup.css">
     <link rel="stylesheet" href="../css/all.css">
+    <link rel="stylesheet" href="../css/signin_signup.css">
+    
   <title>Weekly</title>
 </head>
 
 <body>
   <div class="container border p-3" style="max-width: 400px;  margin-top:20vh">
     <%- include("partials/signin_signup_header") %>
-      <div class="row g-3 mb-3 border-bottom pb-4">
-        <span style="font-size: 2rem;" class="mb-3 ">Life is short, make every week count. </span>
+      <div class="slogan row g-3 mb-3 ps-2 border-bottom pb-4">
+        <span style="font-size: 2rem;" class="mb-3 ">Life is short <br> Make every week count </span>
         <div class="col-12">
-          <a class="btn btn-secondary w-100" href="/signup" role="button">Start now</a>
+          <a class="start-now-button btn w-100" href="/signup" role="button">Start now</a>
         </div>
       </div>
-      <div class="row signup-signin-switch">
+      <div class="row ps-2 signup-signin-switch">
         <div class="col-auto"><span class="pe-3">Already have an account?</span><a href="/signin">Sign in here</a></div>
         
       </div>
