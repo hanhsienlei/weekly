@@ -11,8 +11,9 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="../css/signin_signup.css">
     <link rel="stylesheet" href="../css/all.css">
+    <link rel="stylesheet" href="../css/signin_signup.css">
+    
     <title>Sign up</title>
   </head>
 
@@ -22,7 +23,7 @@
       <form class="row g-3 mb-3 border-bottom pb-3">
         <div class="name-cotnainer col-12">
           <label for="name" class="form-label">Name</label>
-          <input type="text" class="form-control" id="name" placeholder="Kim Jung" required>
+          <input type="text" class="form-control" id="name" placeholder="Jessica Chen" required>
         </div>
         <div class="birthday-container col-12">
           <label for="birthday" class="form-label">Birthday</label>
@@ -34,10 +35,20 @@
         </div>
         <div class="password-cotnainer col-12">
           <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" placeholder="password" required>
+          <input type="password" class="form-control" id="password" placeholder="********" required>
+        </div>
+        <div class="confirm-password-cotnainer col-12">
+          <label for="confirm-password" class="form-label">Confirm password</label>
+          <input type="password" class="form-control" id="confirm-password" placeholder="********" required>
+        </div>
+        <div class="password-not-match" hidden>
+          ✗ The password confirmation does not match.
+        </div>
+        <div class="password-match" hidden>
+          ✓ password confirmation matched.
         </div>
         <div class="col-12 ">
-          <button class="btn btn-secondary w-100" type="submit">Create an account</button>
+          <button class="btn sign-up-buton w-100" type="submit">Create an account</button>
         </div>
       </form>
       <div class="row signup-signin-switch pb-6">
