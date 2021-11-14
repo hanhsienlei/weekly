@@ -137,7 +137,6 @@ const createEventComponent = (
     `.${timeScale}-events-container`
   );
   const eventOuterContainer = document.createElement("div");
-  //const eventToggle = document.createElement("a")
   const eventHeaderContainer = document.createElement("div");
   const eventInfoContainer = document.createElement("div");
   const EventTitleContainer = document.createElement("div");
@@ -381,6 +380,7 @@ const createEventComponent = (
     eventParents.textContent = parents + " 🔍";
   }
   if (eventType === "goal") {
+    console.log("add check goalll for goallll")
     eventParents.setAttribute("data-bs-toggle", "modal");
     eventParents.setAttribute("data-bs-target", "#modal-goal");
     eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
@@ -499,8 +499,12 @@ const createEventComponent = (
 
   checkBoxContainer.appendChild(checkBox);
   eventTitleContentContainer.appendChild(eventTitle);
-  EventTitleContainer.append(
+  if(eventType === "task"){
+    EventTitleContainer.append(
     checkBoxContainer,
+  );
+  }
+  EventTitleContainer.append(
     eventTitleContentContainer,
     eventInfoButtonContainer
   );

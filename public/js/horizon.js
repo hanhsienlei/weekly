@@ -150,6 +150,50 @@ const renderEvents = async (date) => {
       });
       //events
       if (data.date.tasks) {
+        data.date.goals.forEach((goal) => {
+          if (goal.g_status > -1) {
+            createEventComponent(
+              "date",
+              "goal",
+              goal.g_id,
+              goal.g_title,
+              goal.g_status,
+              goal.g_due_date,
+              goal.g_description,
+              goal.g_parent.join(">"),
+              null,
+              null,
+              null,
+              null,
+              goal.g_id,
+              null,
+              null,
+              null
+            );
+          }
+        });
+        data.date.milestones.forEach((milestone) => {
+          if (milestone.m_status > -1) {
+            createEventComponent(
+              "date",
+              "milestone",
+              milestone.m_id,
+              milestone.m_title,
+              milestone.m_status,
+              milestone.m_due_date,
+              milestone.m_description,
+              milestone.m_parent.join(">"),
+              null,
+              null,
+              null,
+              null,
+              milestone.g_id,
+              milestone.g_due_date,
+              null,
+              null
+            );
+          }
+        });
         data.date.tasks.forEach((task) => {
           let repeated_frequency = task.t_repeat ? task.r_frequency : 0;
           if (!task.t_id) {
@@ -182,32 +226,13 @@ const renderEvents = async (date) => {
             );
           }
         });
-        data.date.milestones.forEach((milestone) => {
-          if (milestone.m_status > -1) {
-            createEventComponent(
-              "date",
-              "milestone",
-              milestone.m_id,
-              milestone.m_title,
-              milestone.m_status,
-              milestone.m_due_date,
-              milestone.m_description,
-              milestone.m_parent.join(">"),
-              null,
-              null,
-              null,
-              null,
-              milestone.g_id,
-              milestone.g_due_date,
-              null,
-              null
-            );
-          }
-        });
-        data.date.goals.forEach((goal) => {
+      }
+
+      if (data.week.tasks) {
+        data.week.goals.forEach((goal) => {
           if (goal.g_status > -1) {
             createEventComponent(
-              "date",
+              "week",
               "goal",
               goal.g_id,
               goal.g_title,
@@ -226,9 +251,28 @@ const renderEvents = async (date) => {
             );
           }
         });
-      }
-
-      if (data.week.tasks) {
+        data.week.milestones.forEach((milestone) => {
+          if (milestone.m_status > -1) {
+            createEventComponent(
+              "week",
+              "milestone",
+              milestone.m_id,
+              milestone.m_title,
+              milestone.m_status,
+              milestone.m_due_date,
+              milestone.m_description,
+              milestone.m_parent.join(">"),
+              null,
+              null,
+              null,
+              null,
+              milestone.g_id,
+              milestone.g_due_date,
+              null,
+              null
+            );
+          }
+        });
         data.week.tasks.forEach((task) => {
           if (task.t_status > -1) {
             const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
@@ -254,32 +298,13 @@ const renderEvents = async (date) => {
             }
           }
         });
-        data.week.milestones.forEach((milestone) => {
-          if (milestone.m_status > -1) {
-            createEventComponent(
-              "week",
-              "milestone",
-              milestone.m_id,
-              milestone.m_title,
-              milestone.m_status,
-              milestone.m_due_date,
-              milestone.m_description,
-              milestone.m_parent.join(">"),
-              null,
-              null,
-              null,
-              null,
-              milestone.g_id,
-              milestone.g_due_date,
-              null,
-              null
-            );
-          }
-        });
-        data.week.goals.forEach((goal) => {
+      }
+
+      if (data.month.tasks) {
+        data.month.goals.forEach((goal) => {
           if (goal.g_status > -1) {
             createEventComponent(
-              "week",
+              "month",
               "goal",
               goal.g_id,
               goal.g_title,
@@ -296,34 +321,6 @@ const renderEvents = async (date) => {
               null,
               null
             );
-          }
-        });
-      }
-
-      if (data.month.tasks) {
-        data.month.tasks.forEach((task) => {
-          if (task.t_status > -1) {
-            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-            if (task.t_id) {
-              createEventComponent(
-                "month",
-                "task",
-                task.t_id,
-                task.t_title,
-                task.t_status,
-                task.t_due_date,
-                task.t_description,
-                task.t_parent.join(">"),
-                repeated_frequency,
-                task.r_end_date,
-                task.m_id,
-                task.m_due_date,
-                task.g_id,
-                task.g_due_date,
-                task.t_origin_id,
-                task.t_origin_date
-              );
-            }
           }
         });
         data.month.milestones.forEach((milestone) => {
@@ -348,26 +345,29 @@ const renderEvents = async (date) => {
             );
           }
         });
-        data.month.goals.forEach((goal) => {
-          if (goal.g_status > -1) {
-            createEventComponent(
-              "month",
-              "goal",
-              goal.g_id,
-              goal.g_title,
-              goal.g_status,
-              goal.g_due_date,
-              goal.g_description,
-              goal.g_parent.join(">"),
-              null,
-              null,
-              null,
-              null,
-              goal.g_id,
-              null,
-              null,
-              null
-            );
+        data.month.tasks.forEach((task) => {
+          if (task.t_status > -1) {
+            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+            if (task.t_id) {
+              createEventComponent(
+                "month",
+                "task",
+                task.t_id,
+                task.t_title,
+                task.t_status,
+                task.t_due_date,
+                task.t_description,
+                task.t_parent.join(">"),
+                repeated_frequency,
+                task.r_end_date,
+                task.m_id,
+                task.m_due_date,
+                task.g_id,
+                task.g_due_date,
+                task.t_origin_id,
+                task.t_origin_date
+              );
+            }
           }
         });
       }
@@ -394,53 +394,53 @@ const renderEvents = async (date) => {
             );
           }
         });
-        data.year.milestones.forEach((milestone) => {
-          if (milestone.m_status > -1) {
-            createEventComponent(
-              "year",
-              "milestone",
-              milestone.m_id,
-              milestone.m_title,
-              milestone.m_status,
-              milestone.m_due_date,
-              milestone.m_description,
-              milestone.m_parent.join(">"),
-              null,
-              null,
-              null,
-              null,
-              milestone.g_id,
-              milestone.g_due_date,
-              null,
-              null
-            );
-          }
-        });
-        data.year.tasks.forEach((task) => {
-          if (task.t_status > -1) {
-            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-            if (task.t_id) {
-              createEventComponent(
-                "year",
-                "task",
-                task.t_id,
-                task.t_title,
-                task.t_status,
-                task.t_due_date,
-                task.t_description,
-                task.t_parent.join(">"),
-                repeated_frequency,
-                task.r_end_date,
-                task.m_id,
-                task.m_due_date,
-                task.g_id,
-                task.g_due_date,
-                task.t_origin_id,
-                task.t_origin_date
-              );
-            }
-          }
-        });
+        // data.year.milestones.forEach((milestone) => {
+        //   if (milestone.m_status > -1) {
+        //     createEventComponent(
+        //       "year",
+        //       "milestone",
+        //       milestone.m_id,
+        //       milestone.m_title,
+        //       milestone.m_status,
+        //       milestone.m_due_date,
+        //       milestone.m_description,
+        //       milestone.m_parent.join(">"),
+        //       null,
+        //       null,
+        //       null,
+        //       null,
+        //       milestone.g_id,
+        //       milestone.g_due_date,
+        //       null,
+        //       null
+        //     );
+        //   }
+        // });
+        // data.year.tasks.forEach((task) => {
+        //   if (task.t_status > -1) {
+        //     const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+        //     if (task.t_id) {
+        //       createEventComponent(
+        //         "year",
+        //         "task",
+        //         task.t_id,
+        //         task.t_title,
+        //         task.t_status,
+        //         task.t_due_date,
+        //         task.t_description,
+        //         task.t_parent.join(">"),
+        //         repeated_frequency,
+        //         task.r_end_date,
+        //         task.m_id,
+        //         task.m_due_date,
+        //         task.g_id,
+        //         task.g_due_date,
+        //         task.t_origin_id,
+        //         task.t_origin_date
+        //       );
+        //     }
+        //   }
+        // });
       }
     })
     .catch((err) => {
@@ -462,6 +462,7 @@ const addNewEvent = (timeScale, eventType) => {
   // if (!title) {
   //   return alert(`Please name the ${eventType} before adding!`);
   // }
+  console.log("body: ", body)
   fetch(`/api/${eventType}`, {
     method: "POST",
     headers: {
@@ -472,6 +473,7 @@ const addNewEvent = (timeScale, eventType) => {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log("restuls: ", data)
       const eventId = data.task_id || data.goal_id;
 
       if (data.task_id) {
@@ -503,12 +505,14 @@ const addNewEvent = (timeScale, eventType) => {
           null,
           dueDate,
           null,
-          null,
+          "goal",
           null,
           null,
           null,
           null,
           eventId,
+          dueDate,
+          null,
           null,
           null
         );
