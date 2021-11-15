@@ -109,6 +109,7 @@ const getGoalWithPlan = async (req, res) => {
             t_description,
             t_status,
             t_repeat,
+            t_origin_id,
             r_frequency,
           } = row;
           const newTask = {
@@ -118,6 +119,7 @@ const getGoalWithPlan = async (req, res) => {
             t_due_date,
             t_status,
             t_repeat,
+            t_origin_id,
             r_end_date,
             r_frequency,
           };
@@ -227,7 +229,7 @@ const getGoalProgress = async (req, res) => {
     if (!result) {
       return res.status(400).send({ error: "goal id doesn't exist." });
     } else {
-      return res.status(200).json(goalProgress);
+      return res.status(200).send(goalProgress);
     }
   }
 };

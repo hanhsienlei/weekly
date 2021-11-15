@@ -249,7 +249,6 @@ const createMilestoneContainer = (
     "save-milestone-button",
     "btn",
     "btn-outline-success",
-    "col-12"
   );
   milestoneSaveButton.textContent = "Save milestone";
   milestoneSaveButton.addEventListener("click", (e) => {
@@ -290,7 +289,6 @@ const createMilestoneContainer = (
     "delete-milestone-button",
     "btn",
     "btn-outline-danger",
-    "col-12"
   );
   milestoneDeleteButton.textContent = "Delete the whole milestone";
   milestoneDeleteButton.addEventListener("click", (e) => {

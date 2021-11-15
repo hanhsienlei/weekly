@@ -5,9 +5,7 @@
   height: 1.8em;
   line-height: 100%;
 }
-.events-container {
-  max-height: 70vh;
-}
+
 .date-container, .week-container, .month-container, .year-container {
 border: solid gainsboro 1ps ;
 border-radius: 5px;

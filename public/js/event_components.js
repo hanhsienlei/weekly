@@ -365,6 +365,12 @@ const createEventComponent = (
   );
   eventLabel.textContent = eventType;
   editButton.classList.add("edit-button", "material-icons", "align-middle");
+  editButton.setAttribute("data-bs-toggle", "tooltip");
+    editButton.setAttribute("data-bs-placement", "top");
+    editButton.setAttribute(
+      "title",
+      `Edit`
+    );
   editButton.setAttribute("data-bs-toggle", "collapse");
   editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
   //editButton.setAttribute("style", "opacity: 0");
@@ -388,9 +394,9 @@ const createEventComponent = (
   });
   eventTitleContentContainer.classList.add(
     "event-title-content-container",
-    "col-9"
+    "w-100"
   );
-  eventTitle.classList.add("event-title", "off-focus");
+  eventTitle.classList.add("event-title", "off-focus", "w-100", "d-block");
   eventTitle.setAttribute("type", "text");
   eventTitle.setAttribute("placeholder", `${eventType} name`);
   eventTitle.value = title;
@@ -408,7 +414,12 @@ const createEventComponent = (
     "align-middle",
     "event-parents-icon"
   );
-
+eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
+    eventParentsIcon.setAttribute("data-bs-placement", "top");
+    eventParentsIcon.setAttribute(
+      "title",
+      "Checkout goal"
+    );
   eventParentsIcon.setAttribute("data-bs-toggle", "modal");
     eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
     eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
@@ -549,6 +560,12 @@ const createEventComponent = (
       "align-middle"
     );
     repeatIcon.textContent = "event_repeat";
+    repeatIcon.setAttribute("data-bs-toggle", "tooltip");
+    repeatIcon.setAttribute("data-bs-placement", "top");
+    repeatIcon.setAttribute(
+      "title",
+      "Reoccurring task"
+    );
     eventLabel.after(repeatIcon);
   }
   if(eventParents.textContent){
@@ -598,6 +615,7 @@ const createTaskRepeatSelector = (
         break;
     }
   } else {
+    const repeatDescription = document.createElement("span");
     const selector = document.createElement("select");
     const optionNoRepeat = document.createElement("option");
     const optionEveryday = document.createElement("option");
@@ -605,7 +623,9 @@ const createTaskRepeatSelector = (
     const optionOnceAMonth = document.createElement("option");
     const repeatEndDateDescription = document.createElement("span");
     const repeatEndDate = document.createElement("input");
-    selector.classList.add("task-repeat-selector", "form-selector", "mb-3");
+    repeatDescription.classList.add("repeat-description")
+    repeatDescription.textContent = "Repeat";
+    selector.classList.add("task-repeat-selector", "form-selector", "mb-1");
     optionNoRepeat.setAttribute("value", 0);
     optionNoRepeat.textContent = "No repeat";
     optionNoRepeat.setAttribute("selected", "true");
@@ -615,7 +635,8 @@ const createTaskRepeatSelector = (
     optionOnceAWeek.textContent = "Once a week";
     optionOnceAMonth.setAttribute("value", 30);
     optionOnceAMonth.textContent = "Once a month";
-    repeatEndDateDescription.textContent = "Repeat until...";
+    repeatEndDateDescription.classList.add("repeat-end-date-description")
+    repeatEndDateDescription.textContent = "Until...";
     repeatEndDate.classList.add("event-due-date", "col");
     repeatEndDate.setAttribute("type", "date");
     if (!task_repeat_frequency) {
@@ -655,7 +676,7 @@ const createTaskRepeatSelector = (
       optionOnceAMonth
     );
 
-    container.append(selector, repeatEndDateDescription, repeatEndDate);
+    container.append(repeatDescription, selector, repeatEndDateDescription, repeatEndDate);
   }
 
   return container;

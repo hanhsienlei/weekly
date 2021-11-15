@@ -1233,7 +1233,7 @@ const createStopTodayButton = (
   const button = document.createElement("button");
   button.setAttribute("type", "button");
   button.classList.add("btn", "btn-outline-warning");
-  button.textContent = "stop today";
+  button.textContent = "stop repeating today";
 
   button.addEventListener("click", (e) => {
     const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_r_end_date=${dueDate}`;

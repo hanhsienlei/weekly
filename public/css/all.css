@@ -61,6 +61,7 @@ textarea.off-focus {
   background-color: #fdf36e;
   color: #474749;
 }
+
 .icon-task-repeat, .edit-button, .event-parents-icon {
   font-size: 18px;
   padding: 0.2rem 0.2rem ;
@@ -69,10 +70,67 @@ textarea.off-focus {
   box-sizing: border-box;
   color: #58585a;
 }
-
+.edit-button {
+  display: inline-block;
+  justify-self:flex-end;
+}
 .edit-button:hover, .event-parents-icon:hover {
   background-color: #c7c6c6;
   border: 1px solid #b6b6b6;
   border-radius:3px;
   cursor: pointer;
+}
+
+.btn-outline-danger {
+  color: #fa8181;
+  border-color: #fa8181;
+}
+.btn-outline-danger:hover {
+  background-color: #fa8181;
+}
+
+.btn-outline-success {
+  color: #6dfdae;
+  border-color: #6dfdae;
+}
+.btn-outline-success:hover {
+  background-color: #6dfdae;
+  border-color: #3ef791;
+}
+
+.btn-outline-warning {
+  color: #474749;
+  border-color: #c9c157;
+}
+.btn-outline-warning:hover {
+  background-color: #fdf36e;
+  border-color: #c9c157;
+  color: #474749;
+}
+
+.event-footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.event-footer-container>.btn-outline-danger, .event-footer-container>.btn-outline-success {
+  width:48%;
+  margin-bottom: 0.5rem;
+}
+
+.event-outer-container {
+  height: fit-content;
+  
+}
+.events-container {
+  align-content: flex-start;
+  height: 60vh;
+}
+
+.repeat-description, .repeat-end-date-description {
+  padding:0;
+}
+.task-repeat-selector{
+  padding:3px 12px;
 }
