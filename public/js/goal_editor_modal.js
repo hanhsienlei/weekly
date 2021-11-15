@@ -169,14 +169,16 @@ const createMilestoneContainer = (
   const containerOuter = document.createElement("div");
   const containerInner = document.createElement("div");
   const milestoneContainer = document.createElement("div");
-  const milestoneTitle = document.createElement("span");
-  const milestoneEditButton = document.createElement("button");
+  const milestoneTitleContainer = document.createElement("div");
+  const milestoneTitle = document.createElement("input");
+  const milestoneEditButton = document.createElement("span");
   const milestoneEditorContainer = document.createElement("div");
-  const milestoneDueDateContainer = document.createElement("div");
+  // const milestoneDueDateContainer = document.createElement("div");
   const milestoneDueDate = document.createElement("input");
-  const milestoneDescriptionContainer = document.createElement("div");
-  const milestoneDescription = document.createElement("p");
-  const milestoneTagsContainer = document.createElement("div");
+  // const milestoneDescriptionContainer = document.createElement("div");
+  const milestoneDescription = document.createElement("textarea");
+  // const milestoneTagsContainer = document.createElement("div");
+  const milestoneButtonsContainer = document.createElement("div")
   // const milestoneSaveButtonContainer = document.createElement("div");
   const milestoneSaveButton = document.createElement("button");
   // const milestoneDeleteButtonContainer = document.createElement("div");
@@ -198,59 +200,64 @@ const createMilestoneContainer = (
   containerOuter.dataset.milestoneId = milestoneId;
   containerInner.classList.add("milestone-container", "card-body");
   milestoneContainer.classList.add("milestone-details", "row");
-  milestoneTitle.classList.add("milestone-title", "col-9");
-  milestoneTitle.setAttribute("contenteditable", "true");
-  milestoneTitle.textContent = title;
-  milestoneEditButton.classList.add(
-    "btn",
-    "btn-outline-secondary",
-    "edit-button",
-    "col-2"
+  milestoneTitleContainer.classList.add("milestone-title-container", "row", "mb-3");
+  milestoneTitle.classList.add("milestone-title", "off-focus");
+  milestoneTitle.setAttribute("type", "text");
+  milestoneTitle.setAttribute("placeholder", `Milestone name`);
+  milestoneTitle.value = title;
+  milestoneEditButton.classList.add( "modal-milestone-edit-button", 
+    "edit-button", "material-icons", "align-middle"
   );
-  milestoneEditButton.setAttribute("type", "button");
+  milestoneEditButton.setAttribute("data-bs-toggle", "tooltip");
+    milestoneEditButton.setAttribute("data-bs-placement", "top");
+    milestoneEditButton.setAttribute( "title","Edit milestone"
+    );
   milestoneEditButton.setAttribute("data-bs-toggle", "collapse");
   milestoneEditButton.setAttribute(
     "data-bs-target",
     `.modal-milestone-editor-${milestoneId}`
   );
-  milestoneEditButton.textContent = "✍";
+  milestoneEditButton.textContent = "mode_edit";
   milestoneEditorContainer.classList.add(
+    "modal-milestone-editor",
     `modal-milestone-editor-${milestoneId}`,
-    "row",
-    "collapse"
+    "collapse", "card", "my-2", "py-2"
   );
-  milestoneDueDateContainer.classList.add(
-    "milestone-due-date-container",
-    "row",
-    "mb-3",
-    "px-2"
-  );
+  // milestoneDueDateContainer.classList.add(
+  //   "milestone-due-date-container",
+  //   "row",
+  //   "mb-3",
+  //   "px-2"
+  // );
   milestoneDueDate.type = "date";
-  milestoneDueDate.classList.add("milestone-due-date");
+  milestoneDueDate.classList.add("milestone-due-date", "mb-3");
   milestoneDueDate.setAttribute("max", goalDueDate);
   milestoneDueDate.value = dueDate;
-  milestoneDescriptionContainer.classList.add(
-    "milestone-description-container",
-    "row",
-    "mb-3"
+  // milestoneDescriptionContainer.classList.add(
+  //   "milestone-description-container",
+  //   "row",
+  //   "mb-3"
+  // );
+  milestoneDescription.classList.add("modal-milestone-description", "event-description", "off-focus", "mb-3");
+  // milestoneDescription.setAttribute("contenteditable", "true");
+  milestoneDescription.value = description
+    milestoneDescription.setAttribute(
+    "placeholder",
+    `Description of the milestone...`
   );
-  milestoneDescription.classList.add("modal-milestone-description", "border");
-  milestoneDescription.setAttribute("contenteditable", "true");
-  milestoneDescription.textContent = description
-    ? description
-    : "What's special about this milestone?";
 
   // milestoneSaveButtonContainer.classList.add(
   //   "save-milestone-button-container",
   //   "col-auto",
   //   "mb-3"
   // );
+  milestoneButtonsContainer.classList.add("milestone-buttons-container")
   milestoneSaveButton.classList.add(
     "save-milestone-button",
     "btn",
     "btn-outline-success",
   );
-  milestoneSaveButton.textContent = "Save milestone";
+  milestoneSaveButton.textContent = "Save";
   milestoneSaveButton.addEventListener("click", (e) => {
     const body = {};
     body.milestone_id = milestoneId;
@@ -290,7 +297,7 @@ const createMilestoneContainer = (
     "btn",
     "btn-outline-danger",
   );
-  milestoneDeleteButton.textContent = "Delete the whole milestone";
+  milestoneDeleteButton.textContent = "Delete";
   milestoneDeleteButton.addEventListener("click", (e) => {
     deleteMilestoneAndChildren(milestoneId);
     const currentContainer = parent.querySelector(
@@ -374,28 +381,32 @@ const createMilestoneContainer = (
       });
   });
 
-  parent.append(containerOuter);
+  parent.prepend(containerOuter);
   containerOuter.append(containerInner, addNewTaskContainer);
   containerInner.append(
     milestoneContainer,
     tasksContainer
   );
   milestoneContainer.append(
-    milestoneTitle,
-    milestoneEditButton,
+    milestoneTitleContainer,
     milestoneEditorContainer
   );
+  milestoneTitleContainer.append(
+    milestoneTitle,
+    milestoneEditButton,
+  );
+  milestoneButtonsContainer.append(milestoneSaveButton,
+    milestoneDeleteButton)
   milestoneEditorContainer.append(
-    milestoneDueDateContainer,
-    milestoneDescriptionContainer,
-    milestoneTagsContainer,
-    milestoneSaveButton,
-    milestoneDeleteButton
+    milestoneDueDate,
+    milestoneDescription,
+    // milestoneTagsContainer,
+    milestoneButtonsContainer,
     // milestoneSaveButtonContainer,
     // milestoneDeleteButtonContainer
   );
-  milestoneDueDateContainer.append(milestoneDueDate);
-  milestoneDescriptionContainer.append(milestoneDescription);
+  // milestoneDueDateContainer.append(milestoneDueDate);
+  // milestoneDescriptionContainer.append(milestoneDescription);
   // milestoneSaveButtonContainer.append(milestoneSaveButton);
   // milestoneDeleteButtonContainer.append(milestoneDeleteButton);
   addNewTaskContainer.append(newTaskInput, newTaskButton);
