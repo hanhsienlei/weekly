@@ -22,13 +22,12 @@ const renderGoalEditor = (goalId) => {
       const saveGoal = () => {
         const body = {
           goal_id: goalId,
-          goal_title: goalTitle.textContent.trim(),
-          goal_due_date:
-            goalDueDate.value.length == 10 ? goalDueDate.value : null,
+          goal_title: goalTitle.value.trim(),
+          goal_due_date: goalDueDate.value,
           goal_due_date_unix: Math.ceil(
             new Date(goalDueDate.value + "T23:59:59")
           ),
-          goal_description: goalDescription.textContent.trim(),
+          goal_description: goalDescription.value.trim(),
           //goal_purpose_id: goalPurposeId,
         };
 
@@ -85,15 +84,13 @@ const renderGoalEditor = (goalId) => {
       };
 
       modal.dataset.goalId = goalId;
-      goalTitle.textContent = data.g_title ? data.g_title : "Goal title...";
+      goalTitle.value = data.g_title;
       deleteGoalButton.setAttribute(
         "onclick",
         `deleteGoalAndChildren(${goalId})`
       );
       goalDueDate.value = data.g_due_date;
-      goalDescription.textContent = data.g_description
-        ? data.g_description
-        : "Description of this goal......";
+      goalDescription.value = data.g_description
       goalSaveButton.addEventListener("click", saveGoal);
       newMilestoneButton.addEventListener("click", addNewMilestone);
       modal.addEventListener("hidden.bs.modal", () => {
@@ -169,6 +166,8 @@ const createMilestoneContainer = (
   const containerOuter = document.createElement("div");
   const containerInner = document.createElement("div");
   const milestoneContainer = document.createElement("div");
+  const milestoneLabelContainer = document.createElement("div");
+  const milestoneLabel = document.createElement("span");
   const milestoneTitleContainer = document.createElement("div");
   const milestoneTitle = document.createElement("input");
   const milestoneEditButton = document.createElement("span");
@@ -200,6 +199,16 @@ const createMilestoneContainer = (
   containerOuter.dataset.milestoneId = milestoneId;
   containerInner.classList.add("milestone-container", "card-body");
   milestoneContainer.classList.add("milestone-details", "row");
+milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12");
+  milestoneLabel.classList.add(
+    "event-label",
+    `milestone-label`,
+    "badge",
+    "rounded-pill"
+  );
+  milestoneLabel.textContent = "milestone";
+
+
   milestoneTitleContainer.classList.add("milestone-title-container", "row", "mb-3");
   milestoneTitle.classList.add("milestone-title", "off-focus");
   milestoneTitle.setAttribute("type", "text");
@@ -261,8 +270,8 @@ const createMilestoneContainer = (
   milestoneSaveButton.addEventListener("click", (e) => {
     const body = {};
     body.milestone_id = milestoneId;
-    body.milestone_title = milestoneTitle.textContent.trim();
-    body.milestone_description = milestoneDescription.textContent.trim();
+    body.milestone_title = milestoneTitle.value.trim();
+    body.milestone_description = milestoneDescription.value.trim();
     body.milestone_due_date =
       milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
     body.task_due_date_unix = Math.ceil(
@@ -388,12 +397,13 @@ const createMilestoneContainer = (
     tasksContainer
   );
   milestoneContainer.append(
+    milestoneLabelContainer,
     milestoneTitleContainer,
     milestoneEditorContainer
   );
+  milestoneLabelContainer.append(milestoneLabel, milestoneEditButton);
   milestoneTitleContainer.append(
-    milestoneTitle,
-    milestoneEditButton,
+    milestoneTitle
   );
   milestoneButtonsContainer.append(milestoneSaveButton,
     milestoneDeleteButton)

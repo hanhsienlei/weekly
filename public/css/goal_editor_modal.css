@@ -1,9 +1,14 @@
+#modal-goal .modal-header {
+  background-color: rgb(241, 241, 241);
+}
 .goal-modal-body {
   height: 90vh;
   /* background-color: rgb(210, 210, 210); */
 }
-.goal-title {
-  font-size: larger;
+.modal-goal-title {
+  font-size: 1.6rem;
+  color: #FD6E6E;
+  width:25%;
 }
 .milestone {
   border: solid grey 1px;
@@ -51,7 +56,7 @@
 }
 
 .milestone-title {
-  width: 88%;
+  width: 100%;
 }
 
 .modal-milestone-edit-button {
@@ -59,7 +64,7 @@
   text-align:center;
 }
 
-.milestone-container .save-milestone-button, .milestone-container .delete-milestone-button {
+.milestone-container .save-milestone-button, .milestone-container .delete-milestone-button, .modal-goal-buttons-container .save-goal-button, .modal-goal-buttons-container .editor-delete-goal-button  {
   width: 48%;
   margin-bottom: 0.5rem;
 }
@@ -74,7 +79,19 @@
   border-radius: 3px;
 }
 
-.milestone-buttons-container{
+.milestone-buttons-container, .modal-goal-buttons-container{
   display: flex;
   justify-content:space-between;
+}
+
+.goal-container-row>.goal-container {
+  padding-left:1%;
+   padding-right:7.2%;
+}
+.modal .milestone-title {
+  margin-left:10px;
+  font-size: 1.2rem;
+}
+.modal .milestone-container {
+  height: 70vh;
 }

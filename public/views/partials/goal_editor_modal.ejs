@@ -2,21 +2,18 @@
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <span class="goal-title p-3" contenteditable>Goal name</span> <button class="btn btn-light edit-button col-auto"
-          type="button" data-bs-toggle="collapse" data-bs-target=".goal-container" aria-expanded="false"
-          aria-controls="goal editor">
-          ✍
-        </button>
+        <input class="modal-goal-title goal-title p-3 off-focus" type="text" placeholder="Goal name"></input> <span class="edit-button material-icons align-middle" data-bs-toggle="collapse" data-bs-target=".goal-container-row" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit goal">mode_edit</span>
         <!-- <button class="share-button btn btn-light col-auto ms-2" type="button">
           publish it as template
         </button> -->
-        <button class="editor-delete-goal-button btn btn-light  col-auto ms-2" type="button">
+        <!-- <button class="editor-delete-goal-button btn btn-light  col-auto ms-2" type="button">
           Delete whole goal
-        </button>
+        </button> -->
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="goal-modal-body modal-body overflow-auto smooth-scroll">
-        <div class="goal-container row collapse mb-3">
+        <!-- goal editor -->
+        <!-- <div class="goal-container row collapse mb-3">
           <div class="goal-due-date-container row">
             <div class="col-3 mb-3">
               <input type="date" class="goal-due-date" min="1900-01-01" max="2100-01-01" />
@@ -28,32 +25,42 @@
           <div class="save-goal-button-container row border-bottom mb-3">
             <button class="save-goal-button btn btn-primary col-auto mb-3">Save goal</button>
           </div>
-        </div>
-
-
-        <!-- <div class="add-milestone-conatiner row pt-3 justify-content-start">
-          <div class="new-milestone-input-container col-auto">
-            <input type="text" class="new-milestone-title form-control" placeholder="Add a milestone" />
-          </div>
-          <button class="new-milestone-button btn btn-primary col-auto">+</button>
         </div> -->
 
-        <div class="row d-flex flex-nowrap my-2 mx-1">
-          <div class="add-milestone-outer-container col-4"> 
-        <div class="add-milestone-container">
-          <input type="text" class="new-milestone-title col-10" placeholder="Set a milestone for this goal">
-          <button class="new-milestone-button btn col-1" >+</button>
+        <!-- goal editor -->
+        <div class="goal-container-row collapse row ">
+          <div class="goal-container col-5">
+            <div class="modal-goal-editor card m-2 p-2">
+              <input type="date" class="goal-due-date mb-3" min="1900-01-01" max="2100-01-01" />
+              <textarea class="goal-description mb-3 off-focus" placeholder="Description of this goal..."></textarea>
+              <div class="modal-goal-buttons-container mb-3">
+                <button class="save-goal-button btn btn-outline-success">Save</button>
+                <button class="editor-delete-goal-button btn btn-outline-danger" type="button">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        </div>
+        <!-- add new milestone -->
+        <div class="new-milestone-outer-row row d-flex flex-nowrap my-2 mx-1">
+          <div class="add-milestone-outer-container col-4">
+            <div class="add-milestone-container">
+              <input type="text" class="new-milestone-title col-10" placeholder="Set a milestone for this goal">
+              <button class="new-milestone-button btn col-1">+</button>
+            </div>
+          </div>
         </div>
 
-
+        <!-- milestones -->
         <div class="milestones-container row d-flex flex-nowrap my-2 mx-1 overflow-auto smooth-scroll">
-          
-          
+
+
 
         </div>
       </div>
+
+      
     </div>
   </div>
 </div>
