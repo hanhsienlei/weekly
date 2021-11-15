@@ -34,6 +34,7 @@ const getGoalsLife = async (req, res) => {
       week: getWeekForLife(userByeDay),
     },
     goals: [],
+    userName: req.user.name
   };
   result.forEach((row) => {
     const dateObject = new Date(row.g_due_date);

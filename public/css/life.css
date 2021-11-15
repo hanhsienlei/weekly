@@ -24,8 +24,9 @@ h5 {
   width: 8px;
   border: solid rgb(165, 165, 165) 1px;
   border-radius: 50%;
-  background-color: rgb(173, 173, 173);
+  background-color: rgb(241, 241, 241);
   margin: 3px 3px;
+  box-sizing: content-box;
 }
 .one-week :hover {
   transform: scale(1.5);
@@ -45,6 +46,22 @@ h5 {
 }
 .no-display {
   visibility: hidden;
+}
+
+
+.birthday {
+  background-color: #609ffc;
+  border: #609ffc solid 1px;
+}
+
+.today {
+  background-color: #609ffc;
+  border: #609ffc solid 1px;
+}
+
+.byeday {
+  background-color: #609ffc;
+  border: #609ffc solid 1px;
 }
 .highlight {
   background-color: #FD6E6E;

@@ -1,5 +1,10 @@
 const accessToken = localStorage.getItem("access_token");
 const container = document.querySelector(".life-dots");
+const pageTitle = document.querySelector(".life-title")
+
+const renderTitle = (userName)=>{
+  pageTitle.textContent = `${userName}'s Life in Weeks`
+}
 const renderBaseWeeks = (birthday, today, byeDay) => {
   for (let i = birthday.year; i <= byeDay.year; i++) {
     const divYear = document.createElement("div");
@@ -38,16 +43,23 @@ const renderBaseWeeks = (birthday, today, byeDay) => {
     console.log("done")
   }
 };
-const renderEvents = (goals) => {
+const renderGoals = (goals) => {
   goals.forEach(goal=>{
     const target = document.querySelector(`[id='${goal.year}-${goal.week}']`)
     target.classList.add("highlight")
     target.setAttribute("title", goal.title)
     const link = document.createElement("a")
     link.setAttribute("href", `/dashboard/goal?id=${goal.id}`)
-  //還沒做完
+  //還沒做完連結的部分
   })
 }
+
+const renderEvent = (event, className, title) => {
+  const target = document.querySelector(`[id='${event.year}-${event.week}']`)
+    target.classList.add(className)
+    target.setAttribute("title", title)
+}
+
 
 
 const renderLife = ()=>{
@@ -59,9 +71,17 @@ fetch(`/api/life`, {
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
-      const{birthday, today, byeDay, goals} = data
+      const{birthday, today, byeDay, goals, userName} = data
+      const birthdayTitle = "Your birthday: " + birthday.date
+      const todayTitle = "Today: " + today.date
+    
+      renderTitle(userName)
       renderBaseWeeks(birthday, today, byeDay)
-      renderEvents(goals)
+      
+      renderEvent(birthday,"birthday", birthdayTitle)
+      renderEvent(today, "today", todayTitle)
+      renderEvent(byeDay, "byeday", "Average life expectancy")
+      renderGoals(goals)
     })
     .catch((err) => {
       console.log(err);
