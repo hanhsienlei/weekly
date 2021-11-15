@@ -203,7 +203,9 @@ const validateMilestoneDueDate = () => {
           const taskDueDate = new Date(tasks[i].t_due_date);
           const taskDueDateYMD = getDateYMD(taskDueDate);
           const taskTitle = tasks[i].t_title;
+          console.log("milestoneDueDate,  taskDueDate ",milestoneDueDate,  taskDueDate)
           if (milestoneDueDate < taskDueDate) {
+            console.log("400 error: ",milestoneDueDate,  taskDueDate)
             res.status(400).send({
               error: `Milestone shouldn't due before its task ${taskTitle} (${taskDueDateYMD}).`,
             });
@@ -213,10 +215,15 @@ const validateMilestoneDueDate = () => {
           if (tasks[i].t_repeat) {
             const repeatEndDate = new Date(tasks[i].r_end_date);
             const repeatEndDateYMD = getDateYMD(repeatEndDate);
+
+
+            if (milestoneDueDate < repeatEndDate) {
+
             res.status(400).send({
               error: `Milestone shouldn't due before its task ${taskTitle} (repeat until ${repeatEndDateYMD}).`,
             });
             return;
+          }
           }
         }
         next();
