@@ -183,7 +183,7 @@ const createMilestoneContainer = (
   const milestoneDeleteButton = document.createElement("button");
   const tasksContainer = document.createElement("div");
   const addNewTaskContainer = document.createElement("div");
-  const newTaskInputContainer = document.createElement("div");
+  // const newTaskInputContainer = document.createElement("div");
   const newTaskInput = document.createElement("input");
   const newTaskButton = document.createElement("button");
 
@@ -307,12 +307,12 @@ const createMilestoneContainer = (
     "pt-3",
     `milestone-${milestoneId}-events-container`
   );
-  addNewTaskContainer.classList.add("add-new-task-container", "row", "px-2");
-  newTaskInputContainer.classList.add("new-task-input-container", "col");
+  addNewTaskContainer.classList.add("modal-add-new-task-container");
+  // newTaskInputContainer.classList.add("new-task-input-container", "col");
   newTaskInput.setAttribute("type", "text");
-  newTaskInput.classList.add("new-task-title");
-  newTaskInput.setAttribute("placeholder", "add new task", "col");
-  newTaskButton.classList.add("add-new-task-button", "btn", "col-1");
+  newTaskInput.classList.add("modal-new-task-title", "col-10");
+  newTaskInput.setAttribute("placeholder", "New task for the milestone");
+  newTaskButton.classList.add("modal-add-new-task-button", "btn", "col-1");
   newTaskButton.textContent = "+";
   newTaskButton.addEventListener("click", (e) => {
     const newTaskTitle = newTaskInput.value.trim();
@@ -375,11 +375,10 @@ const createMilestoneContainer = (
   });
 
   parent.append(containerOuter);
-  containerOuter.append(containerInner);
+  containerOuter.append(containerInner, addNewTaskContainer);
   containerInner.append(
     milestoneContainer,
-    tasksContainer,
-    addNewTaskContainer
+    tasksContainer
   );
   milestoneContainer.append(
     milestoneTitle,
@@ -399,8 +398,8 @@ const createMilestoneContainer = (
   milestoneDescriptionContainer.append(milestoneDescription);
   // milestoneSaveButtonContainer.append(milestoneSaveButton);
   // milestoneDeleteButtonContainer.append(milestoneDeleteButton);
-  addNewTaskContainer.append(newTaskInputContainer, newTaskButton);
-  newTaskInputContainer.appendChild(newTaskInput);
+  addNewTaskContainer.append(newTaskInput, newTaskButton);
+  // newTaskInputContainer.appendChild(newTaskInput);
 };
 
 // const createTaskComponent = (

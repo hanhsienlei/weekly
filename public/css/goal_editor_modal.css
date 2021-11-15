@@ -17,11 +17,31 @@ font-size: larger;
   height: 1.8em;
   line-height: 100%;
 } */
-add-milestone-conatiner {
+.add-milestone-outer-container{
+  padding-left: 30px;
+}
+.add-milestone-container {
+  display: flex;
+  align-content: center;
+  justify-content: space-evenly;
 border: solid gainsboro 1ps ;
 border-radius: 5px;
 box-sizing: border-box;
-  background-color: #fdf36e;
+  background-color: #fdc46e;
   padding: 5px 2px;
-  margin: 5px 10px;
 }
+
+
+.modal-add-new-task-container {
+  box-sizing: border-box;
+  background-color: #fdf36e;
+  padding: 8px 12px;
+  border: solid gainsboro 1ps ;
+  border-radius: 3px;
+  width:98%;
+  display: flex;
+  align-content: center;
+  justify-content: space-evenly;
+  margin: 0 auto;
+}
+
