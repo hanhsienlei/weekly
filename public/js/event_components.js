@@ -202,7 +202,7 @@ const createEventComponent = (
   const milestoneDeleteButton =
     eventType === "milestone" ? createDeleteMilestoneButton(id, goal_id) : null;
 
-  const saveEvent = () => {
+  const saveEvent = (relocateEvent) => {
     const body = {};
     body[`${eventType}_id`] = id;
     body[`${eventType}_title`] = eventTitle.value;
@@ -283,7 +283,7 @@ const createEventComponent = (
         }
 
         const newEventDueDate = new Date(eventDueDate.value);
-        if (!window.location.pathname.includes("horizon")) {
+        if (!window.location.pathname.includes("horizon") || !relocateEvent) {
           return;
         } else {
           const eventContainers =
@@ -390,7 +390,9 @@ const createEventComponent = (
     } else {
       checkBox.setAttribute("checked", "true");
     }
-    saveEvent();
+    const relocateEvent = timeScale.includes("milestone")? 0: 1
+
+    saveEvent(relocateEvent);
   });
   eventTitleContentContainer.classList.add(
     "event-title-content-container",

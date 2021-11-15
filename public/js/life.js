@@ -1,5 +1,5 @@
 const accessToken = localStorage.getItem("access_token");
-const main = document.querySelector(".main");
+const container = document.querySelector(".life-dots");
 const renderBaseWeeks = (birthday, today, byeDay) => {
   for (let i = birthday.year; i <= byeDay.year; i++) {
     const divYear = document.createElement("div");
@@ -14,7 +14,7 @@ const renderBaseWeeks = (birthday, today, byeDay) => {
     divYear.classList.add("one-year");
     divYear.setAttribute("data-year", i)
     divYear.append(labelAge, labelYear);
-    main.appendChild(divYear)
+    container.appendChild(divYear)
     for (let j = 1; j <= 52; j++) {
       const divWeek = document.createElement("div");
       divWeek.classList.add("one-week", `week${j}` );

@@ -2,7 +2,7 @@
   background-color: rgb(241, 241, 241);
 }
 .goal-modal-body {
-  height: 90vh;
+  height: 80vh;
   /* background-color: rgb(210, 210, 210); */
 }
 .modal-goal-title {
@@ -93,5 +93,5 @@
   font-size: 1.2rem;
 }
 .modal .milestone-container {
-  height: 70vh;
+  height: 60vh;
 }
