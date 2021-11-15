@@ -6,10 +6,11 @@
   line-height: 100%;
 }
 
-.date-container, .week-container, .month-container, .year-container {
-border: solid gainsboro 1ps ;
+/* .date-container, .week-container, .month-container, .year-container {
+border: solid gainsboro 1px ;
+background-color: gainsboro;
 border-radius: 5px;
-}
+} */
 .date-add-new-container, .week-add-new-container, .month-add-new-container {
   box-sizing: border-box;
   background-color: #fdf36e;

@@ -40,7 +40,22 @@ const renderGoalEditor = (goalId) => {
           body: JSON.stringify(body),
         })
           .then((response) => response.json())
-          .then((data) => console.log(data))
+          .then((data) => {
+            console.log("return from save: ", data);
+        if (data.error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.error,
+          });
+          return;
+        }
+        Swal.fire({
+          icon: "success",
+          title: "All good!",
+          text: "Update successfully",
+        });
+          })
           .catch((err) => {
             console.log(err);
           });
@@ -289,8 +304,21 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-      })
+            console.log("return from save: ", data);
+        if (data.error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.error,
+          });
+          return;
+        }
+        Swal.fire({
+          icon: "success",
+          title: "All good!",
+          text: "Update successfully",
+        });
+          })
       .catch((err) => {
         console.log(err);
       });
@@ -321,7 +349,9 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
     "row",
     "border-top",
     "pt-3",
-    `milestone-${milestoneId}-events-container`
+    `milestone-${milestoneId}-events-container`,
+    "overflow-auto", 
+    "smooth-scroll" 
   );
   addNewTaskContainer.classList.add("modal-add-new-task-container");
   // newTaskInputContainer.classList.add("new-task-input-container", "col");

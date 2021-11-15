@@ -57,6 +57,7 @@ const renderGoalProgress = async (goal_id) => {
       let barLabels = m_titles;
       let barDataDone = m_number_of_task_done;
       let barDataTotal = m_number_of_task;
+      let doneColor= m_titles.length ? "#ffafaf": "#d8d8e0"
       if (!m_titles.length) {
         doughnutData = [1, 4, 3, 2, 5];
         doughnutLabels = [
@@ -77,8 +78,9 @@ const renderGoalProgress = async (goal_id) => {
       }
       const doughnutCanvas = document.querySelector("#doughnut");
       const doughnutBackgroundColor = Array(doughnutLabels.length).fill(
-        "#ffafaf"
+        doneColor
       );
+      
       doughnutBackgroundColor[doughnutLabels.length - 1] = "#d8d8e0";
       const doughnut = new Chart(doughnutCanvas, {
         type: "doughnut",
@@ -135,7 +137,7 @@ const renderGoalProgress = async (goal_id) => {
               label: "done tasks",
               data: barDataDone,
               fill: false,
-              backgroundColor: "#ffafaf",
+              backgroundColor: doneColor,
               yAxisID: "y0",
             },
             {

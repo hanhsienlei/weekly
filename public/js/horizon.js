@@ -394,28 +394,28 @@ const renderEvents = async (date) => {
             );
           }
         });
-        // data.year.milestones.forEach((milestone) => {
-        //   if (milestone.m_status > -1) {
-        //     createEventComponent(
-        //       "year",
-        //       "milestone",
-        //       milestone.m_id,
-        //       milestone.m_title,
-        //       milestone.m_status,
-        //       milestone.m_due_date,
-        //       milestone.m_description,
-        //       milestone.m_parent.join(">"),
-        //       null,
-        //       null,
-        //       null,
-        //       null,
-        //       milestone.g_id,
-        //       milestone.g_due_date,
-        //       null,
-        //       null
-        //     );
-        //   }
-        // });
+        data.year.milestones.forEach((milestone) => {
+          if (milestone.m_status > -1) {
+            createEventComponent(
+              "year",
+              "milestone",
+              milestone.m_id,
+              milestone.m_title,
+              milestone.m_status,
+              milestone.m_due_date,
+              milestone.m_description,
+              milestone.m_parent.join(">"),
+              null,
+              null,
+              null,
+              null,
+              milestone.g_id,
+              milestone.g_due_date,
+              null,
+              null
+            );
+          }
+        });
         // data.year.tasks.forEach((task) => {
         //   if (task.t_status > -1) {
         //     const repeated_frequency = task.t_repeat ? task.r_frequency : 0;

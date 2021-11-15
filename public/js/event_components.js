@@ -517,7 +517,12 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
   eventSaveButton.setAttribute("data-bs-toggle", "collapse");
 
   eventSaveButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
-  eventSaveButton.addEventListener("click", saveEvent);
+  const saveAndRelocateEvent =()=> {
+const relocateEvent = timeScale.includes("milestone")? 0: 1
+saveEvent(relocateEvent)
+  }
+  
+  eventSaveButton.addEventListener("click", saveAndRelocateEvent);
 
   eventFooterContainer.append(eventSaveButton);
   
