@@ -7,6 +7,7 @@ const renderGoalProgress = async (goal_id) => {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log(data)
       const progressGoalTitle = document.querySelector(".progress-goal-title");
       const progressGoalButton = document.querySelector(
         ".progress-view-goal-button"
@@ -187,6 +188,7 @@ const InitializePage = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log(data)
       const goalList = document.querySelector(".goal-list");
       if (data.length) {
         renderGoalProgress(data[0].g_id);

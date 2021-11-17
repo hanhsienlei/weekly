@@ -205,7 +205,7 @@ const getGoalProgress = async (req, res) => {
       for (let i = 0; i < goalProgress.m_number_of_task.length; i++) {
         if (
           goalProgress.m_number_of_task[i] ===
-          goalProgress.m_number_of_task_done[i]
+          goalProgress.m_number_of_task_done[i] && goalProgress.m_number_of_task_done[i] != 0
         ) {
           count += 1;
         }
