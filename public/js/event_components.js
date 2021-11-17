@@ -112,24 +112,6 @@ const createEventComponent = (
   task_origin_id = null,
   task_origin_date = null
 ) => {
-  // console.log(
-  //   timeScale,
-  //   eventType,
-  //   id,
-  //   title,
-  //   status,
-  //   dueDate,
-  //   description,
-  //   parents,
-  //   task_repeat_frequency,
-  //   task_repeat_end_date,
-  //   milestone_id,
-  //   milestone_due_date,
-  //   goal_id,
-  //   goal_due_date,
-  //   task_origin_id,
-  //   task_origin_date
-  // );
   const accessToken = localStorage.getItem("access_token");
   //如果移動要改parentContainer所以用let
   let parentContainer = document.querySelector(
@@ -203,9 +185,18 @@ const createEventComponent = (
     eventType === "milestone" ? createDeleteMilestoneButton(id, goal_id) : null;
 
   const saveEvent = (relocateEvent) => {
+    if(!eventTitle.value.trim()){
+      Swal.fire({
+          title: `${eventType} title cannot be empty`,
+          icon: "warning",
+          showCancelButton: false,
+        }).then(()=>{
+          eventTitle.value = title
+        })
+    } else {
     const body = {};
     body[`${eventType}_id`] = id;
-    body[`${eventType}_title`] = eventTitle.value;
+    body[`${eventType}_title`] = eventTitle.value.trim();
     body[`${eventType}_description`] = eventDescription.value;
     body[`${eventType}_status`] = checkBox.hasAttribute("checked") ? 1 : 0;
     body[`${eventType}_due_date`] = eventDueDate.value;
@@ -328,6 +319,7 @@ const createEventComponent = (
       .catch((err) => {
         console.log(err);
       });
+      }
   };
 
   eventOuterContainer.classList.add(
@@ -403,11 +395,15 @@ const createEventComponent = (
   eventTitle.setAttribute("placeholder", `${eventType} name`);
   eventTitle.value = title;
   eventTitle.addEventListener("focus", (e) => {
-    console.log("click");
     eventTitle.classList.remove("off-focus");
   });
   eventTitle.addEventListener("blur", (e) => {
     eventTitle.classList.add("off-focus");
+  });
+  eventTitle.addEventListener("keyup", (e) => {
+    if (e.keyCode === 13) {
+      saveEvent()
+    }
   });
   eventParentsContainer.classList.add("event-parents-container")
   eventParents.classList.add("event-parents", "mt-1", "mb-2");
