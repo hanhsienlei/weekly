@@ -25,21 +25,19 @@ app.get("/signup", (req, res) => {
 app.get("/signin", (req, res) => {
   res.render("signin");
 });
-
 app.get("/life", (req, res) => {
   res.render("life");
 });
-
 app.get("/horizon", (req, res) => {
   res.render("horizon");
 });
-app.get("/dashboard/goal", (req, res) => {
-  res.render("dashboard_goal");
+app.get("/review", (req, res) => {
+  res.render("review");
 });
 
-app.get("/library", (req, res) => {
-  res.render("goal_library");
-});
+// app.get("/library", (req, res) => {
+//   res.render("goal_library");
+// });
 
 //api routes
 app.use("/api",[
@@ -50,8 +48,12 @@ app.use("/api",[
   require("./server/routes/api/repeated_task_route"),
   require("./server/routes/api/life_route"),
   require("./server/routes/api/user_route")
-]
-)
+])
+
+// Page not found
+app.use(function(req, res, next) {
+    res.status(404).render("not_found");
+});
 
 //error handler
 app.use(function(err, req, res, next) {

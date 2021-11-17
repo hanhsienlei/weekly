@@ -49,7 +49,7 @@ const renderGoals = (goals) => {
     target.classList.add("highlight")
     target.setAttribute("title", goal.title)
     const link = document.createElement("a")
-    link.setAttribute("href", `/dashboard/goal?id=${goal.id}`)
+    link.setAttribute("href", `/review?id=${goal.id}`)
   //還沒做完連結的部分
   })
 }

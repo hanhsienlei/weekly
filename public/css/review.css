@@ -32,6 +32,11 @@
 .progress-milestone-progress, .progress-task-progress{
   font-size: 1.5rem;
 }
+
+.progress-empty-note {
+  color: #fd6e6e;
+}
+
 .dashboard-doughnut {
   position: relative;
   display: flex;
