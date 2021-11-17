@@ -42,19 +42,19 @@ const renderGoalEditor = (goalId) => {
           .then((response) => response.json())
           .then((data) => {
             console.log("return from save: ", data);
-        if (data.error) {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: data.error,
-          });
-          return;
-        }
-        Swal.fire({
-          icon: "success",
-          title: "All good!",
-          text: "Update successfully",
-        });
+            if (data.error) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: data.error,
+              });
+              return;
+            }
+            Swal.fire({
+              icon: "success",
+              title: "All good!",
+              text: "Update successfully",
+            });
           })
           .catch((err) => {
             console.log(err);
@@ -105,7 +105,7 @@ const renderGoalEditor = (goalId) => {
         `deleteGoalAndChildren(${goalId})`
       );
       goalDueDate.value = data.g_due_date;
-      goalDescription.value = data.g_description
+      goalDescription.value = data.g_description;
       goalSaveButton.addEventListener("click", saveGoal);
       newMilestoneButton.addEventListener("click", addNewMilestone);
       modal.addEventListener("hidden.bs.modal", () => {
@@ -192,7 +192,7 @@ const createMilestoneContainer = (
   // const milestoneDescriptionContainer = document.createElement("div");
   const milestoneDescription = document.createElement("textarea");
   // const milestoneTagsContainer = document.createElement("div");
-  const milestoneButtonsContainer = document.createElement("div")
+  const milestoneButtonsContainer = document.createElement("div");
   // const milestoneSaveButtonContainer = document.createElement("div");
   const milestoneSaveButton = document.createElement("button");
   // const milestoneDeleteButtonContainer = document.createElement("div");
@@ -205,7 +205,7 @@ const createMilestoneContainer = (
 
   containerOuter.classList.add(
     "milestone-outer-container",
-    "col-4",
+    // "col-4",
     "overflow-auto",
     "smooth-scroll",
     `milestone-outer-container-${milestoneId}`,
@@ -214,7 +214,11 @@ const createMilestoneContainer = (
   containerOuter.dataset.milestoneId = milestoneId;
   containerInner.classList.add("milestone-container", "card-body");
   milestoneContainer.classList.add("milestone-details", "row");
-milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12");
+  milestoneLabelContainer.classList.add(
+    "event-label-container",
+    "mb-1",
+    "col-12"
+  );
   milestoneLabel.classList.add(
     "event-label",
     `milestone-label`,
@@ -223,19 +227,24 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
   );
   milestoneLabel.textContent = "milestone";
 
-
-  milestoneTitleContainer.classList.add("milestone-title-container", "row", "mb-3");
+  milestoneTitleContainer.classList.add(
+    "milestone-title-container",
+    "row",
+    "mb-3"
+  );
   milestoneTitle.classList.add("milestone-title", "off-focus");
   milestoneTitle.setAttribute("type", "text");
   milestoneTitle.setAttribute("placeholder", `Milestone name`);
   milestoneTitle.value = title;
-  milestoneEditButton.classList.add( "modal-milestone-edit-button", 
-    "edit-button", "material-icons", "align-middle"
+  milestoneEditButton.classList.add(
+    "modal-milestone-edit-button",
+    "edit-button",
+    "material-icons",
+    "align-middle"
   );
   milestoneEditButton.setAttribute("data-bs-toggle", "tooltip");
-    milestoneEditButton.setAttribute("data-bs-placement", "top");
-    milestoneEditButton.setAttribute( "title","Edit milestone"
-    );
+  milestoneEditButton.setAttribute("data-bs-placement", "top");
+  milestoneEditButton.setAttribute("title", "Edit milestone");
   milestoneEditButton.setAttribute("data-bs-toggle", "collapse");
   milestoneEditButton.setAttribute(
     "data-bs-target",
@@ -245,7 +254,10 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
   milestoneEditorContainer.classList.add(
     "modal-milestone-editor",
     `modal-milestone-editor-${milestoneId}`,
-    "collapse", "card", "my-2", "py-2"
+    "collapse",
+    "card",
+    "my-2",
+    "py-2"
   );
   // milestoneDueDateContainer.classList.add(
   //   "milestone-due-date-container",
@@ -262,10 +274,15 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
   //   "row",
   //   "mb-3"
   // );
-  milestoneDescription.classList.add("modal-milestone-description", "event-description", "off-focus", "mb-3");
+  milestoneDescription.classList.add(
+    "modal-milestone-description",
+    "event-description",
+    "off-focus",
+    "mb-3"
+  );
   // milestoneDescription.setAttribute("contenteditable", "true");
-  milestoneDescription.value = description
-    milestoneDescription.setAttribute(
+  milestoneDescription.value = description;
+  milestoneDescription.setAttribute(
     "placeholder",
     `Description of the milestone...`
   );
@@ -275,11 +292,11 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
   //   "col-auto",
   //   "mb-3"
   // );
-  milestoneButtonsContainer.classList.add("milestone-buttons-container")
+  milestoneButtonsContainer.classList.add("milestone-buttons-container");
   milestoneSaveButton.classList.add(
     "save-milestone-button",
     "btn",
-    "btn-outline-success",
+    "btn-outline-success"
   );
   milestoneSaveButton.textContent = "Save";
   milestoneSaveButton.addEventListener("click", (e) => {
@@ -304,7 +321,7 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
     })
       .then((response) => response.json())
       .then((data) => {
-            console.log("return from save: ", data);
+        console.log("return from save: ", data);
         if (data.error) {
           Swal.fire({
             icon: "error",
@@ -318,7 +335,7 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
           title: "All good!",
           text: "Update successfully",
         });
-          })
+      })
       .catch((err) => {
         console.log(err);
       });
@@ -332,7 +349,7 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
   milestoneDeleteButton.classList.add(
     "delete-milestone-button",
     "btn",
-    "btn-outline-danger",
+    "btn-outline-danger"
   );
   milestoneDeleteButton.textContent = "Delete";
   milestoneDeleteButton.addEventListener("click", (e) => {
@@ -350,14 +367,21 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
     "border-top",
     "pt-3",
     `milestone-${milestoneId}-events-container`,
-    "overflow-auto", 
-    "smooth-scroll" 
+    "overflow-auto",
+    "smooth-scroll"
   );
   addNewTaskContainer.classList.add("modal-add-new-task-container");
   // newTaskInputContainer.classList.add("new-task-input-container", "col");
   newTaskInput.setAttribute("type", "text");
   newTaskInput.classList.add("modal-new-task-title", "col-10");
   newTaskInput.setAttribute("placeholder", "New task for the milestone");
+
+  newTaskInput.addEventListener("keyup", (e) => {
+    if (e.keyCode === 13) {
+      newTaskButton.click();
+    }
+  });
+
   newTaskButton.classList.add("modal-add-new-task-button", "btn", "col-1");
   newTaskButton.textContent = "+";
   newTaskButton.addEventListener("click", (e) => {
@@ -422,26 +446,20 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
 
   parent.prepend(containerOuter);
   containerOuter.append(containerInner, addNewTaskContainer);
-  containerInner.append(
-    milestoneContainer,
-    tasksContainer
-  );
+  containerInner.append(milestoneContainer, tasksContainer);
   milestoneContainer.append(
     milestoneLabelContainer,
     milestoneTitleContainer,
     milestoneEditorContainer
   );
   milestoneLabelContainer.append(milestoneLabel, milestoneEditButton);
-  milestoneTitleContainer.append(
-    milestoneTitle
-  );
-  milestoneButtonsContainer.append(milestoneSaveButton,
-    milestoneDeleteButton)
+  milestoneTitleContainer.append(milestoneTitle);
+  milestoneButtonsContainer.append(milestoneSaveButton, milestoneDeleteButton);
   milestoneEditorContainer.append(
     milestoneDueDate,
     milestoneDescription,
     // milestoneTagsContainer,
-    milestoneButtonsContainer,
+    milestoneButtonsContainer
     // milestoneSaveButtonContainer,
     // milestoneDeleteButtonContainer
   );
@@ -453,242 +471,16 @@ milestoneLabelContainer.classList.add("event-label-container", "mb-1", "col-12")
   // newTaskInputContainer.appendChild(newTaskInput);
 };
 
-// const createTaskComponent = (
-//   milestoneId,
-//   id,
-//   title,
-//   status,
-//   dueDate,
-//   description,
-//   task_repeat_frequency = 0,
-//   task_repeat_end_date = null,
-//   milestone_due_date = null
-// ) => {
-//   const milestoneContainer = document.querySelector(
-//     `.milestone-outer-container-${milestoneId}`
-//   );
-//   const parentContainer = milestoneContainer.querySelector(`.tasks-container`);
-//   const eventOuterContainer = document.createElement("div");
-//   //const eventToggle = document.createElement("a")
-//   const eventHeaderContainer = document.createElement("div");
-//   const eventInfoContainer = document.createElement("div");
-//   const tagsContainer = document.createElement("div");
-//   const EventTitleContainer = document.createElement("div");
-//   const checkBox = document.createElement("input");
-//   const eventTitle = document.createElement("span");
-//   const eventInfoButtonContainer = document.createElement("div");
-//   const editButton = document.createElement("button");
-//   const eventEditor = document.createElement("div");
-//   const eventDueDateContainer = document.createElement("div");
-//   const eventDueDate = document.createElement("input");
-//   const eventDescriptionContainer = document.createElement("div");
-//   const eventDescription = document.createElement("p");
-//   const taskRepeatSelectorContainer = createTaskRepeatSelector(
-//     id,
-//     task_repeat_frequency,
-//     task_repeat_end_date,
-//     dueDate,
-//     milestone_due_date,
-//     eventDueDate
-//   );
-//   const eventFooterContainer = document.createElement("div");
-//   const eventSaveButton = document.createElement("button");
-//   const eventCancelButton = document.createElement("button");
+const modal = document.querySelector("#modal-goal");
+modal.addEventListener("hidden.bs.modal", (e) => {
+  modal.querySelector(".milestones-container").innerHTML = "";
+});
 
-//   eventOuterContainer.classList.add(
-//     `task-outer-container`,
-//     "card",
-//     "col-12",
-//     "mb-2"
-//   );
-//   eventOuterContainer.setAttribute("id", `task-${id}`);
 
-//   eventHeaderContainer.classList.add("event-header-container", "row", "mb-3");
-//   eventInfoContainer.classList.add("event-info-container", "col-9");
-//   tagsContainer.classList.add("tags-container");
-//   EventTitleContainer.classList.add("event-title-container", "my-2");
-//   checkBox.classList.add("form-check-input");
-//   checkBox.setAttribute("type", "checkbox");
-//   if (status) {
-//     checkBox.setAttribute("checked", "true");
-//   }
-//   checkBox.addEventListener("click", (e) => {
-//     const isChecked = checkBox.hasAttribute("checked");
-//     if (isChecked) {
-//       checkBox.removeAttribute("checked");
-//     } else {
-//       checkBox.setAttribute("checked", "true");
-//     }
-//     const isCheckedNew = checkBox.hasAttribute("checked");
-
-//     const body = {};
-//     body.task_id = id;
-//     body.task_title = eventTitle.textContent;
-//     body.task_description = eventDescription.textContent;
-//     body.task_status = isCheckedNew ? 1 : 0;
-//     body.task_due_date =
-//       eventDueDate.value.length == 10 ? eventDueDate.value : null;
-//     body.task_due_date_unix = Math.ceil(
-//       new Date(eventDueDate.value + "T23:59:59")
-//     );
-
-//     console.log("[checkbox] body: ", body);
-//     fetch(`/api/task`, {
-//       method: "POST",
-//       headers: {
-//         Authorization: `Bearer ${accessToken}`,
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(body),
-//     })
-//       .then((response) => response.json())
-//       .then((data) => {
-//         console.log(data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   });
-//   eventTitle.classList.add("event-title");
-//   eventTitle.setAttribute("contenteditable", "true");
-//   eventTitle.textContent = title;
-//   eventInfoButtonContainer.classList.add(
-//     "event-info-button-container",
-//     "col-2"
-//   );
-//   editButton.classList.add("btn", "btn-light", "edit-button");
-//   editButton.setAttribute("type", "button");
-//   editButton.setAttribute("data-bs-toggle", "collapse");
-//   editButton.setAttribute("data-bs-target", `#modal-task-editor-${id}`);
-//   editButton.textContent = "✍";
-//   eventEditor.classList.add("event-editor", "row", "collapse");
-//   eventEditor.setAttribute("id", `modal-task-editor-${id}`);
-//   eventDueDateContainer.classList.add(
-//     "event-due-date-container",
-//     "row",
-//     "mb-3"
-//   );
-//   eventDueDate.classList.add("event-due-date");
-//   eventDueDate.setAttribute("type", "date");
-//   eventDueDate.setAttribute("max", milestone_due_date);
-//   eventDueDate.value = dueDate;
-//   eventDescriptionContainer.classList.add(
-//     "event-description-container",
-//     "row",
-//     "mb-3"
-//   );
-//   eventDescription.classList.add("event-description", "border");
-//   eventDescription.setAttribute("contenteditable", "true");
-//   eventDescription.textContent = description
-//     ? description
-//     : "what is this task about?";
-
-//   eventFooterContainer.classList.add("event-footer-container", "row", "mb-3");
-//   eventSaveButton.textContent = "save";
-//   eventSaveButton.classList.add(
-//     "col-12",
-//     "btn",
-//     "btn-outline-secondary",
-//     "save-button",
-//     `save-button-task`
-//   );
-//   eventSaveButton.setAttribute("type", "button");
-//   eventSaveButton.setAttribute("data-bs-toggle", "collapse");
-//   eventSaveButton.setAttribute("data-bs-target", `#modal-task-editor-${id}`);
-//   eventSaveButton.addEventListener("click", (e) => {
-//     const body = {};
-//     body.task_id = id;
-//     body.task_title = eventTitle.textContent;
-//     body.task_description = eventDescription.textContent;
-//     body.task_status = checkBox.hasAttribute("checked") ? 1 : 0;
-//     body.task_due_date = eventDueDate.value;
-//     body.task_due_date_unix = Math.ceil(
-//       new Date(eventDueDate.value + "T23:59:59")
-//     );
-//     const repeatSelector = taskRepeatSelectorContainer.querySelector("select");
-//     const task_r_frequency =
-//       repeatSelector.options[repeatSelector.selectedIndex].value;
-//     const task_repeat = task_r_frequency != 0 ? 1 : 0;
-//     const task_r_end_date =
-//       taskRepeatSelectorContainer.querySelector("input").value ||
-//       taskRepeatSelectorContainer.querySelector("input").max;
-//     body.task_repeat = task_repeat;
-//     body.task_r_frequency = task_r_frequency;
-//     body.task_r_end_date = task_r_end_date || "2100-01-01";
-//     body.task_r_end_date_unix = Math.ceil(
-//       new Date(task_r_end_date + "T23:59:59")
-//     );
-//     console.log("body: ", body);
-//     fetch(`/api/task`, {
-//       method: "POST",
-//       headers: {
-//         Authorization: `Bearer ${accessToken}`,
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(body),
-//     })
-//       .then((response) => response.json())
-//       .then((data) => {
-//         console.log(data);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   });
-//   eventCancelButton.textContent = "Delete";
-//   eventCancelButton.classList.add(
-//     "col-12",
-//     "btn",
-//     "btn-outline-secondary",
-//     "cancel-button"
-//   );
-//   eventCancelButton.setAttribute("type", "button");
-//   eventCancelButton.setAttribute("data-bs-toggle", "collapse");
-//   eventCancelButton.setAttribute("data-bs-target", `#modal-task-editor-${id}`);
-//   eventCancelButton.addEventListener("click", (e) => {
-//     editButton.setAttribute("data-bs-toggle", "collapse");
-//     let apiEndpoint = `/api/task?task_id=${id}`;
-//     console.log("apiEndpoint: ", apiEndpoint);
-//     fetch(apiEndpoint, {
-//       method: "DELETE",
-//       headers: { Authorization: `Bearer ${accessToken}` },
-//     })
-//       .then((response) => response.json())
-//       .then((data) => {
-//         console.log("return from delete", data);
-//         parentContainer.removeChild(eventOuterContainer);
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   });
-
-//   eventFooterContainer.append(eventSaveButton, eventCancelButton);
-//   eventDescriptionContainer.appendChild(eventDescription);
-//   eventDueDateContainer.appendChild(eventDueDate);
-//   eventEditor.append(
-//     eventDueDateContainer,
-//     eventDescriptionContainer,
-//     eventFooterContainer
-//   );
-//   eventDescriptionContainer.after(taskRepeatSelectorContainer);
-//   EventTitleContainer.append(checkBox, eventTitle);
-//   eventInfoButtonContainer.appendChild(editButton);
-//   eventInfoContainer.append(tagsContainer, EventTitleContainer);
-//   eventHeaderContainer.append(eventInfoContainer, eventInfoButtonContainer);
-//   //eventHeaderContainer.append(eventInfoContainer);
-//   //eventToggle.append(eventHeaderContainer, eventEditor);
-//   //eventOuterContainer.append(eventToggle);
-//   eventOuterContainer.append(eventHeaderContainer, eventEditor);
-//   parentContainer.appendChild(eventOuterContainer);
-// };
-
-const resetModal = () => {
-  const modal = document.querySelector("#modal-goal");
-  modal.addEventListener("hidden.bs.modal", (e) => {
-    modal.querySelector(".milestones-container").innerHTML = "";
+document
+  .querySelector(".new-milestone-title")
+  .addEventListener("keyup", (e) => {
+    if (e.keyCode === 13) {
+      document.querySelector(".new-milestone-button").click();
+    }
   });
-};
-
-
-resetModal();

@@ -388,7 +388,9 @@ const addNewEvent = (timeScale, eventType) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("restuls: ", data);
-      const eventContainer = document.querySelector(`.${timeScale}-events-container`)
+      const eventContainer = document.querySelector(
+        `.${timeScale}-events-container`
+      );
       const eventId = data.task_id || data.goal_id;
 
       if (data.task_id) {
@@ -432,7 +434,7 @@ const addNewEvent = (timeScale, eventType) => {
           null
         );
       }
-      eventContainer.scrollTop = eventContainer.scrollHeight
+      eventContainer.scrollTop = eventContainer.scrollHeight;
       input.value = "";
     })
     .catch((err) => {
