@@ -121,8 +121,12 @@ textarea.off-focus {
 
 .event-outer-container {
   height: fit-content;
-  
 }
+
+.event-outer-container:hover {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
+}
+
 .events-container {
   align-content: flex-start;
   height: 60vh;
