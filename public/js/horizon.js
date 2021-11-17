@@ -87,7 +87,7 @@
 //       console.log(err);
 //     });
 // };
-const accessToken = localStorage.getItem("access_token");
+// const accessToken = localStorage.getItem("access_token");
 const renderEvents = async (date) => {
   const accessToken = localStorage.getItem("access_token");
   fetch(`/api/events/${date}`, {
@@ -1283,6 +1283,7 @@ const renderEventsToday = () => {
   renderEvents(todayYMD);
 };
 
+getUser()
 document.onload = renderEventsToday();
 
 $("#modal-goal").on("hidden.bs.modal", () => {

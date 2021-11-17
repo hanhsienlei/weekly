@@ -1,4 +1,4 @@
-const accessToken = localStorage.getItem("access_token");
+// const accessToken = localStorage.getItem("access_token");
 const container = document.querySelector(".life-dots");
 const pageTitle = document.querySelector(".life-title")
 
@@ -87,4 +87,6 @@ fetch(`/api/life`, {
       console.log(err);
     });
 }
+
+getUser()
   document.onload = renderLife()

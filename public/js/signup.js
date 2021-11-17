@@ -48,3 +48,5 @@ submitButton.addEventListener("click", (e) => {
       console.log(err);
     });
 });
+
+getUser()

@@ -1,5 +1,5 @@
 const goalList = document.querySelector(".goal-list");
-const accessToken = localStorage.getItem("access_token");
+// const accessToken = localStorage.getItem("access_token");
 const renderGoalProgress = async (goal_id) => {
   fetch(`/api/goal/progress?goal_id=${goal_id}`, {
     headers: {
@@ -320,4 +320,5 @@ const InitializePage = async () => {
 // };
 
 //window.onload = renderGoalProgress();
+getUser()
 window.onload = InitializePage();
