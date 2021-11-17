@@ -109,7 +109,7 @@ const renderGoalEditor = (goalId) => {
       goalTitle.value = data.g_title;
       goalTitle.addEventListener("keyup", (e) => {
         if (e.keyCode === 13) {
-          goalSaveButton.click();
+          saveGoal();
         }
       });
 
@@ -120,6 +120,8 @@ const renderGoalEditor = (goalId) => {
       goalDueDate.value = data.g_due_date;
       goalDescription.value = data.g_description;
       goalSaveButton.addEventListener("click", saveGoal);
+      goalSaveButton.setAttribute("data-bs-toggle", "collapse")
+      goalSaveButton.setAttribute("data-bs-target", ".goal-container-row")
 
       newMilestoneButton.addEventListener("click", addNewMilestone);
       modal.addEventListener("hidden.bs.modal", () => {
@@ -191,6 +193,8 @@ const createMilestoneContainer = (
   goalDueDate = null,
   goalId
 ) => {
+
+  
   const parent = document.querySelector(".milestones-container");
   const containerOuter = document.createElement("div");
   const containerInner = document.createElement("div");
@@ -216,6 +220,56 @@ const createMilestoneContainer = (
   // const newTaskInputContainer = document.createElement("div");
   const newTaskInput = document.createElement("input");
   const newTaskButton = document.createElement("button");
+
+  const modalSaveMilestone = ()=>{
+    if (!milestoneTitle.value.trim()) {
+      Swal.fire({
+        icon: "warning",
+        title: `Milestone title cannot be empty`,
+      });
+    } else {
+      const body = {};
+      body.milestone_id = milestoneId;
+      body.milestone_title = milestoneTitle.value.trim();
+      body.milestone_description = milestoneDescription.value.trim();
+      body.milestone_due_date =
+        milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
+      body.task_due_date_unix = Math.ceil(
+        new Date(milestoneDueDate.value + "T23:59:59")
+      );
+
+      console.log("body: ", body);
+      fetch(`/api/milestone`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("return from save: ", data);
+          if (data.error) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: data.error,
+            });
+            return;
+          }else{
+          Swal.fire({
+            icon: "success",
+            title: "All good!",
+            text: "Update successfully",
+          });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 
   containerOuter.classList.add(
     "milestone-outer-container",
@@ -252,7 +306,7 @@ const createMilestoneContainer = (
   milestoneTitle.value = title;
   milestoneTitle.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
-      milestoneSaveButton.click();
+      modalSaveMilestone()
     }
   });
   milestoneEditButton.classList.add(
@@ -318,54 +372,12 @@ const createMilestoneContainer = (
     "btn-outline-success"
   );
   milestoneSaveButton.textContent = "Save";
-  milestoneSaveButton.addEventListener("click", (e) => {
-    if (!milestoneTitle.value.trim()) {
-      Swal.fire({
-        icon: "warning",
-        title: `Milestone title cannot be empty`,
-      });
-    } else {
-      const body = {};
-      body.milestone_id = milestoneId;
-      body.milestone_title = milestoneTitle.value.trim();
-      body.milestone_description = milestoneDescription.value.trim();
-      body.milestone_due_date =
-        milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
-      body.task_due_date_unix = Math.ceil(
-        new Date(milestoneDueDate.value + "T23:59:59")
-      );
-
-      console.log("body: ", body);
-      fetch(`/api/milestone`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("return from save: ", data);
-          if (data.error) {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: data.error,
-            });
-            return;
-          }
-          Swal.fire({
-            icon: "success",
-            title: "All good!",
-            text: "Update successfully",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  });
+  milestoneSaveButton.setAttribute("data-bs-toggle", "collapse");
+  milestoneSaveButton.setAttribute(
+    "data-bs-target",
+    `.modal-milestone-editor-${milestoneId}`
+  );
+  milestoneSaveButton.onclick = modalSaveMilestone
 
   // milestoneDeleteButtonContainer.classList.add(
   //   "delete-milestone-button-container",
