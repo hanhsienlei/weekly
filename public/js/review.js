@@ -1,5 +1,4 @@
 const goalList = document.querySelector(".goal-list");
-// const accessToken = localStorage.getItem("access_token");
 const renderGoalProgress = async (goal_id) => {
   fetch(`/api/goal/progress?goal_id=${goal_id}`, {
     headers: {
@@ -23,15 +22,13 @@ const renderGoalProgress = async (goal_id) => {
       const progressWeeksFromNowText = document.querySelector(
         ".progress-weeks-from-now-text"
       );
-      const progressTaskSum = document.querySelector(
-        ".progress-task-progress"
-      );
+      const progressTaskSum = document.querySelector(".progress-task-progress");
       const progressMilestoneSum = document.querySelector(
         ".progress-milestone-progress"
       );
-      
+
       const progressEmptyNote = document.querySelector(".progress-empty-note");
-      const goalPercentageSpan = document.querySelector(".goal-percentage")
+      const goalPercentageSpan = document.querySelector(".goal-percentage");
       const {
         g_id,
         g_title,
@@ -49,15 +46,17 @@ const renderGoalProgress = async (goal_id) => {
       const GoalEmptyNote = m_titles.length
         ? ""
         : "⚠️ No plans are made for this goal yet. The charts show how they would look like when you start working on your goals.";
-        
-      const goalDonePercentage =  g_summary.task[1]? Math.ceil((g_summary.task[0] / g_summary.task[1])*100):0
+
+      const goalDonePercentage = g_summary.task[1]
+        ? Math.ceil((g_summary.task[0] / g_summary.task[1]) * 100)
+        : 0;
       const numberOfTaskOpen = g_summary.task[1] - g_summary.task[0];
       let doughnutData = new Array(...m_number_of_task_done, numberOfTaskOpen);
       let doughnutLabels = new Array(...m_titles, "Not done yet");
       let barLabels = m_titles;
       let barDataDone = m_number_of_task_done;
       let barDataTotal = m_number_of_task;
-      let doneColor= m_titles.length ? "#ffafaf": "#d8d8e0"
+      let doneColor = m_titles.length ? "#ffafaf" : "#d8d8e0";
       if (!m_titles.length) {
         doughnutData = [1, 4, 3, 2, 5];
         doughnutLabels = [
@@ -80,7 +79,7 @@ const renderGoalProgress = async (goal_id) => {
       const doughnutBackgroundColor = Array(doughnutLabels.length).fill(
         doneColor
       );
-      
+
       doughnutBackgroundColor[doughnutLabels.length - 1] = "#d8d8e0";
       const doughnut = new Chart(doughnutCanvas, {
         type: "doughnut",
@@ -164,6 +163,14 @@ const renderGoalProgress = async (goal_id) => {
       goalList.addEventListener("click", (e) => {
         doughnut.destroy();
         bar.destroy();
+      });
+
+      $("#modal-goal").on("hidden.bs.modal", () => {
+        const selectedGoal = document.querySelector(".selected");
+        const selectedGoalId = selectedGoal.dataset.goalId;
+        doughnut.destroy();
+        bar.destroy();
+        renderGoalProgress(selectedGoalId);
       });
     })
     .catch((err) => {
@@ -319,6 +326,5 @@ const InitializePage = async () => {
 //   return container;
 // };
 
-//window.onload = renderGoalProgress();
-getUser()
+getUser();
 window.onload = InitializePage();
