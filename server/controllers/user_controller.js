@@ -99,10 +99,6 @@ const signIn = async (req, res) => {
 
     if (result.error) {
         const status_code = result.status ? result.status : 403;
-        console.log(result.error)
-        result.error = result.error == "Password is wrong" ? "Password is wrong" : "Email doesn't exist"
-
-        
         res.status(status_code).send({error: result.error});
         return;
     }
