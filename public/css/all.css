@@ -17,9 +17,6 @@ a:hover {
 /* button {
     margin: 3px;
 } */
-/* [contenteditable="true"]  :matches(:hover, :focus){
-border: grey slid 1x;
-} */
 
 textarea {
   border: solid grey 1px;

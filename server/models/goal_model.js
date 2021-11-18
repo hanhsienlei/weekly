@@ -29,6 +29,7 @@ const getGoalWithPlan = async (goalId) => {
     g.publish g_publish,
     g.popularity g_popularity,
     g.purpose_id p_id,
+    g.category g_category,
     p.title p_title,
     m.id m_id,
     m.title m_title,
@@ -66,6 +67,7 @@ const getGoalsAndMilestonesByUser = async (userId) => {
     g.group_id g_group_id,
     g.publish g_publish,
     g.purpose_id p_id,
+    g.category g_category,
     m.id m_id,
     m.title m_title,
     m.due_date m_due_date,
@@ -87,7 +89,8 @@ const getGoalsByUser = async (userId) => {
     g.status g_status,
     g.group_id g_group_id,
     g.publish g_publish,
-    g.purpose_id p_id
+    g.purpose_id p_id,
+    g.category g_category
   FROM goal g
   WHERE g.user_id = ? AND g.status > -1
   ORDER BY g.due_date; 

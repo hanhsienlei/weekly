@@ -31,3 +31,6 @@ const getUser = async () => {
       console.log(err);
     });
 };
+const categoryIcons = ["🚀", "💪", "👪", "💰", "💼", "🎨", "🌏", "💖", "🌱"]
+const categoryMaterialIcons = []
+const categoryColors = []

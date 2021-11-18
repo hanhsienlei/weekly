@@ -7,7 +7,7 @@ const renderGoalProgress = async (goal_id) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
+      console.log(data);
       const progressGoalTitle = document.querySelector(".progress-goal-title");
       const progressGoalButton = document.querySelector(
         ".progress-view-goal-button"
@@ -40,10 +40,25 @@ const renderGoalProgress = async (goal_id) => {
         m_number_of_task,
         m_number_of_task_done,
       } = data;
-      const weeksFromNowValue =
+      let weeksFromNowValue =
         g_weeks_from_now > 0 ? g_weeks_from_now : Math.abs(g_weeks_from_now);
-      const weeksFromNowText =
-        g_weeks_from_now > 0 ? ` weeks away` : ` weeks ago`;
+      let weeksFromNowText = "";
+
+      if (g_weeks_from_now > 1) {
+        weeksFromNowText = ` week away`;
+      } else if (g_weeks_from_now == 1) {
+        weeksFromNowValue = "";
+        weeksFromNowText = `Some days ago`;
+      } else if (g_weeks_from_now == 0) {
+        weeksFromNowValue = "";
+        weeksFromNowText = `Today is the big day!`;
+      } else if (g_weeks_from_now == -1) {
+        weeksFromNowValue = "";
+        weeksFromNowText = `Some days away`;
+      } else if (g_weeks_from_now < -1) {
+        weeksFromNowText = ` weeks ago`;
+      }
+
       const GoalEmptyNote = m_titles.length
         ? ""
         : "⚠️ No plans are made for this goal yet. The charts show how they would look like when you start working on your goals.";
@@ -188,7 +203,7 @@ const InitializePage = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
+      console.log(data);
       const goalList = document.querySelector(".goal-list");
       if (data.length) {
         renderGoalProgress(data[0].g_id);

@@ -58,9 +58,7 @@ a:hover {
 .date-value, .week-value, .month-value, .year-value {
   font-size: 1.4rem;
 }
-[contenteditable = "true"] {
-  padding: .4rem; 
-} 
+
 .date-header-container:hover {
 cursor: pointer;
 }

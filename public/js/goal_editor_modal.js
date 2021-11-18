@@ -1,4 +1,4 @@
-// const accessToken = localStorage.getItem("access_token");
+
 const renderGoalEditor = (goalId) => {
   fetch(`/api/goal/plan?goal_id=${goalId}`, {
     headers: {
@@ -14,6 +14,7 @@ const renderGoalEditor = (goalId) => {
         ".editor-delete-goal-button"
       );
       const goalDueDate = modal.querySelector(".goal-due-date");
+      const goalCategory = modal.querySelector(".goal-category-selector");
       const goalDescription = modal.querySelector(".goal-description");
       //const purposeSelector = modal.querySelector(".purpose-selector");
       const goalSaveButton = modal.querySelector(".save-goal-button");
@@ -33,10 +34,11 @@ const renderGoalEditor = (goalId) => {
             goal_due_date_unix: Math.ceil(
               new Date(goalDueDate.value + "T23:59:59")
             ),
+            goal_category: goalCategory.options[goalCategory.selectedIndex].value,
             goal_description: goalDescription.value.trim(),
             //goal_purpose_id: goalPurposeId,
           };
-
+          console.log("dave goal body:", body)
           fetch("/api/goal", {
             method: "POST",
             headers: {
@@ -118,11 +120,16 @@ const renderGoalEditor = (goalId) => {
         `deleteGoalAndChildren(${goalId})`
       );
       goalDueDate.value = data.g_due_date;
+      
       goalDescription.value = data.g_description;
       goalSaveButton.addEventListener("click", saveGoal);
       goalSaveButton.setAttribute("data-bs-toggle", "collapse")
       goalSaveButton.setAttribute("data-bs-target", ".goal-container-row")
-
+      let goalCategoryIndex = data.g_category
+      if(data.g_category>8||data.g_category<0){
+        goalCategoryIndex = 0
+      }
+      goalCategory.options[goalCategoryIndex].selected = true
       newMilestoneButton.addEventListener("click", addNewMilestone);
       modal.addEventListener("hidden.bs.modal", () => {
         modal.querySelector(".milestones-container").innerHTML = "";
@@ -353,7 +360,7 @@ const createMilestoneContainer = (
     "off-focus",
     "mb-3"
   );
-  // milestoneDescription.setAttribute("contenteditable", "true");
+  
   milestoneDescription.value = description;
   milestoneDescription.setAttribute(
     "placeholder",

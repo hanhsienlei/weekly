@@ -115,7 +115,7 @@ const getEventsByDate = async (req, res) => {
             !records.goalIds.includes(row.g_id)
           ) {
             records.goalIds.push(row.g_id);
-            const { g_id, g_title, g_description, g_status } = row;
+            const { g_id, g_title, g_description, g_status, g_category } = row;
             const newGoal = {
               g_id,
               g_title,
@@ -123,6 +123,7 @@ const getEventsByDate = async (req, res) => {
               g_due_date,
               g_status,
               g_parent: [row.p_title],
+              g_category
             };
             data[range].goals.push(newGoal);
             console.log("goal!")
@@ -135,7 +136,7 @@ const getEventsByDate = async (req, res) => {
             !records.milestoneIds.includes(row.m_id)
           ) {
             records.milestoneIds.push(row.m_id);
-            const { m_id, m_title, m_description, m_status, g_id } = row;
+            const { m_id, m_title, m_description, m_status, g_id, g_category } = row;
             const newMilestone = {
               m_id,
               m_title,
@@ -145,6 +146,7 @@ const getEventsByDate = async (req, res) => {
               m_parent: [row.p_title, row.g_title],
               g_id,
               g_due_date,
+              g_category
             };
             data[range].milestones.push(newMilestone);
             console.log("milestone!")
@@ -167,6 +169,7 @@ const getEventsByDate = async (req, res) => {
                 t_origin_id,
                 m_id,
                 g_id,
+                g_category
               } = row;
               const newTask = {
                 t_id,
@@ -183,6 +186,7 @@ const getEventsByDate = async (req, res) => {
                 m_due_date,
                 g_id,
                 g_due_date,
+                g_category
               };
               if(row.t_origin_id){
                 newTask.t_origin_date = t_origin_date
@@ -208,7 +212,7 @@ const getEventsByDate = async (req, res) => {
       const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
       function addNewRepeatingTask() {
-        const { t_id, t_title, t_description, r_frequency, m_id, g_id } = row;
+        const { t_id, t_title, t_description, r_frequency, m_id, g_id, g_category } = row;
         const newTask = {
           t_id: null,
           t_title,
@@ -224,6 +228,7 @@ const getEventsByDate = async (req, res) => {
           m_due_date,
           g_id,
           g_due_date,
+          g_category
         };
 
         data.date.tasks.push(newTask);

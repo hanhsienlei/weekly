@@ -13,9 +13,14 @@ const saveGoal = async (req, res) => {
     due_date: body.goal_due_date,
     due_date_unix: body.goal_due_date_unix,
     purpose_id: body.goal_purpose_id,
+    category:body.goal_category
   };
   if (!goalDetails.purpose_id) {
     delete goalDetails.purpose_id;
+  }
+
+  if (!goalDetails.category) {
+    goalDetails.category = 0
   }
 
   console.log("[savegoal controller] goalDetails: ", goalDetails);
@@ -65,6 +70,7 @@ const getGoalWithPlan = async (req, res) => {
       g_group_id,
       g_popularity,
       g_publish,
+      g_category
     } = result[0];
     const g_due_date = result[0].g_due_date
       ? getDateYMD(result[0].g_due_date)
@@ -79,6 +85,7 @@ const getGoalWithPlan = async (req, res) => {
       g_group_id,
       g_popularity,
       g_publish,
+      g_category,
       milestones: [],
     };
     const milestoneIndexes = {};
@@ -146,7 +153,7 @@ const getGoalProgress = async (req, res) => {
       "goal controller, Goal.getGoalWithPlan(goalId): result: ",
       result
     );
-    const { user_id, g_id, g_title, g_description } = result[0];
+    const { user_id, g_id, g_title, g_description, g_category } = result[0];
     const g_due_date = result[0].g_due_date
       ? getDateYMD(result[0].g_due_date)
       : null;
@@ -162,6 +169,7 @@ const getGoalProgress = async (req, res) => {
       g_title,
       g_description,
       g_due_date,
+      g_category,
       g_weeks_from_now: GoalWeeksFromNow,
       g_summary: { milestone: [], task: [] },
       m_ids: [],

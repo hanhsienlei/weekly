@@ -41,6 +41,7 @@ const getGoalsLife = async (req, res) => {
     const goal = {
       id: row.g_id,
       title: row.g_title,
+      category:row.g_category,
       date: getDateYMD(dateObject),
       year: dateObject.getFullYear(),
       week: getWeekForLife(dateObject),
