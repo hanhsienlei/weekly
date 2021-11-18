@@ -34,24 +34,9 @@ border-radius: 5px;
   border-radius: 3px;
 }
 .event-title {
-  font-size: large;
+  font-size: 1.2rem;
 }
-/* .edit-button {
-  opacity: 0;
-}
-.edit-button :hover {
-  opacity: 100;
-} */
 
-/* .goal-outer-container {
-  background-color: rgb(210, 210, 210);
-}
-.milestone-outer-container {
-   background-color: rgb(241, 241, 241); 
-} 
-.task-outer-container {
-  background-color: rgb(255, 255, 255);
-} */
 a {
   text-decoration: none;
   color: #111111;

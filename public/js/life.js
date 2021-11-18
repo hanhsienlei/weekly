@@ -88,4 +88,19 @@ fetch(`/api/life`, {
 }
 
 getUser()
-  document.onload = renderLife()
+document.onload = renderLife()
+
+const goalLegend = document.querySelector("#goal-legend")
+
+
+document.addEventListener("click", e => {
+  const goalLegendIsOpen = goalLegend.style.visibility === "visible"
+  const main = document.querySelector(".main")
+  if (goalLegendIsOpen) {
+    main.classList.add("move-right")
+  }
+  if (!goalLegendIsOpen || e.target.classList.contains("btn-close")) {
+    main.classList.remove("move-right")
+  }
+
+})

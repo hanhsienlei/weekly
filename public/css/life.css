@@ -8,12 +8,56 @@ h5 {
   color: #FD6E6E;
   font-weight: 300;
 }
+.start-planning-now {
+  color: #FD6E6E;
+  font-weight: 500;
+}
+.start-planning-now:hover {
+  color: #f7ad52;
+  font-weight: 400;
+}
 .main {
   display: flex;
   flex-direction: column; 
   /* justify-content: end; */
   align-items: center;
   margin-bottom: 50px;
+  margin-top:0;
+}
+.show-legend {
+  width : 40px;
+  margin-top: 100px;
+  margin-left: 20px;
+}
+.show-legend:hover {
+ cursor: pointer; 
+}
+.show-legend-dot {
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+}
+#goal-legend {
+  width:300px
+}
+.category-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.legend-dot {
+  height: 10px;
+  width: 10px;
+  border: solid #f1f1f1 1.5px;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+#goal-legend>span {
+  vertical-align: middle;
 }
 
 .one-year {
@@ -30,6 +74,7 @@ h5 {
   margin: 3px 3px;
   box-sizing: content-box;
 }
+
 .one-week:hover {
   transform: scale(1.2);
   cursor:pointer
@@ -55,8 +100,8 @@ h5 {
 
 
 .birthday, .today, .byeday {
-  background-color: #FD6E6E;
-  border: #f5abab solid 1.5px;
+  background-color: #494848;
+  border: #777575 solid 1.5px;
 }
 
 .category-0 {
@@ -94,4 +139,8 @@ h5 {
 .category-8 {
   background-color: #f774bc;
   border: #ffc6e5 solid 1.5px;
+}
+
+.move-right {
+  padding-left:200px;
 }
