@@ -178,6 +178,7 @@ const renderGoalEditor = (goalId) => {
                   milestone.m_due_date,
                   goalId,
                   goalDueDate.value,
+                  0,
                   task.t_origin_id,
                   null
                 );
@@ -479,6 +480,7 @@ const createMilestoneContainer = (
           milestoneDueDate.value,
           goalId,
           goalDueDate.value,
+          0,
           null,
           null
         );

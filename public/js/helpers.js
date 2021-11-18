@@ -32,5 +32,5 @@ const getUser = async () => {
     });
 };
 const categoryIcons = ["🚀", "💪", "👪", "💰", "💼", "🎨", "🌏", "💖", "🌱"]
-const categoryMaterialIcons = []
+const categoryMaterialIcons = ["rocket_launch", "directions_run", "groups", "savings", "business_center", "palette", "sailing", "self_improvement", "volunteer_activism"]
 const categoryColors = []

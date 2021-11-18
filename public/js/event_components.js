@@ -109,6 +109,7 @@ const createEventComponent = (
   milestone_due_date = null,
   goal_id = null,
   goal_due_date = null,
+  goal_category = 0,
   task_origin_id = null,
   task_origin_date = null
 ) => {
@@ -130,6 +131,7 @@ const createEventComponent = (
   const eventTitleContentContainer = document.createElement("div");
   const eventTitle = document.createElement("input");
   const eventParentsContainer = document.createElement("div")
+  const eventGoalCategoryIcon = document.createElement("span");
   const eventParents = document.createElement("span");
   const eventParentsIcon = document.createElement("span");
   const eventEditor = document.createElement("div");
@@ -405,8 +407,10 @@ const createEventComponent = (
       saveEvent()
     }
   });
+  
   eventParentsContainer.classList.add("event-parents-container")
-  eventParents.classList.add("event-parents", "mt-1", "mb-2");
+  eventGoalCategoryIcon.classList.add("material-icons", "align-middle", "event-goal-category-icon")
+  eventParents.classList.add("event-parents", "mt-1", "mb-2", "align-middle",);
   eventParentsIcon.classList.add(
     "material-icons",
     "align-middle",
@@ -421,12 +425,12 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
   eventParentsIcon.setAttribute("data-bs-toggle", "modal");
     eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
     eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-  if (parents != ">>") {
+  if (parents != "．．") {
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-    eventParents.textContent = parents;
-
+    eventParents.textContent = parents.slice(1);
+    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category]
     eventParentsIcon.textContent = "zoom_in";
   }
   if (eventType === "goal") {
@@ -434,7 +438,8 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
-    eventParents.textContent = ">check goal";
+    eventParents.textContent = " check goal";
+    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category]
     eventParentsIcon.textContent = "zoom_in";
   }
 
@@ -572,7 +577,7 @@ saveEvent(relocateEvent)
     eventLabel.after(repeatIcon);
   }
   if(eventParents.textContent){
-eventParentsContainer.append(eventParents,eventParentsIcon)
+eventParentsContainer.append(eventGoalCategoryIcon, eventParents,eventParentsIcon)
   }
   
   eventInfoContainer.append(

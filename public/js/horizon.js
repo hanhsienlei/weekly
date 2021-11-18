@@ -70,13 +70,14 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join(">"),
+              goal.g_parent.join("．"),
               null,
               null,
               null,
               null,
               goal.g_id,
               null,
+              goal.g_category,
               null,
               null
             );
@@ -92,13 +93,14 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join(">"),
+              milestone.m_parent.join("．"),
               null,
               null,
               null,
               null,
               milestone.g_id,
               milestone.g_due_date,
+              milestone.g_category,
               null,
               null
             );
@@ -124,13 +126,14 @@ const renderEvents = async (date) => {
               task.t_status,
               task.t_due_date,
               task.t_description,
-              task.t_parent.join(">"),
+              task.t_parent.join("．"),
               repeated_frequency,
               task.r_end_date,
               task.m_id,
               task.m_due_date,
               task.g_id,
               task.g_due_date,
+              task.g_category,
               task.t_origin_id,
               task.t_origin_date
             );
@@ -149,13 +152,14 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join(">"),
+              goal.g_parent.join("．"),
               null,
               null,
               null,
               null,
               goal.g_id,
               null,
+              goal.g_category,
               null,
               null
             );
@@ -171,13 +175,14 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join(">"),
+              milestone.m_parent.join("．"),
               null,
               null,
               null,
               null,
               milestone.g_id,
               milestone.g_due_date,
+              milestone.g_category,
               null,
               null
             );
@@ -195,13 +200,14 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join(">"),
+                task.t_parent.join("．"),
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
                 task.m_due_date,
                 task.g_id,
                 task.g_due_date,
+                task.g_category,
                 task.t_origin_id,
                 task.t_origin_date
               );
@@ -221,13 +227,14 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join(">"),
+              goal.g_parent.join("．"),
               null,
               null,
               null,
               null,
               goal.g_id,
               null,
+              goal.g_category,
               null,
               null
             );
@@ -243,13 +250,14 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join(">"),
+              milestone.m_parent.join("．"),
               null,
               null,
               null,
               null,
               milestone.g_id,
               milestone.g_due_date,
+              milestone.g_category,
               null,
               null
             );
@@ -267,13 +275,14 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join(">"),
+                task.t_parent.join("．"),
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
                 task.m_due_date,
                 task.g_id,
                 task.g_due_date,
+                task.g_category,
                 task.t_origin_id,
                 task.t_origin_date
               );
@@ -292,13 +301,14 @@ const renderEvents = async (date) => {
               goal.g_status,
               goal.g_due_date,
               goal.g_description,
-              goal.g_parent.join(">"),
+              goal.g_parent.join("．"),
               null,
               null,
               null,
               null,
               goal.g_id,
               null,
+              goal.g_category,
               null,
               null
             );
@@ -314,13 +324,14 @@ const renderEvents = async (date) => {
               milestone.m_status,
               milestone.m_due_date,
               milestone.m_description,
-              milestone.m_parent.join(">"),
+              milestone.m_parent.join("．"),
               null,
               null,
               null,
               null,
               milestone.g_id,
               milestone.g_due_date,
+              milestone.g_category,
               null,
               null
             );
@@ -410,6 +421,7 @@ const addNewEvent = (timeScale, eventType) => {
           null,
           null,
           null,
+          null,
           null
         );
       } else {
@@ -429,7 +441,7 @@ const addNewEvent = (timeScale, eventType) => {
           null,
           eventId,
           dueDate,
-          null,
+          0,
           null,
           null
         );
