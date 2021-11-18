@@ -90,7 +90,6 @@ const signIn = async (req, res) => {
     let result;
     switch (data.provider) {
         case 'native':
-            console.log("data.email, data.password", data.email, data.password)
             result = await nativeSignIn(data.email, data.password);
             break;
         default:
@@ -99,7 +98,9 @@ const signIn = async (req, res) => {
 
     if (result.error) {
         const status_code = result.status ? result.status : 403;
-        res.status(status_code).send({error: result.error});
+        console.log("result.error", result.error)
+        const errorMessage = result.error === 'Wrong Request' ? result.error : "Incorrect email or password"
+        res.status(status_code).send({error: errorMessage});
         return;
     }
 
