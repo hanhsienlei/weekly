@@ -1,4 +1,5 @@
 const Milestone = require("../models/milestone_model");
+const { getInputLength } = require("../../utils/util");
 
 const saveMilestone = async (req, res) => {
   const body = req.body;
@@ -10,7 +11,10 @@ const saveMilestone = async (req, res) => {
     goal_id: body.milestone_goal_id,
   };
   if (!milestoneDetails.goal_id){delete milestoneDetails.goal_id}
-  
+  if (getInputLength(body.milestone_title) > 100) {
+    res.status(400).send({ error: "title too long" });
+    return;
+  }
   console.log("milestoneDetails: ", milestoneDetails);
   if (!body.milestone_id) {
     const milestoneId = await Milestone.createMilestone(milestoneDetails);

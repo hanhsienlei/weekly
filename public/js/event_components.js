@@ -429,7 +429,7 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-    eventParents.textContent = parents.slice(1);
+    eventParents.textContent = parents? parents.slice(1): null;
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category]
     eventParentsIcon.textContent = "zoom_in";
   }

@@ -399,55 +399,63 @@ const addNewEvent = (timeScale, eventType) => {
     .then((response) => response.json())
     .then((data) => {
       console.log("restuls: ", data);
-      const eventContainer = document.querySelector(
-        `.${timeScale}-events-container`
-      );
-      const eventId = data.task_id || data.goal_id;
-
-      if (data.task_id) {
-        //沒有goal button
-        createEventComponent(
-          timeScale,
-          eventType,
-          eventId,
-          title,
-          null,
-          dueDate,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-        );
+      if (data.error) {
+        Swal.fire({
+          icon: "warning",
+          title: data.error,
+          showConfirmButton: false,
+        });
       } else {
-        //有goal button
-        createEventComponent(
-          timeScale,
-          eventType,
-          eventId,
-          title,
-          null,
-          dueDate,
-          null,
-          "goal",
-          null,
-          null,
-          null,
-          null,
-          eventId,
-          dueDate,
-          0,
-          null,
-          null
+        const eventContainer = document.querySelector(
+          `.${timeScale}-events-container`
         );
+        const eventId = data.task_id || data.goal_id;
+
+        if (data.task_id) {
+          //沒有goal button
+          createEventComponent(
+            timeScale,
+            eventType,
+            eventId,
+            title,
+            null,
+            dueDate,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          );
+        } else {
+          //有goal button
+          createEventComponent(
+            timeScale,
+            eventType,
+            eventId,
+            title,
+            null,
+            dueDate,
+            null,
+            "goal",
+            null,
+            null,
+            null,
+            null,
+            eventId,
+            dueDate,
+            0,
+            null,
+            null
+          );
+        }
+        eventContainer.scrollTop = eventContainer.scrollHeight;
+        input.value = "";
       }
-      eventContainer.scrollTop = eventContainer.scrollHeight;
-      input.value = "";
     })
     .catch((err) => {
       console.log(err);

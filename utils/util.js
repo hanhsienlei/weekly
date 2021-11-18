@@ -364,10 +364,15 @@ const validateTaskDueDate = () => {
   };
 };
 
+const getInputLength = (string) => {
+  return string.replace(/[^\x00-\xff]/g,"xx").length;
+}
+
 module.exports = {
   wrapAsync,
   authentication,
   validateGoalDueDate,
   validateMilestoneDueDate,
   validateTaskDueDate,
+  getInputLength
 };

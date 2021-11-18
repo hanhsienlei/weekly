@@ -3,6 +3,7 @@ const {
   getDateYMD,
   getDateObjectFromYMD,
 } = require("../../utils/date_converter");
+const { getInputLength } = require("../../utils/util");
 
 const saveGoal = async (req, res) => {
   const body = req.body;
@@ -21,6 +22,10 @@ const saveGoal = async (req, res) => {
 
   if (!goalDetails.category) {
     goalDetails.category = 0
+  }
+  if (getInputLength(body.goal_title) > 100) {
+    res.status(400).send({ error: "title too long" });
+    return;
   }
 
   console.log("[savegoal controller] goalDetails: ", goalDetails);

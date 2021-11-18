@@ -5,6 +5,8 @@ const {
   getDateObjectFromYMD,
 } = require("../../utils/date_converter");
 
+const { getInputLength } = require("../../utils/util");
+
 const stopRepeatTask = async (req, res) => {
   const queryDate = req.query.task_r_end_date
   const queryDateObject = getDateObjectFromYMD(queryDate)
@@ -33,6 +35,10 @@ const saveNewRepeatedTask = async (req, res) => {
   const originDate = req.body.task_origin_date;
   const originDateUnix = Math.ceil(new Date(originDate + "T23:59:59"));
   const status = req.body.task_status;
+  if (getInputLength(req.body.task_title) > 100) {
+    res.status(400).send({ error: "title too long" });
+    return;
+  }
   const returnedId = await RepeatedTask.saveNewRepeatedTask(
     originId,
     title,

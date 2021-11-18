@@ -2,6 +2,7 @@ require('dotenv').config();
 const validator = require('validator');
 const User = require('../models/user_model');
 const  {getDateYMD, getDateObjectFromYMD} = require("../../utils/date_converter");
+const  {getInputLength} = require("../../utils/util");
 
 const signUp = async (req, res) => {
     let {name} = req.body;
@@ -26,6 +27,11 @@ const signUp = async (req, res) => {
 
     if(!name || !email || !password || !birthday) {
         res.status(400).send({error:'Request Error: name, email, birthday and password are required.'});
+        return;
+    }
+
+    if(getInputLength(name)>45){
+        res.status(400).send({error:'Request Error: Name too long'});
         return;
     }
 

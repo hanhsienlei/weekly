@@ -1,9 +1,11 @@
 const Task = require("../models/task_model");
 const RepeatedTask = require("../models/repeated_task_model");
+const { getInputLength } = require("../../utils/util");
 
 const updateTask = async (req, res) => {
   const body = req.body;
-  console.log("updateTask controller, req.body: ", body)
+  console.log("updateTask controller, req.body: ", body);
+
   const taskDetails = {
     title: body.task_title,
     description: body.task_description,
@@ -18,7 +20,11 @@ const updateTask = async (req, res) => {
     end_date: body.task_r_end_date,
     end_date_unix: body.task_r_end_date_unix,
   };
-
+  console.log(getInputLength(body.task_title))
+  if (getInputLength(body.task_title) > 100) {
+    res.status(400).send({ error: "title too long" });
+    return;
+  }
   if (!taskDetails.milestone_id) {
     delete taskDetails.milestone_id;
   }
@@ -45,14 +51,20 @@ const updateTask = async (req, res) => {
     } else {
       if (body.task_repeat) {
         console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
-        const repeatedRuleResult = await handleRepeatRule(repeatDetails, body.task_id);
-        console.log("repeatedRuleResult: ", repeatedRuleResult)
+        const repeatedRuleResult = await handleRepeatRule(
+          repeatDetails,
+          body.task_id
+        );
+        console.log("repeatedRuleResult: ", repeatedRuleResult);
         const taskContent = {
           title: body.task_title,
-          description: body.task_description
-        }
-        const repeatedTasksResult = await RepeatedTask.updateRepeatedTasks(taskContent, body.task_id)
-        console.log("repeatedTasksResult: ", repeatedTasksResult)
+          description: body.task_description,
+        };
+        const repeatedTasksResult = await RepeatedTask.updateRepeatedTasks(
+          taskContent,
+          body.task_id
+        );
+        console.log("repeatedTasksResult: ", repeatedTasksResult);
       }
       const updateResult = await Task.updateTask(taskDetails, body.task_id);
       res.status(200).send({ message: `Update succeeded (${updateResult})` });
@@ -63,11 +75,11 @@ const updateTask = async (req, res) => {
 const getTask = async (req, res) => {
   const taskId = req.body.task_id;
   if (!taskId) {
-    return res.status(400).send({error: "task id is required."});
+    return res.status(400).send({ error: "task id is required." });
   } else {
     const result = await Task.getTask(Number(taskId));
     if (!result) {
-      return res.status(400).send({error:"Task id doesn't exist."});
+      return res.status(400).send({ error: "Task id doesn't exist." });
     } else {
       return res.status(200).send(result);
     }
@@ -93,9 +105,12 @@ const handleRepeatRule = async (repeatDetails, taskId) => {
 const deleteTask = async (req, res) => {
   const taskId = req.query.task_id;
   if (!taskId) {
-    return res.status(400).send({error:"task id is required."});
+    return res.status(400).send({ error: "task id is required." });
   } else {
-    const result = [await Task.deleteTask(taskId), await RepeatedTask.deleteRepeatedTasks(taskId)]
+    const result = [
+      await Task.deleteTask(taskId),
+      await RepeatedTask.deleteRepeatedTasks(taskId),
+    ];
     return res.status(200).send(result);
   }
 };
@@ -103,5 +118,5 @@ const deleteTask = async (req, res) => {
 module.exports = {
   updateTask,
   getTask,
-  deleteTask
+  deleteTask,
 };
