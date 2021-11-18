@@ -93,7 +93,7 @@ const getGoalsByUser = async (userId) => {
     g.category g_category
   FROM goal g
   WHERE g.user_id = ? AND g.status > -1
-  ORDER BY g.due_date; 
+  ORDER BY g.due_date DESC; 
   `, userId)
   return result
 }
