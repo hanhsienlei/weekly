@@ -31,12 +31,12 @@
             <div>Maybe save the earth too</div>
           </div>
         </div> -->
-        <div class="horizon-container px-3 row justify-content-between">
-          <div class="date-container col-3">
+        <div class="horizon-container px-3 pt-3 row justify-content-evenly">
+          <div class="date-container">
             <div class="date-header-container d-flex justify-content-center mt-1">
               <h4 onclick=renderEventsToday()>TODAY</h4>
             </div>
-            <div class="date-title-container row border-top border-secondary mt-2  pt-2 pb-2">
+            <div class="date-title-container row ">
               <div class="date-before before col-2 text-center btn">&lt;</div>
               <div class="date-value col-8 text-center"></div>
               <div class="date-after after col-2 text-center btn">&gt;</div>
@@ -44,19 +44,19 @@
             <div class="date-sub-title-container row mb-2">
               <div class="date-sub-title text-center"></div>
             </div>
-            <div class="date-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll">
+            <div class="date-events-container events-container row px-2 mb-3 overflow-auto smooth-scroll">
 
             </div>
-            <div class="date-add-new-container row ps-4">
+            <div class="date-add-new-container row ">
               <input type="text" class="date-new-task-title col-10 " placeholder="add new task this day">
               <button class="date-add-new-task btn col-1" onclick="addNewEvent('date', 'task')">+</button>
             </div>
           </div>
-          <div class="week-container col-3">
+          <div class="week-container">
             <div class="week-header-container d-flex justify-content-center mt-1">
               <h4>WEEK</h4>
             </div>
-            <div class="week-title-container row border-top border-secondary mt-2  pt-2 pb-2">
+            <div class="week-title-container row ">
               <div class="week-before before col-2 text-center btn">&lt;</div>
               <div class="week-value col-8 text-center"></div>
               <div class="week-after after col-2 text-center btn">&gt;</div>
@@ -64,19 +64,19 @@
             <div class="week-sub-title-container row mb-2">
               <div class="week-sub-title text-center"></div>
             </div>
-            <div class="week-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll">
+            <div class="week-events-container events-container row px-2 mb-3 overflow-auto smooth-scroll">
             </div>
-            <div class="week-add-new-container row ps-4">
+            <div class="week-add-new-container row">
               <input type="text" class="week-new-task-title  col-10" placeholder="add new task this week">
               <button class="week-add-new-task btn col-1" onclick="addNewEvent('week', 'task')">+</button>
             </div>
 
           </div>
-          <div class="month-container col-3">
+          <div class="month-container">
             <div class="month-header-container d-flex justify-content-center mt-1">
               <h4>MONTH</h4>
             </div>
-            <div class="month-title-container row border-top border-secondary mt-2  pt-2 pb-2">
+            <div class="month-title-container row ">
               <div class="month-before before col-2 text-center btn">&lt;</div>
               <div class="month-value col-8 text-center"></div>
               <div class="month-after after col-2 text-center btn">&gt;</div>
@@ -84,17 +84,17 @@
             <div class="month-sub-title-container row mb-2">
               <div class="month-sub-title text-center"></div>
             </div>
-            <div class="month-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll"></div>
-            <div class="month-add-new-container row ps-4">
+            <div class="month-events-container events-container row px-2 mb-3 overflow-auto smooth-scroll"></div>
+            <div class="month-add-new-container row ">
               <input type="text" class="month-new-task-title  col-10" placeholder="add new task this month">
               <button class="month-add-new-task btn col-1" onclick="addNewEvent('month', 'task')">+</button>
             </div>
           </div>
-          <div class="year-container col-3">
+          <div class="year-container">
             <div class="year-header-container d-flex justify-content-center mt-1">
               <h4>YEAR</h4>
             </div>
-            <div class="year-title-container row border-top border-secondary mt-2  pt-2 pb-2">
+            <div class="year-title-container row ">
               <div class="year-before before col-2 text-center btn">&lt;</div>
               <div class="year-value col-8 text-center"></div>
               <div class="year-after after col-2 text-center btn">&gt;</div>
@@ -102,8 +102,8 @@
             <div class="year-sub-title-container row mb-2">
               <div class="year-sub-title text-center"></div>
             </div>
-            <div class="year-events-container events-container row px-4 mb-3 overflow-auto smooth-scroll"></div>
-            <div class="year-add-new-container row ps-4">
+            <div class="year-events-container events-container row px-2 mb-3 overflow-auto smooth-scroll"></div>
+            <div class="year-add-new-container row ">
               <input type="text" class="year-new-goal-title col-10" placeholder="add new goal for the year">
               <button class="year-add-new-goal btn col-1" onclick="addNewEvent('year', 'goal')">+</button>
             </div>

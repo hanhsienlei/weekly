@@ -24,6 +24,9 @@ h5 {
   margin-bottom: 50px;
   margin-top:0;
 }
+.life-dots{
+  padding-bottom: 50px;
+}
 .show-legend {
   width : 40px;
   margin-top: 100px;
@@ -40,7 +43,8 @@ h5 {
   vertical-align: middle;
 }
 #goal-legend {
-  width:300px
+  width:300px;
+  margin-top:76px;
 }
 .category-row {
   display: flex;

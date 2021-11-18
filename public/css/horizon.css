@@ -5,34 +5,50 @@
 h4, .date-value, .week-value, .month-value, .year-value{
   font-weight: 300;
   color: #474749;
+  margin:8px 0;
 }
 .card-edit {
   height: 1.8em;
   line-height: 100%;
 }
 
-/* .date-container, .week-container, .month-container, .year-container {
-border: solid gainsboro 1px ;
-background-color: gainsboro;
-border-radius: 5px;
-} */
+.date-container, .week-container, .month-container, .year-container {
+  width: 24%;
+/* border: solid gainsboro 1px ; */
+/* background-color: gainsboro; */
+/* border-radius: 5px; */
+}
+
+.events-container {
+  /* max-height: -webkit-calc(100% - 100px); */
+  border-left:solid 1px rgb(236, 236, 236);
+  /* border-right:solid 1px rgb(236, 236, 236); */
+}
+
 .date-add-new-container, .week-add-new-container, .month-add-new-container {
   box-sizing: border-box;
   background-color: #fdf36e;
-  padding: 5px 2px;
-  margin: 5px 10px;
+  padding: 5px 10px;
+  margin: 5px -2px;
   border: solid gainsboro 1ps ;
   border-radius: 3px;
+  width: 100%;
 }
 
 .year-add-new-container {
   box-sizing: border-box;
   background-color: #FD6E6E;
-  padding: 5px 2px;
-  margin: 0 10px;
+  padding: 5px 10px;
+  margin: 5px -2px;
   border: solid gainsboro 1ps ;
   border-radius: 3px;
+  width: 100%;
 }
+
+.date-add-new-task, .week-add-new-task, .month-add-new-task, .year-add-new-goal {
+  margin-left: 8px;
+}
+
 .event-title {
   font-size: 1.2rem;
 }
