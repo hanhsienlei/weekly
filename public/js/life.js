@@ -45,7 +45,7 @@ const renderBaseWeeks = (birthday, today, byeDay) => {
 const renderGoals = (goals) => {
   goals.forEach(goal=>{
     const target = document.querySelector(`[id='${goal.year}-${goal.week}']`)
-    target.classList.add("highlight")
+    target.classList.add("highlight", `category-${goal.category}`)
     target.setAttribute("title", goal.title)
     const link = document.createElement("a")
     link.setAttribute("href", `/review?id=${goal.id}`)

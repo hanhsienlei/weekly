@@ -309,7 +309,7 @@ const createMilestoneContainer = (
     "mb-3"
   );
   milestoneTitle.classList.add("milestone-title", "off-focus");
-  milestoneTitle.setAttribute("type", "text");
+  milestoneTitle.type = "text";
   milestoneTitle.setAttribute("placeholder", `Milestone name`);
   milestoneTitle.value = title;
   milestoneTitle.addEventListener("keyup", (e) => {
@@ -347,7 +347,7 @@ const createMilestoneContainer = (
   //   "px-2"
   // );
   milestoneDueDate.type = "date";
-  milestoneDueDate.classList.add("milestone-due-date", "mb-3");
+  milestoneDueDate.classList.add("milestone-due-date", "form-control", "mb-3");
   milestoneDueDate.setAttribute("max", goalDueDate);
   milestoneDueDate.value = dueDate;
   // milestoneDescriptionContainer.classList.add(
@@ -359,7 +359,8 @@ const createMilestoneContainer = (
     "modal-milestone-description",
     "event-description",
     "off-focus",
-    "mb-3"
+    "mb-3",
+    "form-control"
   );
   
   milestoneDescription.value = description;
@@ -418,7 +419,7 @@ const createMilestoneContainer = (
   );
   addNewTaskContainer.classList.add("modal-add-new-task-container");
   // newTaskInputContainer.classList.add("new-task-input-container", "col");
-  newTaskInput.setAttribute("type", "text");
+  newTaskInput.type = "text";
   newTaskInput.classList.add("modal-new-task-title", "col-10");
   newTaskInput.setAttribute("placeholder", "New task for the milestone");
 

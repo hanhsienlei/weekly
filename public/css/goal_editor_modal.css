@@ -10,7 +10,7 @@
   color: #FD6E6E;
   width:25vw;
 }
-.milestone {
+.milestone, input, select{
   border: solid grey 1px;
 }
 
@@ -97,3 +97,7 @@
 /* .modal .milestone-container {
   min-height: 60vh;
 } */
+
+.form-control {
+  
+}

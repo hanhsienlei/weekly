@@ -1,5 +1,10 @@
 * {
   box-sizing: border-box;
+  
+}
+h4, .date-value, .week-value, .month-value, .year-value{
+  font-weight: 300;
+  color: #474749;
 }
 .card-edit {
   height: 1.8em;

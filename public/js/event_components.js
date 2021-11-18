@@ -373,7 +373,7 @@ const createEventComponent = (
   checkBoxContainer.classList.add("check-box-container", "col-1");
 
   checkBox.classList.add("form-check-input");
-  checkBox.setAttribute("type", "checkbox");
+  checkBox.type = "checkbox";
   if (status) {
     checkBox.setAttribute("checked", "true");
   }
@@ -393,7 +393,7 @@ const createEventComponent = (
     "w-100"
   );
   eventTitle.classList.add("event-title", "off-focus", "w-100", "d-block");
-  eventTitle.setAttribute("type", "text");
+  eventTitle.type = "text";
   eventTitle.setAttribute("placeholder", `${eventType} name`);
   eventTitle.value = title;
   eventTitle.addEventListener("focus", (e) => {
@@ -438,7 +438,7 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
-    eventParents.textContent = " check goal";
+    eventParents.textContent = "check goal";
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category]
     eventParentsIcon.textContent = "zoom_in";
   }
@@ -458,8 +458,8 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     "row",
     "mb-3"
   );
-  eventDueDate.classList.add("event-due-date", `due-date-${eventType}-${id}`);
-  eventDueDate.setAttribute("type", "date");
+  eventDueDate.classList.add("event-due-date", `due-date-${eventType}-${id}`, "form-control");
+  eventDueDate.type = "date";
   eventDueDate.value = dueDate;
   switch (eventType) {
     case "milestone":
@@ -476,12 +476,13 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
   eventDescriptionContainer.classList.add(
     "event-description-container",
     "row",
-    "mb-3"
+    "mb-3"    
   );
   eventDescription.classList.add(
     "event-description",
     `event-description-${eventType}-${id}`,
-    "off-focus"
+    "off-focus",
+    "form-control"
   );
   eventDescription.setAttribute(
     "placeholder",
@@ -633,7 +634,7 @@ const createTaskRepeatSelector = (
     const repeatEndDate = document.createElement("input");
     repeatDescription.classList.add("repeat-description")
     repeatDescription.textContent = "Repeat";
-    selector.classList.add("task-repeat-selector", "form-selector", "mb-1");
+    selector.classList.add("task-repeat-selector","form-control", "form-selector", "mb-1");
     optionNoRepeat.setAttribute("value", 0);
     optionNoRepeat.textContent = "No repeat";
     optionNoRepeat.setAttribute("selected", "true");
@@ -645,8 +646,8 @@ const createTaskRepeatSelector = (
     optionOnceAMonth.textContent = "Once a month";
     repeatEndDateDescription.classList.add("repeat-end-date-description")
     repeatEndDateDescription.textContent = "Until...";
-    repeatEndDate.classList.add("event-due-date", "col");
-    repeatEndDate.setAttribute("type", "date");
+    repeatEndDate.classList.add("event-due-date", "col", "form-control");
+    repeatEndDate.type = "date";
     if (!task_repeat_frequency) {
       repeatEndDate.setAttribute("disabled", "true");
     }

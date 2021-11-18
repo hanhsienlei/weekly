@@ -1,10 +1,12 @@
 
 h3 {
   margin-bottom:20px;
+  font-weight: 300;
 }
 
 h5 {
   color: #FD6E6E;
+  font-weight: 300;
 }
 .main {
   display: flex;
@@ -22,48 +24,74 @@ h5 {
 .one-week {
   height: 8px;
   width: 8px;
-  border: solid rgb(165, 165, 165) 1px;
+  border: solid #f1f1f1 1.5px;
   border-radius: 50%;
-  background-color: rgb(241, 241, 241);
+  background-color: #fdfdfd;
   margin: 3px 3px;
   box-sizing: content-box;
 }
-.one-week :hover {
-  transform: scale(1.5);
+.one-week:hover {
+  transform: scale(1.2);
   cursor:pointer
 }
 
 .week13, .week26, .week39 {
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
 .label-age, .label-year {
   width: 20px;
-  margin: 0 10px;
+  margin: 10px 10px 0;
+  color: #5c5c5c;
+  font-size: 13px;
+  line-height: 100%;
 }
 .past {
-  background-color: rgb(56, 56, 56);
+  background-color: #888787;
 }
 .no-display {
   visibility: hidden;
 }
 
 
-.birthday {
-  background-color: #609ffc;
-  border: #609ffc solid 1px;
-}
-
-.today {
-  background-color: #609ffc;
-  border: #609ffc solid 1px;
-}
-
-.byeday {
-  background-color: #609ffc;
-  border: #609ffc solid 1px;
-}
-.highlight {
+.birthday, .today, .byeday {
   background-color: #FD6E6E;
-  border: #FD6E6E solid 1px;
+  border: #f5abab solid 1.5px;
+}
+
+.category-0 {
+  background-color: #f85757;
+  border: #FFADAD solid 1.5px;
+}
+.category-1 {
+  background-color: #f7ad52;
+  border: #FFD6A5 solid 1.5px;
+}
+.category-2 {
+  background-color: #f2f765;
+  border: #FDFFB6 solid 1.5px;
+}
+.category-3 {
+  background-color: #8df778;
+  border: #CAFFBF solid 1.5px;
+}
+.category-4 {
+  background-color: #63e7f3;
+  border: #9BF6FF solid 1.5px;
+}
+.category-5 {
+  background-color: #6097f7;
+  border: #A0C4FF solid 1.5px;
+}
+.category-6 {
+  background-color: #7865f7;
+  border: #BDB2FF solid 1.5px;
+}
+.category-7 {
+  background-color: #f872f8;
+  border: #FFC6FF solid 1.5px;
+}
+.category-8 {
+  background-color: #f774bc;
+  border: #ffc6e5 solid 1.5px;
 }

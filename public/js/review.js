@@ -169,6 +169,7 @@ const renderGoalProgress = async (goal_id) => {
 
       progressGoalTitle.textContent = g_title;
       progressGoalButton.setAttribute("onclick", `renderGoalEditor(${g_id})`);
+      progressGoalButton.textContent = "🔍  checkout goal"
       progressGoalDueDate.textContent = `🗓 ${g_due_date}`;
       progressWeeksFromNowValue.textContent = "🕰 " + weeksFromNowValue;
       progressWeeksFromNowText.textContent = weeksFromNowText;
