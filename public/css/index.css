@@ -3,7 +3,6 @@
   font-size: 2rem;
 }
 
-
 .oneline-description{
   font-size: 1rem;
   font-weight: 300;
@@ -34,3 +33,17 @@
   color: grey;
   opacity: 1;
 } */
+
+@media(max-width: 768px){
+.main {
+  display:flex;
+  flex-direction:column;
+  flex-wrap: wrap;
+}
+.landing-text, .landing-image {
+  width:90%;
+  justify-content:center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+}
