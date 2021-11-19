@@ -21,25 +21,15 @@
   <%- include("partials/header") %>
     <div class="main">
       <div class="my-3">
-        <!-- <div class="row justify-content-center section purpose">
-          <div class="row section-title border-top border-secondary mt-4 py-2">
-            Purpose
-          </div>
-          <div class="row d-flex section-content overflow-auto smooth-scroll">
-            <div>Save the puppies</div>
-            <div>Be...wait for it... legendary</div>
-            <div>Maybe save the earth too</div>
-          </div>
-        </div> -->
         <div class="horizon-container px-3 pt-3 row justify-content-evenly">
           <div class="date-container">
             <div class="date-header-container d-flex justify-content-center mt-1">
               <h4 onclick=renderEventsToday()>TODAY</h4>
             </div>
-            <div class="date-title-container row ">
-              <div class="date-before before col-2 text-center btn">&lt;</div>
+            <div class="date-title-container row justify-content-between">
+              <p class="date-before before material-icons ">chevron_left</p>
               <div class="date-value col-8 text-center"></div>
-              <div class="date-after after col-2 text-center btn">&gt;</div>
+              <p class="date-after after material-icons ">chevron_right</p>
             </div>
             <div class="date-sub-title-container row mb-2">
               <div class="date-sub-title text-center"></div>
@@ -56,10 +46,10 @@
             <div class="week-header-container d-flex justify-content-center mt-1">
               <h4>WEEK</h4>
             </div>
-            <div class="week-title-container row ">
-              <div class="week-before before col-2 text-center btn">&lt;</div>
+            <div class="week-title-container justify-content-between row">
+              <p class="week-before before material-icons ">chevron_left</p>
               <div class="week-value col-8 text-center"></div>
-              <div class="week-after after col-2 text-center btn">&gt;</div>
+              <p class="week-after after material-icons ">chevron_right</p>
             </div>
             <div class="week-sub-title-container row mb-2">
               <div class="week-sub-title text-center"></div>
@@ -76,10 +66,10 @@
             <div class="month-header-container d-flex justify-content-center mt-1">
               <h4>MONTH</h4>
             </div>
-            <div class="month-title-container row ">
-              <div class="month-before before col-2 text-center btn">&lt;</div>
+            <div class="month-title-container justify-content-between row">
+              <p class="month-before before material-icons ">chevron_left</p>
               <div class="month-value col-8 text-center"></div>
-              <div class="month-after after col-2 text-center btn">&gt;</div>
+              <p class="month-after after material-icons">chevron_right</p>
             </div>
             <div class="month-sub-title-container row mb-2">
               <div class="month-sub-title text-center"></div>
@@ -94,10 +84,10 @@
             <div class="year-header-container d-flex justify-content-center mt-1">
               <h4>YEAR</h4>
             </div>
-            <div class="year-title-container row ">
-              <div class="year-before before col-2 text-center btn">&lt;</div>
+            <div class="year-title-container justify-content-between row">
+              <p class="year-before before material-icons ">chevron_left</p>
               <div class="year-value col-8 text-center"></div>
-              <div class="year-after after col-2 text-center btn">&gt;</div>
+              <p class="year-after after material-icons ">chevron_right</p>
             </div>
             <div class="year-sub-title-container row mb-2">
               <div class="year-sub-title text-center"></div>
