@@ -1,49 +1,47 @@
-.slogan-1, .slogan-2 {
-  margin-top:0;
+.slogan-1,
+.slogan-2 {
+  margin-top: 0;
   font-size: 2rem;
 }
 
-.oneline-description{
+.oneline-description {
   font-size: 1rem;
   font-weight: 300;
   margin-bottom: 1rem;
 }
 
-.start-now-button{
+.start-now-button {
   width: fit-content;
   border-radius: 20px;
-  margin-left:8px;
+  margin-left: 8px;
   padding: 0.5rem 1.5rem;
 }
 
-.start-now-button:hover{
+.start-now-button:hover {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
   opacity: 0.9;
 }
 
-.storysetLink{
+.storysetLink {
   text-align: end;
 }
 
-.storysetLink>a{
+.storysetLink > a {
   opacity: 0.5;
-  font-size:0.7rem;
+  font-size: 0.7rem;
 }
-/* .storysetLink>a:hover{
-  color: grey;
-  opacity: 1;
-} */
 
-@media(max-width: 768px){
-.main {
-  display:flex;
-  flex-direction:column;
-  flex-wrap: wrap;
-}
-.landing-text, .landing-image {
-  width:90%;
-  justify-content:center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
+@media (max-width: 768px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  .landing-text,
+  .landing-image {
+    width: 90%;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 }

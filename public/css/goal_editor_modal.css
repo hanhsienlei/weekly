@@ -3,14 +3,15 @@
 }
 .goal-modal-body {
   min-height: 80vh;
-  /* background-color: rgb(210, 210, 210); */
 }
 .modal-goal-title {
   font-size: 1.6rem;
-  color: #FD6E6E;
-  width:25vw;
+  color: #fd6e6e;
+  width: 25vw;
 }
-.milestone, input, select{
+.milestone,
+input,
+select {
   border: solid grey 1px;
 }
 
@@ -18,14 +19,11 @@
   font-size: large;
 }
 
-/* .edit-button, .btn {
-  height: 1.8em;
-  line-height: 100%;
-} */
+
 .add-milestone-outer-container {
   padding-left: 0;
   padding-right: 0;
-  width:25vw;
+  width: 25vw;
 }
 .add-milestone-container {
   display: flex;
@@ -62,42 +60,42 @@
 
 .modal-milestone-edit-button {
   width: 9%;
-  text-align:center;
+  text-align: center;
 }
 
-.milestone-container .save-milestone-button, .milestone-container .delete-milestone-button, .modal-goal-buttons-container .save-goal-button, .modal-goal-buttons-container .editor-delete-goal-button  {
+.milestone-container .save-milestone-button,
+.milestone-container .delete-milestone-button,
+.modal-goal-buttons-container .save-goal-button,
+.modal-goal-buttons-container .editor-delete-goal-button {
   width: 48%;
   margin-bottom: 0.5rem;
 }
 
-
-
 .modal .milestone-outer-container {
   background-color: rgb(238, 238, 238);
-  margin-right:10px;
+  margin-right: 10px;
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-radius: 3px;
-  width:25vw;
+  width: 25vw;
 }
 
-.milestone-buttons-container, .modal-goal-buttons-container{
+.milestone-buttons-container,
+.modal-goal-buttons-container {
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 
-.goal-container-row>.goal-container {
-  padding-left:1%;
-   padding-right:7.2%;
+.goal-container-row > .goal-container {
+  padding-left: 1%;
+  padding-right: 7.2%;
 }
+
 .modal .milestone-title {
-  margin-left:10px;
+  margin-left: 10px;
   font-size: 1.2rem;
 }
-/* .modal .milestone-container {
-  min-height: 60vh;
-} */
 
 .event-title {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }

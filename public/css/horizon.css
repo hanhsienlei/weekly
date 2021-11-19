@@ -1,51 +1,59 @@
 * {
   box-sizing: border-box;
-  
 }
-h4, .date-value, .week-value, .month-value, .year-value{
+h4,
+.date-value,
+.week-value,
+.month-value,
+.year-value {
   font-weight: 300;
   color: #474749;
-  margin:8px 0;
+  margin: 8px 0;
 }
 .card-edit {
   height: 1.8em;
   line-height: 100%;
 }
 
-.date-container, .week-container, .month-container, .year-container {
+.date-container,
+.week-container,
+.month-container,
+.year-container {
   width: 24%;
-/* border: solid gainsboro 1px ; */
-/* background-color: gainsboro; */
-/* border-radius: 5px; */
 }
 
 .events-container {
   /* max-height: -webkit-calc(100% - 100px); */
-  border-left:solid 1px rgb(236, 236, 236);
-  border-right:solid 1px rgb(236, 236, 236);
+  border-left: solid 1px rgb(236, 236, 236);
+  border-right: solid 1px rgb(236, 236, 236);
 }
 
-.date-add-new-container, .week-add-new-container, .month-add-new-container {
+.date-add-new-container,
+.week-add-new-container,
+.month-add-new-container {
   box-sizing: border-box;
   background-color: #fdf36e;
   padding: 5px 10px;
   margin: 5px -2px;
-  border: solid gainsboro 1ps ;
+  border: solid gainsboro 1ps;
   border-radius: 3px;
   width: 100%;
 }
 
 .year-add-new-container {
   box-sizing: border-box;
-  background-color: #FD6E6E;
+  background-color: #fd6e6e;
   padding: 5px 10px;
   margin: 5px -2px;
-  border: solid gainsboro 1ps ;
+  border: solid gainsboro 1ps;
   border-radius: 3px;
   width: 100%;
 }
 
-.date-add-new-task, .week-add-new-task, .month-add-new-task, .year-add-new-goal {
+.date-add-new-task,
+.week-add-new-task,
+.month-add-new-task,
+.year-add-new-goal {
   margin-left: 8px;
 }
 
@@ -61,29 +69,34 @@ a:hover {
   text-decoration: none;
   color: #111111;
 }
-.date-value, .week-value, .month-value, .year-value {
+.date-value,
+.week-value,
+.month-value,
+.year-value {
   font-size: 1.4rem;
 }
 
 .date-header-container:hover {
-cursor: pointer;
+  cursor: pointer;
 }
 
 .material-icons {
   font-size: 1.2rem;
-  padding:0;
+  padding: 0;
 }
 
-.before, .after {
-  font-size:1.5rem;
-  margin:8px 0;
-  height:30px;
-  width:30px;
-  padding:5px ;
+.before,
+.after {
+  font-size: 1.5rem;
+  margin: 8px 0;
+  height: 30px;
+  width: 30px;
+  padding: 5px;
   text-align: center;
   line-height: 100%;
 }
-.before:hover, .after:hover {
+.before:hover,
+.after:hover {
   background-color: lightgrey;
   border-radius: 50%;
   cursor: pointer;

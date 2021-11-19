@@ -6,23 +6,25 @@ a:hover {
   text-decoration: none;
   color: #111111;
 }
-.start-now-button, .sign-in-button, .sign-up-buton {
+.start-now-button,
+.sign-in-button,
+.sign-up-buton {
   background-color: #fc7777;
-  color:#4c4c4e;
-  border:1px solid #cf6060;
+  color: #4c4c4e;
+  border: 1px solid #cf6060;
 }
 
 .slogan {
-  font-weight:200;
+  font-weight: 200;
 }
 
-.signup-signin-switch>div>a {
- color: #cf6060
+.signup-signin-switch > div > a {
+  color: #cf6060;
 }
 
 .password-not-match {
-  color:rgb(170, 82, 82)
+  color: rgb(170, 82, 82);
 }
 .password-match {
-  color:rgb(82, 170, 82)
+  color: rgb(82, 170, 82);
 }
