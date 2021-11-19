@@ -1,5 +1,6 @@
 const goalList = document.querySelector(".goal-list");
 const renderGoalProgress = async (goal_id) => {
+  console.log("fetch: ", goal_id)
   fetch(`/api/goal/progress?goal_id=${goal_id}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -7,6 +8,15 @@ const renderGoalProgress = async (goal_id) => {
   })
     .then((response) => response.json())
     .then((data) => {
+      if(data.error){
+        Swal.fire({
+          title: "Oops...",
+          text: data.error,
+          icon: "error",
+          showCancelButton: false,
+        });
+        return
+      }
       console.log(data);
       const progressGoalTitle = document.querySelector(".progress-goal-title");
       const progressGoalButton = document.querySelector(
@@ -207,7 +217,10 @@ const InitializePage = async () => {
       console.log(data);
       const goalList = document.querySelector(".goal-list");
       if (data.length) {
-        renderGoalProgress(data[0].g_id);
+        const params = new URLSearchParams(window.location.search)
+        const renderGoalId = params.get("goal_id")? Number(params.get("goal_id")):data[0].g_id
+        console.log("render goal: ", renderGoalId)
+        renderGoalProgress(renderGoalId);
         data.forEach((goal) => {
           const { g_id, g_title } = goal;
           const goalItem = document.createElement("li");
@@ -215,7 +228,7 @@ const InitializePage = async () => {
           goalItem.classList.add("list-group-item", "ps-4");
           goalItem.textContent = g_title;
           goalList.appendChild(goalItem);
-          if (g_id == data[0].g_id) {
+          if (g_id == renderGoalId) {
             goalItem.classList.add("selected");
           }
         });

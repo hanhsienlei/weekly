@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { authentication, wrapAsync, validateGoalDueDate } = require("../../../utils/util");
+const { authentication, wrapAsync, validateGoalDueDate, authorizationGoalProgress } = require("../../../utils/util");
 
 const { saveGoal, getGoal, getGoalWithPlan, getGoalProgress, getGoalsByUser, deleteGoalAndChildren } = require("../../controllers/goal_controller");
 const {
@@ -21,6 +21,6 @@ router
 
 router
   .route("/goal/progress")
-  .get(authentication(USER_ROLE.ALL), wrapAsync(getGoalProgress))
+  .get(authentication(USER_ROLE.ALL),authorizationGoalProgress(), wrapAsync(getGoalProgress))
 
 module.exports = router

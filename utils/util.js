@@ -69,6 +69,22 @@ const authentication = (roleId) => {
   };
 };
 
+const authorizationGoalProgress = () => {
+  return async function (req, res, next) {
+    const goalId = Number(req.query.goal_id);
+    if (goalId) {
+      const userId = Number(req.user.id);
+      const returnedUserId = await getUserByGoal(goalId);
+      if (userId !== returnedUserId.user_id) {
+        res.status(400).send({ error: "This is not your goal!" });
+        return;
+      }else {
+      next()
+    }
+    }
+  };
+};
+
 const validateGoalDueDate = () => {
   return async function (req, res, next) {
     const userBirthday = new Date(req.user.birthday);
@@ -364,6 +380,7 @@ const validateTaskDueDate = () => {
   };
 };
 
+
 const getInputLength = (string) => {
   return string.replace(/[^\x00-\xff]/g,"xx").length;
 }
@@ -371,6 +388,7 @@ const getInputLength = (string) => {
 module.exports = {
   wrapAsync,
   authentication,
+  authorizationGoalProgress,
   validateGoalDueDate,
   validateMilestoneDueDate,
   validateTaskDueDate,
