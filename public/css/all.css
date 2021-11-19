@@ -93,11 +93,11 @@ input.off-focus {
 }
 
 .btn-outline-success {
-  color: #6dfdae;
-  border-color: #6dfdae;
+  color: #47ca82;
+  border-color: #4fb87e;
 }
 .btn-outline-success:hover {
-  background-color: #6dfdae;
+  background-color: #47ca82;
   border-color: #3ef791;
 }
 

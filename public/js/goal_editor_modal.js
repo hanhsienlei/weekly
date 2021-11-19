@@ -407,11 +407,7 @@ const createMilestoneContainer = (
   milestoneDeleteButton.textContent = "Delete";
   milestoneDeleteButton.addEventListener("click", (e) => {
     deleteMilestoneAndChildren(milestoneId);
-    const currentContainer = parent.querySelector(
-      `.milestone-outer-container-${milestoneId}`
-    );
-    console.log(parent, currentContainer);
-    parent.removeChild(currentContainer);
+    
   });
 
   tasksContainer.classList.add(

@@ -1,112 +1,130 @@
 const deleteGoalAndChildren = (goalId) => {
   Swal.fire({
-  title: 'Are you sure?',
-  text: "All the milestones and tasks will be gone too.",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
-  confirmButtonText: 'Yes, delete it!'
-}).then((result) => {
-  if (result.isConfirmed) {
-    const accessToken = localStorage.getItem("access_token");
-  fetch(`/api/goal?goal_id=${goalId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      if (data.error) {
-        //something went wrong
-        Swal.fire({
-          title: "Something went wrong.",
-          text: "Please try again",
-          icon: "error",
-          showCancelButton: false,
-        });
-        return;
-      }
-      if (data.affectedRows > 0) {
-        //all deleted
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          showConfirmButton: false,
-        });
+    title: "Are you sure?",
+    text: "All the milestones and tasks will be gone too.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#fa8181",
+    cancelButtonColor: "#636363",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const accessToken = localStorage.getItem("access_token");
+      fetch(`/api/goal?goal_id=${goalId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.error) {
+            //something went wrong
+            Swal.fire({
+              title: "Something went wrong.",
+              text: "Please try again",
+              icon: "error",
+              showCancelButton: false,
+            });
+            return;
+          }
+          if (data.affectedRows > 0) {
+            //all deleted
+            Swal.fire({
+              icon: "success",
+              title: "Deleted!",
+              showConfirmButton: false,
+            });
 
-        if (window.location.pathname.includes("horizon")) {
-          const currentDate =
-            document.querySelector(".date-value").dataset.dueDate;
-          renderEvents(currentDate);
-        }
-      } else {
-        //nothing changed
-        Swal.fire({
-          icon: "warning",
-          title: "Seems like this goal has already be gone.",
-          showConfirmButton: false,
+            if (window.location.pathname.includes("horizon")) {
+              const currentDate =
+                document.querySelector(".date-value").dataset.dueDate;
+              renderEvents(currentDate);
+            }
+          } else {
+            //nothing changed
+            Swal.fire({
+              icon: "warning",
+              title: "Seems like this goal has already be gone.",
+              showConfirmButton: false,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-})
-
-
-  
+    }
+  });
 };
 
 const deleteMilestoneAndChildren = (milestoneId) => {
-  console.log("delete milestone : ", milestoneId);
-  const accessToken = localStorage.getItem("access_token");
-  fetch(`/api/milestone?milestone_id=${milestoneId}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      if (data.error) {
-        //something went wrong
-        Swal.fire({
-          title: "Something went wrong.",
-          text: "Please try again",
-          icon: "error",
-          showCancelButton: false,
+  Swal.fire({
+    title: "Are you sure?",
+    text: "All the tasks will be gone too.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#fa8181",
+    cancelButtonColor: "#636363",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      console.log("delete milestone : ", milestoneId);
+      const accessToken = localStorage.getItem("access_token");
+      fetch(`/api/milestone?milestone_id=${milestoneId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.error) {
+            //something went wrong
+            Swal.fire({
+              title: "Something went wrong.",
+              text: "Please try again",
+              icon: "error",
+              showCancelButton: false,
+            });
+            return;
+          }
+          if (data.affectedRows > 0) {
+            //all deleted
+            Swal.fire({
+              icon: "success",
+              title: "Deleted!",
+              showConfirmButton: false,
+            });
+            if (window.location.pathname.includes("horizon")) {
+              const currentDate =
+                document.querySelector(".date-value").dataset.dueDate;
+              renderEvents(currentDate);
+            }
+            const goalModal = document.querySelector("#modal-goal");
+            const parent = goalModal.querySelector(".milestones-container");
+            const currentContainer = goalModal.querySelector(
+              `.milestone-outer-container-${milestoneId}`
+            );
+            console.log(parent, currentContainer);
+            if (currentContainer) {
+              parent.removeChild(currentContainer);
+            }
+          } else {
+            //nothing changed
+            Swal.fire({
+              icon: "warning",
+              title: "Seems like this milestone has already be gone.",
+              showConfirmButton: false,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        return;
-      }
-      if (data.affectedRows > 0) {
-        //all deleted
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          showConfirmButton: false,
-        });
-        if (window.location.pathname.includes("horizon")) {
-          const currentDate =
-            document.querySelector(".date-value").dataset.dueDate;
-          renderEvents(currentDate);
-        }
-      } else {
-        //nothing changed
-        Swal.fire({
-          icon: "warning",
-          title: "Seems like this milestone has already be gone.",
-          showConfirmButton: false,
-        });
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    }
+  });
 };
 
 const createEventComponent = (
@@ -145,7 +163,7 @@ const createEventComponent = (
   const checkBox = document.createElement("input");
   const eventTitleContentContainer = document.createElement("div");
   const eventTitle = document.createElement("input");
-  const eventParentsContainer = document.createElement("div")
+  const eventParentsContainer = document.createElement("div");
   const eventGoalCategoryIcon = document.createElement("span");
   const eventParents = document.createElement("span");
   const eventParentsIcon = document.createElement("span");
@@ -204,142 +222,142 @@ const createEventComponent = (
     eventType === "milestone" ? createDeleteMilestoneButton(id, goal_id) : null;
 
   const saveEvent = (relocateEvent) => {
-    if(!eventTitle.value.trim()){
+    if (!eventTitle.value.trim()) {
       Swal.fire({
-          title: `${eventType} title cannot be empty`,
-          icon: "warning",
-          showCancelButton: false,
-        }).then(()=>{
-          eventTitle.value = title
-        })
+        title: `${eventType} title cannot be empty`,
+        icon: "warning",
+        showCancelButton: false,
+      }).then(() => {
+        eventTitle.value = title;
+      });
     } else {
-    const body = {};
-    body[`${eventType}_id`] = id;
-    body[`${eventType}_title`] = eventTitle.value.trim();
-    body[`${eventType}_description`] = eventDescription.value;
-    body[`${eventType}_status`] = checkBox.hasAttribute("checked") ? 1 : 0;
-    body[`${eventType}_due_date`] = eventDueDate.value;
-    body[`${eventType}_due_date_unix`] = Math.ceil(
-      new Date(eventDueDate.value + "T23:59:59")
-    );
-    body.task_origin_id = task_origin_id;
-    body.task_origin_date = task_origin_date;
+      const body = {};
+      body[`${eventType}_id`] = id;
+      body[`${eventType}_title`] = eventTitle.value.trim();
+      body[`${eventType}_description`] = eventDescription.value;
+      body[`${eventType}_status`] = checkBox.hasAttribute("checked") ? 1 : 0;
+      body[`${eventType}_due_date`] = eventDueDate.value;
+      body[`${eventType}_due_date_unix`] = Math.ceil(
+        new Date(eventDueDate.value + "T23:59:59")
+      );
+      body.task_origin_id = task_origin_id;
+      body.task_origin_date = task_origin_date;
 
-    if (taskRepeatSelector) {
-      const task_r_frequency =
-        taskRepeatSelector.options[taskRepeatSelector.selectedIndex].value;
-      const task_repeat = task_r_frequency != 0 ? 1 : 0;
-      const task_r_end_date = taskRepeatEndDate.value;
-      body.task_repeat = task_repeat;
-      body.task_r_frequency = task_r_frequency;
-      body.task_r_end_date = task_r_end_date;
-      //task due date > repeat end date的話，error
-      console.log(body);
-      if (!task_r_end_date) {
-      } else if (task_repeat && task_r_end_date < eventDueDate.value) {
-        Swal.fire({
-          title: "Invalid repeat rule",
-          text: "Repeat end date should be later than starting date. ",
-          icon: "error",
-          showCancelButton: false,
-        });
-        return;
-      }
-    }
-
-    console.log("body: ", body);
-
-    let apiEndpoint = "";
-    if (!id && task_origin_id) {
-      apiEndpoint = `/api/repeated-task/new`;
-    } else if (task_origin_id) {
-      apiEndpoint = `/api/repeated-task/saved`;
-    } else {
-      apiEndpoint = `/api/${eventType}`;
-    }
-    console.log("body: ", body);
-    console.log("apiEndpoint: ", apiEndpoint);
-    fetch(apiEndpoint, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("return from save: ", data);
-        if (data.error) {
+      if (taskRepeatSelector) {
+        const task_r_frequency =
+          taskRepeatSelector.options[taskRepeatSelector.selectedIndex].value;
+        const task_repeat = task_r_frequency != 0 ? 1 : 0;
+        const task_r_end_date = taskRepeatEndDate.value;
+        body.task_repeat = task_repeat;
+        body.task_r_frequency = task_r_frequency;
+        body.task_r_end_date = task_r_end_date;
+        //task due date > repeat end date的話，error
+        console.log(body);
+        if (!task_r_end_date) {
+        } else if (task_repeat && task_r_end_date < eventDueDate.value) {
           Swal.fire({
+            title: "Invalid repeat rule",
+            text: "Repeat end date should be later than starting date. ",
             icon: "error",
-            title: "Oops...",
-            text: data.error,
+            showCancelButton: false,
           });
           return;
         }
-        const alertText = task_origin_id
-          ? "Update successfully. The rest of the repeating tasks remain the same."
-          : "Update successfully";
-        Swal.fire({
-          icon: "success",
-          title: "All good!",
-          text: alertText,
-          showConfirmButton: false,
-        });
-        if (window.location.pathname.includes("horizon")) {
-          const currentDate =
-            document.querySelector(".date-value").dataset.dueDate;
-          renderEvents(currentDate);
-        }
-
-        const newEventDueDate = new Date(eventDueDate.value);
-        if (!window.location.pathname.includes("horizon") || !relocateEvent) {
-          return;
-        } else {
-          const eventContainers =
-            document.querySelectorAll(".events-container");
-          const containerDueDates = [];
-          eventContainers.forEach((c) =>
-            containerDueDates.push(c.dataset.dueDate)
-          );
-          console.log(newEventDueDate, containerDueDates);
-
-          const relocateEvent = (index) => {
-            if (parentContainer === eventContainers[index]) return;
-            parentContainer.removeChild(eventOuterContainer);
-            eventContainers[index].appendChild(eventOuterContainer);
-            parentContainer = eventContainers[index];
-          };
-          if (eventDueDate.value === containerDueDates[0]) {
-            relocateEvent(0);
-          } else if (
-            newEventDueDate > new Date(containerDueDates[0]) &&
-            newEventDueDate <= new Date(containerDueDates[1])
-          ) {
-            relocateEvent(1);
-          } else if (
-            newEventDueDate > new Date(containerDueDates[0]) &&
-            newEventDueDate <= new Date(containerDueDates[2])
-          ) {
-            relocateEvent(2);
-          } else if (
-            newEventDueDate > new Date(containerDueDates[0]) &&
-            newEventDueDate <= new Date(containerDueDates[3])
-          ) {
-            relocateEvent(3);
-          } else if (
-            newEventDueDate < new Date(containerDueDates[0]) ||
-            newEventDueDate > new Date(containerDueDates[3])
-          ) {
-            parentContainer.removeChild(eventOuterContainer);
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
       }
+
+      console.log("body: ", body);
+
+      let apiEndpoint = "";
+      if (!id && task_origin_id) {
+        apiEndpoint = `/api/repeated-task/new`;
+      } else if (task_origin_id) {
+        apiEndpoint = `/api/repeated-task/saved`;
+      } else {
+        apiEndpoint = `/api/${eventType}`;
+      }
+      console.log("body: ", body);
+      console.log("apiEndpoint: ", apiEndpoint);
+      fetch(apiEndpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("return from save: ", data);
+          if (data.error) {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: data.error,
+            });
+            return;
+          }
+          const alertText = task_origin_id
+            ? "Update successfully. The rest of the repeating tasks remain the same."
+            : "Update successfully";
+          Swal.fire({
+            icon: "success",
+            title: "All good!",
+            text: alertText,
+            showConfirmButton: false,
+          });
+          if (window.location.pathname.includes("horizon")) {
+            const currentDate =
+              document.querySelector(".date-value").dataset.dueDate;
+            renderEvents(currentDate);
+          }
+
+          const newEventDueDate = new Date(eventDueDate.value);
+          if (!window.location.pathname.includes("horizon") || !relocateEvent) {
+            return;
+          } else {
+            const eventContainers =
+              document.querySelectorAll(".events-container");
+            const containerDueDates = [];
+            eventContainers.forEach((c) =>
+              containerDueDates.push(c.dataset.dueDate)
+            );
+            console.log(newEventDueDate, containerDueDates);
+
+            const relocateEvent = (index) => {
+              if (parentContainer === eventContainers[index]) return;
+              parentContainer.removeChild(eventOuterContainer);
+              eventContainers[index].appendChild(eventOuterContainer);
+              parentContainer = eventContainers[index];
+            };
+            if (eventDueDate.value === containerDueDates[0]) {
+              relocateEvent(0);
+            } else if (
+              newEventDueDate > new Date(containerDueDates[0]) &&
+              newEventDueDate <= new Date(containerDueDates[1])
+            ) {
+              relocateEvent(1);
+            } else if (
+              newEventDueDate > new Date(containerDueDates[0]) &&
+              newEventDueDate <= new Date(containerDueDates[2])
+            ) {
+              relocateEvent(2);
+            } else if (
+              newEventDueDate > new Date(containerDueDates[0]) &&
+              newEventDueDate <= new Date(containerDueDates[3])
+            ) {
+              relocateEvent(3);
+            } else if (
+              newEventDueDate < new Date(containerDueDates[0]) ||
+              newEventDueDate > new Date(containerDueDates[3])
+            ) {
+              parentContainer.removeChild(eventOuterContainer);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   eventOuterContainer.classList.add(
@@ -378,11 +396,8 @@ const createEventComponent = (
   eventLabel.textContent = eventType;
   editButton.classList.add("edit-button", "material-icons", "align-middle");
   editButton.setAttribute("data-bs-toggle", "tooltip");
-    editButton.setAttribute("data-bs-placement", "top");
-    editButton.setAttribute(
-      "title",
-      `Edit`
-    );
+  editButton.setAttribute("data-bs-placement", "top");
+  editButton.setAttribute("title", `Edit`);
   editButton.setAttribute("data-bs-toggle", "collapse");
   editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
   //editButton.setAttribute("style", "opacity: 0");
@@ -402,7 +417,7 @@ const createEventComponent = (
     } else {
       checkBox.setAttribute("checked", "true");
     }
-    const relocateEvent = timeScale.includes("milestone")? 0: 1
+    const relocateEvent = timeScale.includes("milestone") ? 0 : 1;
 
     saveEvent(relocateEvent);
   });
@@ -422,33 +437,34 @@ const createEventComponent = (
   });
   eventTitle.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
-      saveEvent()
+      saveEvent();
     }
   });
-  
-  eventParentsContainer.classList.add("event-parents-container")
-  eventGoalCategoryIcon.classList.add("material-icons", "align-middle", "event-goal-category-icon")
-  eventParents.classList.add("event-parents", "mt-1", "mb-2", "align-middle",);
+
+  eventParentsContainer.classList.add("event-parents-container");
+  eventGoalCategoryIcon.classList.add(
+    "material-icons",
+    "align-middle",
+    "event-goal-category-icon"
+  );
+  eventParents.classList.add("event-parents", "mt-1", "mb-2", "align-middle");
   eventParentsIcon.classList.add(
     "material-icons",
     "align-middle",
     "event-parents-icon"
   );
-eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
-    eventParentsIcon.setAttribute("data-bs-placement", "top");
-    eventParentsIcon.setAttribute(
-      "title",
-      "Checkout goal"
-    );
+  eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
+  eventParentsIcon.setAttribute("data-bs-placement", "top");
+  eventParentsIcon.setAttribute("title", "Checkout goal");
   eventParentsIcon.setAttribute("data-bs-toggle", "modal");
-    eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
-    eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
+  eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
+  eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
   if (parents != "．．") {
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-    eventParents.textContent = parents? parents.slice(1): null;
-    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category]
+    eventParents.textContent = parents ? parents.slice(1) : null;
+    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
     eventParentsIcon.textContent = "zoom_in";
   }
   if (eventType === "goal") {
@@ -457,7 +473,7 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
     eventParents.textContent = "check goal";
-    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category]
+    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
     eventParentsIcon.textContent = "zoom_in";
   }
 
@@ -476,8 +492,12 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     "row",
     "mb-3"
   );
-  eventDueDateLabel.textContent=`${eventType} due date`
-  eventDueDate.classList.add("event-due-date", `due-date-${eventType}-${id}`, "form-control");
+  eventDueDateLabel.textContent = `${eventType} due date`;
+  eventDueDate.classList.add(
+    "event-due-date",
+    `due-date-${eventType}-${id}`,
+    "form-control"
+  );
   eventDueDate.type = "date";
   eventDueDate.value = dueDate;
   switch (eventType) {
@@ -495,9 +515,9 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
   eventDescriptionContainer.classList.add(
     "event-description-container",
     "row",
-    "mb-3"    
+    "mb-3"
   );
-  eventDescriptionLabel.textContent=`${eventType} description`
+  eventDescriptionLabel.textContent = `${eventType} description`;
   eventDescription.classList.add(
     "event-description",
     `event-description-${eventType}-${id}`,
@@ -539,15 +559,15 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
   eventSaveButton.setAttribute("data-bs-toggle", "collapse");
 
   eventSaveButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
-  const saveAndRelocateEvent =()=> {
-const relocateEvent = timeScale.includes("milestone")? 0: 1
-saveEvent(relocateEvent)
-  }
-  
+  const saveAndRelocateEvent = () => {
+    const relocateEvent = timeScale.includes("milestone") ? 0 : 1;
+    saveEvent(relocateEvent);
+  };
+
   eventSaveButton.addEventListener("click", saveAndRelocateEvent);
 
   eventFooterContainer.append(eventSaveButton);
-  
+
   if (eventType === "task") {
     eventFooterContainer.append(taskDeleteButton);
   }
@@ -591,16 +611,17 @@ saveEvent(relocateEvent)
     repeatIcon.textContent = "event_repeat";
     repeatIcon.setAttribute("data-bs-toggle", "tooltip");
     repeatIcon.setAttribute("data-bs-placement", "top");
-    repeatIcon.setAttribute(
-      "title",
-      "Reoccurring task"
-    );
+    repeatIcon.setAttribute("title", "Reoccurring task");
     eventLabel.after(repeatIcon);
   }
-  if(eventParents.textContent){
-eventParentsContainer.append(eventGoalCategoryIcon, eventParents,eventParentsIcon)
+  if (eventParents.textContent) {
+    eventParentsContainer.append(
+      eventGoalCategoryIcon,
+      eventParents,
+      eventParentsIcon
+    );
   }
-  
+
   eventInfoContainer.append(
     eventLabelContainer,
     eventTitleContainer,
@@ -652,9 +673,14 @@ const createTaskRepeatSelector = (
     const optionOnceAMonth = document.createElement("option");
     const repeatEndDateDescription = document.createElement("span");
     const repeatEndDate = document.createElement("input");
-    repeatDescription.classList.add("repeat-description")
+    repeatDescription.classList.add("repeat-description");
     repeatDescription.textContent = "Repeat";
-    selector.classList.add("task-repeat-selector","form-control", "form-selector", "mb-1");
+    selector.classList.add(
+      "task-repeat-selector",
+      "form-control",
+      "form-selector",
+      "mb-1"
+    );
     optionNoRepeat.setAttribute("value", 0);
     optionNoRepeat.textContent = "No repeat";
     optionNoRepeat.setAttribute("selected", "true");
@@ -664,7 +690,7 @@ const createTaskRepeatSelector = (
     optionOnceAWeek.textContent = "Once a week";
     optionOnceAMonth.setAttribute("value", 30);
     optionOnceAMonth.textContent = "Once a month";
-    repeatEndDateDescription.classList.add("repeat-end-date-description")
+    repeatEndDateDescription.classList.add("repeat-end-date-description");
     repeatEndDateDescription.textContent = "Until...";
     repeatEndDate.classList.add("event-due-date", "col", "form-control");
     repeatEndDate.type = "date";
@@ -705,7 +731,12 @@ const createTaskRepeatSelector = (
       optionOnceAMonth
     );
 
-    container.append(repeatDescription, selector, repeatEndDateDescription, repeatEndDate);
+    container.append(
+      repeatDescription,
+      selector,
+      repeatEndDateDescription,
+      repeatEndDate
+    );
   }
 
   return container;
@@ -746,8 +777,8 @@ const createDeleteTaskButton = (
       text: `"${title}" will be gone for good.`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      confirmButtonColor: "#fa8181",
+      cancelButtonColor: "#636363",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {

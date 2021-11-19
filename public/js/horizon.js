@@ -477,30 +477,32 @@ const createViewGoalButton = (goal_id) => {
 const createDeleteGoalButton = (goalId) => {
   const button = document.createElement("button");
   button.setAttribute("type", "button");
-  button.setAttribute("data-bs-toggle", "modal");
-  button.setAttribute("data-bs-target", "#deleteGoalModal");
+  // button.setAttribute("data-bs-toggle", "modal");
+  // button.setAttribute("data-bs-target", "#deleteGoalModal");
   button.classList.add("btn", "btn-outline-danger", "col-6");
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
-    const deleteGoalModal = document.querySelector("#deleteGoalModal");
-    const modalFooter = deleteGoalModal.querySelector(".modal-footer");
-    const deleteGoalButton = deleteGoalModal.querySelector(
-      ".delete-goal-button"
-    );
-    deleteGoalButton.setAttribute(
-      "onclick",
-      `deleteGoalAndChildren(${goalId})`
-    );
-    const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
-    console.log("oldViewGoalButton: ", oldViewGoalButton);
-    if (oldViewGoalButton) {
-      oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
-    } else {
-      const viewGoalButton = createViewGoalButton(goalId);
-      viewGoalButton.setAttribute("data-bs-dismiss", "modal");
-      modalFooter.appendChild(viewGoalButton);
-    }
+    deleteGoalAndChildren(goalId)
+
+    // const deleteGoalModal = document.querySelector("#deleteGoalModal");
+    // const modalFooter = deleteGoalModal.querySelector(".modal-footer");
+    // const deleteGoalButton = deleteGoalModal.querySelector(
+    //   ".delete-goal-button"
+    // );
+    // deleteGoalButton.setAttribute(
+    //   "onclick",
+    //   `deleteGoalAndChildren(${goalId})`
+    // );
+    // const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
+    // console.log("oldViewGoalButton: ", oldViewGoalButton);
+    // if (oldViewGoalButton) {
+    //   oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
+    // } else {
+    //   const viewGoalButton = createViewGoalButton(goalId);
+    //   viewGoalButton.setAttribute("data-bs-dismiss", "modal");
+    //   modalFooter.appendChild(viewGoalButton);
+    // }
   });
 
   return button;
@@ -509,32 +511,33 @@ const createDeleteGoalButton = (goalId) => {
 const createDeleteMilestoneButton = (milestoneId, goalId) => {
   const button = document.createElement("button");
   button.setAttribute("type", "button");
-  button.setAttribute("data-bs-toggle", "modal");
-  button.setAttribute("data-bs-target", "#deleteMilestoneModal");
+  // button.setAttribute("data-bs-toggle", "modal");
+  // button.setAttribute("data-bs-target", "#deleteMilestoneModal");
   button.classList.add("btn", "btn-outline-danger", "col-6");
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
-    const deleteMilestoneModal = document.querySelector(
-      "#deleteMilestoneModal"
-    );
-    const modalFooter = deleteMilestoneModal.querySelector(".modal-footer");
-    const deleteMilestoneButton = deleteMilestoneModal.querySelector(
-      ".delete-milestone-button"
-    );
-    deleteMilestoneButton.setAttribute(
-      "onclick",
-      `deleteMilestoneAndChildren(${milestoneId})`
-    );
-    const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
-    console.log("oldViewGoalButton: ", oldViewGoalButton);
-    if (oldViewGoalButton) {
-      oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
-    } else {
-      const viewGoalButton = createViewGoalButton(goalId);
-      viewGoalButton.setAttribute("data-bs-dismiss", "modal");
-      modalFooter.appendChild(viewGoalButton);
-    }
+    deleteMilestoneAndChildren(milestoneId)
+    // const deleteMilestoneModal = document.querySelector(
+    //   "#deleteMilestoneModal"
+    // );
+    // const modalFooter = deleteMilestoneModal.querySelector(".modal-footer");
+    // const deleteMilestoneButton = deleteMilestoneModal.querySelector(
+    //   ".delete-milestone-button"
+    // );
+    // deleteMilestoneButton.setAttribute(
+    //   "onclick",
+    //   `deleteMilestoneAndChildren(${milestoneId})`
+    // );
+    // const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
+    // console.log("oldViewGoalButton: ", oldViewGoalButton);
+    // if (oldViewGoalButton) {
+    //   oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
+    // } else {
+    //   const viewGoalButton = createViewGoalButton(goalId);
+    //   viewGoalButton.setAttribute("data-bs-dismiss", "modal");
+    //   modalFooter.appendChild(viewGoalButton);
+    // }
   });
   return button;
 };
