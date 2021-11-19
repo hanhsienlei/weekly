@@ -62,6 +62,7 @@ const renderGoalEditor = (goalId) => {
                 icon: "success",
                 title: "All good!",
                 text: "Update successfully",
+                showConfirmButton: false,
               });
             })
             .catch((err) => {
@@ -270,6 +271,7 @@ const createMilestoneContainer = (
             icon: "success",
             title: "All good!",
             text: "Update successfully",
+            showConfirmButton: false,
           });
           }
         })

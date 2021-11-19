@@ -2,7 +2,8 @@ const accessToken = localStorage.getItem("access_token");
 const currentPath = window.location.pathname;
 const isSignupSignup = currentPath === "/signin" || currentPath === "/signup";
 const getUser = async () => {
-  fetch(`/api/user/profile`, {
+  if(!accessToken) return
+   fetch(`/api/user/profile`, {
     headers: new Headers({
       Authorization: `Bearer ${accessToken}`,
     }),
@@ -25,6 +26,8 @@ const getUser = async () => {
           window.location.pathname = "/life";
           return;
         });
+      } else{
+        return
       }
     })
     .catch((err) => {

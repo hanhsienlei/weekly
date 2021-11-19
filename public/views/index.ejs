@@ -8,33 +8,61 @@
   <!-- <link rel="stylesheet" href="../css/reset.css"> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="../css/all.css">
-    <link rel="stylesheet" href="../css/signin_signup.css">
-    <link rel="icon" href="../img/logo_icon_coral.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/all.css" />
+  <link rel="stylesheet" href="../css/signin_signup.css" />
+  <link rel="stylesheet" href="../css/index.css" />
+  <link rel="icon" href="../img/logo_icon_coral.png" />
   <title>Weekly</title>
 </head>
 
 <body>
-  <div class="container border p-3" style="max-width: 400px;  margin-top:20vh">
-    <%- include("partials/signin_signup_header") %>
-      <div class="slogan row g-3 mb-3 ps-2 border-bottom pb-4">
-        <span style="font-size: 2rem;" class="mb-3 ">Life is short <br> Make every week count </span>
-        <div class="col-12">
-          <a class="start-now-button btn w-100" href="/signup" role="button">Start now</a>
-        </div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/"><img src="../img/logo_weekly_icon_left.png" alt="weekly logo"
+          style="height: 50px" /></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <a class="nav-link" href="/signin">Sign in</a>
+      </div> -->
+    </div>
+  </nav>
+  <div class="main row justify-content-center align-items-center pt-3">
+
+
+    <div class="col-5">
+      <div class="slogan-container row g-3 mb-3 ps-2 border-bottom pb-4">
+        <span class="slogan-1">Life is short,</span>
+        <span class="slogan-2">Make every week count.</span>
+        <span class="oneline-description">A life-goal planner that helps you fulfill your dreams. </span>
+        <a class="start-now-button btn" href="/signup" role="button">START NOW</a>
       </div>
       <div class="row ps-2 signup-signin-switch">
-        <div class="col-auto"><span class="pe-3">Already have an account?</span><a href="/signin">Sign in here</a></div>
-        
+        <div class="col-auto">
+          <span class="pe-3">Already have an account?</span><a href="/signin">Sign in here</a>
+        </div>
       </div>
+    </div>
+    <div class="col-5">
+      <img src="../img/feature-image.svg" alt="feature image" />
+      <!-- feature image Contribution -->
+      <div class="col-12 storysetLink">
+        <a href="https://storyset.com/sport">Sport illustrations by Storyset</a>
+      </div>
+    </div>
   </div>
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="../js/helpers.js">getUser()</script>
-
-  </body>
+  <script src="../js/helpers.js">
+    getUser()
+  </script>
+</body>
 
 </html>

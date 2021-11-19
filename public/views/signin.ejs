@@ -19,7 +19,20 @@
   </head>
 
   <body>
-    <div class="container" style="max-width: 400px;  margin-top:10vh">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img src="../img/logo_weekly_icon_left.png" alt="weekly logo"
+            style="height:50px"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <a class="nav-link" href="/signin">Sign in</a>
+          </div> -->
+      </div>
+    </nav>
+    <div class="container" style="max-width: 400px;  margin-top:15vh">
       <%- include("partials/signin_signup_header") %>
       <form class="row g-3 mb-3 border-bottom pb-3">
         <div class="email-cotnainer col-12">

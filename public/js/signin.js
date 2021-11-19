@@ -1,7 +1,8 @@
-const submitButton = document.querySelector("button");
+const submitButton = document.querySelector(".sign-in-button");
 
 submitButton.addEventListener("click", (e) => {
   e.preventDefault();
+  console.log("sign in go")
   const email = document.querySelector("#email");
   const password = document.querySelector("#password");
   const body = {

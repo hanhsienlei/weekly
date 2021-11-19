@@ -74,9 +74,10 @@ h5 {
   width: 8px;
   border: solid #f1f1f1 1.5px;
   border-radius: 50%;
-  background-color: #fdfdfd;
+  background-color: #888787;
   margin: 3px 3px;
   box-sizing: content-box;
+  opacity: 0.4;
 }
 
 .one-week:hover {
@@ -97,16 +98,14 @@ h5 {
 }
 .past {
   background-color: #888787;
+  opacity: 1;
 }
 .no-display {
   visibility: hidden;
 }
 
 
-.birthday, .today, .byeday {
-  background-color: #494848;
-  border: #777575 solid 1.5px;
-}
+
 
 .category-0 {
   background-color: #f85757;
@@ -147,4 +146,8 @@ h5 {
 
 .move-right {
   padding-left:200px;
+}
+.birthday, .today, .byeday {
+  border: #3b3939 solid 1.5px;
+  opacity: 0.8;
 }

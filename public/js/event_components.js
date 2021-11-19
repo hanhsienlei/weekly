@@ -1,5 +1,15 @@
 const deleteGoalAndChildren = (goalId) => {
-  const accessToken = localStorage.getItem("access_token");
+  Swal.fire({
+  title: 'Are you sure?',
+  text: "All the milestones and tasks will be gone too.",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+  if (result.isConfirmed) {
+    const accessToken = localStorage.getItem("access_token");
   fetch(`/api/goal?goal_id=${goalId}`, {
     method: "DELETE",
     headers: {
@@ -44,6 +54,11 @@ const deleteGoalAndChildren = (goalId) => {
     .catch((err) => {
       console.log(err);
     });
+  }
+})
+
+
+  
 };
 
 const deleteMilestoneAndChildren = (milestoneId) => {
@@ -268,6 +283,7 @@ const createEventComponent = (
           icon: "success",
           title: "All good!",
           text: alertText,
+          showConfirmButton: false,
         });
         if (window.location.pathname.includes("horizon")) {
           const currentDate =

@@ -1,4 +1,4 @@
-const submitButton = document.querySelector("button");
+const submitButton = document.querySelector(".sign-up-button");
 const confirmPassword = document.querySelector("#confirm-password")
 confirmPassword.addEventListener("input", e=>{
   const password = document.querySelector("#password")

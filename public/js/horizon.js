@@ -574,6 +574,7 @@ const createStopTodayButton = (
           icon: "success",
           title: "All good",
           text: "this task will no longer repeat. Other older or edited tasks from this series remain the same.",
+          showConfirmButton: false,
         });
         //parentContainer.removeChild(eventOuterContainer);
         const currentDate =
