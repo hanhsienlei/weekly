@@ -81,8 +81,10 @@ h5 {
 }
 
 .one-week:hover {
-  transform: scale(1.2);
-  cursor:pointer
+  transform: scale(1.1);
+  cursor:pointer;
+box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.19);
+
 }
 
 .week13, .week26, .week39 {
@@ -148,6 +150,7 @@ h5 {
   padding-left:200px;
 }
 .birthday, .today, .byeday {
-  border: #3b3939 solid 1.5px;
+  border: #646262 solid 1.5px;
   opacity: 0.8;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
 }
