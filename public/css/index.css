@@ -1,6 +1,3 @@
-
-
-
 .slogan-1, .slogan-2 {
   margin-top:0;
   font-size: 2rem;
@@ -12,12 +9,12 @@
   font-weight: 300;
   margin-bottom: 1rem;
 }
+
 .start-now-button{
   width: fit-content;
   border-radius: 20px;
   margin-left:8px;
   padding: 0.5rem 1.5rem;
-  
 }
 
 .start-now-button:hover{
@@ -31,6 +28,7 @@
 
 .storysetLink>a{
   opacity: 0.5;
+  font-size:0.7rem;
 }
 /* .storysetLink>a:hover{
   color: grey;
