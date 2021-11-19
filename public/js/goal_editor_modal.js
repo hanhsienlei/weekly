@@ -202,8 +202,6 @@ const createMilestoneContainer = (
   goalDueDate = null,
   goalId
 ) => {
-
-  
   const parent = document.querySelector(".milestones-container");
   const containerOuter = document.createElement("div");
   const containerInner = document.createElement("div");
@@ -211,12 +209,15 @@ const createMilestoneContainer = (
   const milestoneLabelContainer = document.createElement("div");
   const milestoneLabel = document.createElement("span");
   const milestoneTitleContainer = document.createElement("div");
+  
   const milestoneTitle = document.createElement("input");
   const milestoneEditButton = document.createElement("span");
   const milestoneEditorContainer = document.createElement("div");
   // const milestoneDueDateContainer = document.createElement("div");
+  const milestoneDueDateLabel = document.createElement("span");
   const milestoneDueDate = document.createElement("input");
   // const milestoneDescriptionContainer = document.createElement("div");
+  const milestoneDescriptionLabel = document.createElement("span");
   const milestoneDescription = document.createElement("textarea");
   // const milestoneTagsContainer = document.createElement("div");
   const milestoneButtonsContainer = document.createElement("div");
@@ -310,6 +311,7 @@ const createMilestoneContainer = (
     "row",
     "mb-3"
   );
+  
   milestoneTitle.classList.add("milestone-title", "off-focus");
   milestoneTitle.type = "text";
   milestoneTitle.setAttribute("placeholder", `Milestone name`);
@@ -348,6 +350,7 @@ const createMilestoneContainer = (
   //   "mb-3",
   //   "px-2"
   // );
+  milestoneDueDateLabel.textContent = "Milestone due date"
   milestoneDueDate.type = "date";
   milestoneDueDate.classList.add("milestone-due-date", "form-control", "mb-3");
   milestoneDueDate.setAttribute("max", goalDueDate);
@@ -357,6 +360,7 @@ const createMilestoneContainer = (
   //   "row",
   //   "mb-3"
   // );
+  milestoneDescriptionLabel.textContent = "Milestone description"
   milestoneDescription.classList.add(
     "modal-milestone-description",
     "event-description",
@@ -506,7 +510,9 @@ const createMilestoneContainer = (
   milestoneTitleContainer.append(milestoneTitle);
   milestoneButtonsContainer.append(milestoneSaveButton, milestoneDeleteButton);
   milestoneEditorContainer.append(
+    milestoneDueDateLabel,
     milestoneDueDate,
+    milestoneDescriptionLabel,
     milestoneDescription,
     // milestoneTagsContainer,
     milestoneButtonsContainer

@@ -151,8 +151,10 @@ const createEventComponent = (
   const eventParentsIcon = document.createElement("span");
   const eventEditor = document.createElement("div");
   const eventDueDateContainer = document.createElement("div");
+  const eventDueDateLabel = document.createElement("span");
   const eventDueDate = document.createElement("input");
   const eventDescriptionContainer = document.createElement("div");
+  const eventDescriptionLabel = document.createElement("span");
   const eventDescription = document.createElement("textarea");
   const taskRepeatSelectorContainer =
     eventType === "task"
@@ -474,6 +476,7 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     "row",
     "mb-3"
   );
+  eventDueDateLabel.textContent=`${eventType} due date`
   eventDueDate.classList.add("event-due-date", `due-date-${eventType}-${id}`, "form-control");
   eventDueDate.type = "date";
   eventDueDate.value = dueDate;
@@ -494,6 +497,7 @@ eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
     "row",
     "mb-3"    
   );
+  eventDescriptionLabel.textContent=`${eventType} description`
   eventDescription.classList.add(
     "event-description",
     `event-description-${eventType}-${id}`,
@@ -558,8 +562,8 @@ saveEvent(relocateEvent)
     eventFooterContainer.append(stopRepeatButton);
   }
 
-  eventDescriptionContainer.appendChild(eventDescription);
-  eventDueDateContainer.appendChild(eventDueDate);
+  eventDescriptionContainer.append(eventDescriptionLabel, eventDescription);
+  eventDueDateContainer.append(eventDueDateLabel, eventDueDate);
   eventEditor.append(
     eventDueDateContainer,
     eventDescriptionContainer,

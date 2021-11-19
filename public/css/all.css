@@ -134,9 +134,9 @@ input.off-focus {
   height: 60vh;
 }
 
-.repeat-description, .repeat-end-date-description {
+/* .repeat-description, .repeat-end-date-description {
   padding:0;
-}
+} */
 .task-repeat-selector{
   padding:3px 12px;
 }
