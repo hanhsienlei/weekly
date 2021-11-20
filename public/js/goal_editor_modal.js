@@ -9,6 +9,7 @@ const renderGoalEditor = (goalId) => {
     .then((data) => {
       console.log(data);
       const modal = document.querySelector("#modal-goal");
+      const goalTitleIcon = modal.querySelector(".modal-title-icon");
       const goalTitle = modal.querySelector(".goal-title");
       const deleteGoalButton = modal.querySelector(
         ".editor-delete-goal-button"
@@ -109,6 +110,7 @@ const renderGoalEditor = (goalId) => {
       };
 
       modal.dataset.goalId = goalId;
+      goalTitleIcon.textContent = categoryMaterialIcons[data.g_category]
       goalTitle.value = data.g_title;
       goalTitle.addEventListener("keyup", (e) => {
         if (e.keyCode === 13) {
@@ -131,6 +133,11 @@ const renderGoalEditor = (goalId) => {
         goalCategoryIndex = 0
       }
       goalCategory.options[goalCategoryIndex].selected = true
+      goalCategory.addEventListener("change", e=> {
+        const goalCategoryNumber = Number(goalCategory.value)
+        goalTitleIcon.textContent = categoryMaterialIcons[goalCategoryNumber]
+      })
+
       newMilestoneButton.addEventListener("click", addNewMilestone);
       modal.addEventListener("hidden.bs.modal", () => {
         modal.querySelector(".milestones-container").innerHTML = "";
