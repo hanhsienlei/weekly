@@ -36,3 +36,13 @@ const getUser = async () => {
 };
 const categoryIcons = ["💼", "👪", "💰", "🎨", "🧘🏼", "🚀", "🤾🏼", "💗", "🗺️"]
 const categoryMaterialIcons = ["business_center", "groups", "savings", "palette", "self_improvement", "rocket_launch", "directions_run",  "volunteer_activism", "sailing"]
+const getTodayYMD = () => {
+  const today = new Date();
+  const year = today.getFullYear().toString();
+  const month = (today.getMonth() + 1).toString();
+  const month2Digit = month.length === 1 ? `0${month}` : month;
+  const date = today.getDate().toString();
+  const date2Digit = date.length === 1 ? `0${date}` : date;
+  const todayYMD = `${year}-${month2Digit}-${date2Digit}`;
+  return todayYMD
+}

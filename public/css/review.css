@@ -84,3 +84,11 @@
   color: #fd6e6e;
 }
 
+.add-new-goal-button>span {
+  color: #c73737;
+}
+
+.swal-align-left {
+  text-align: left;
+  line-height: 2rem;
+}

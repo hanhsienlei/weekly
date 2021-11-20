@@ -1,6 +1,8 @@
+let newGoal = 0;
+
 const goalList = document.querySelector(".goal-list");
 const renderGoalProgress = async (goal_id) => {
-  console.log("fetch: ", goal_id)
+  console.log("fetch: ", goal_id);
   fetch(`/api/goal/progress?goal_id=${goal_id}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -8,14 +10,14 @@ const renderGoalProgress = async (goal_id) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      if(data.error){
+      if (data.error) {
         Swal.fire({
           title: "Oops...",
           text: data.error,
           icon: "error",
           showCancelButton: false,
         });
-        return
+        return;
       }
       console.log(data);
       const progressGoalTitle = document.querySelector(".progress-goal-title");
@@ -179,7 +181,7 @@ const renderGoalProgress = async (goal_id) => {
 
       progressGoalTitle.textContent = g_title;
       progressGoalButton.setAttribute("onclick", `renderGoalEditor(${g_id})`);
-      progressGoalButton.textContent = "🔍  checkout goal"
+      progressGoalButton.textContent = "🔍  checkout goal";
       progressGoalDueDate.textContent = `🗓 ${g_due_date}`;
       progressWeeksFromNowValue.textContent = "🕰 " + weeksFromNowValue;
       progressWeeksFromNowText.textContent = weeksFromNowText;
@@ -191,7 +193,10 @@ const renderGoalProgress = async (goal_id) => {
         doughnut.destroy();
         bar.destroy();
       });
-
+      goalList.addEventListener("change", (e) => {
+        doughnut.destroy();
+        bar.destroy();
+      });
       $("#modal-goal").on("hidden.bs.modal", () => {
         const selectedGoal = document.querySelector(".selected");
         const selectedGoalId = selectedGoal.dataset.goalId;
@@ -205,63 +210,170 @@ const renderGoalProgress = async (goal_id) => {
     });
 };
 
-const InitializePage = async () => {
+const InitializePage = async (goalId) => {
   const accessToken = localStorage.getItem("access_token");
-  fetch(`/api/goals`, {
+  const goalList = document.querySelector(".goal-list");
+  goalList.innerHTML = "";
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("goal") === "new" && !newGoal) {
+    console.log("add new goal");
+    newGoal++;
+    addNewGoal();
+  } else {
+    fetch(`/api/goals`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const goalList = document.querySelector(".goal-list");
+        goalList.innerHTML = "";
+        const params = new URLSearchParams(window.location.search);
+        if (data.length) {
+          let renderGoalId = params.get("goal_id")
+            ? Number(params.get("goal_id"))
+            : data[0].g_id;
+          if (goalId) {
+            renderGoalId = goalId;
+          }
+          console.log("render goal: ", renderGoalId);
+          renderGoalProgress(renderGoalId);
+          data.forEach((goal) => {
+            const { g_id, g_title, g_category } = goal;
+            const goalItem = document.createElement("div");
+            goalItem.setAttribute("data-goal-id", g_id);
+            goalItem.classList.add("list-group-item", "ps-2");
+            goalItemIcon = document.createElement("span");
+            goalItemTitle = document.createElement("span");
+            goalItemIcon.classList.add("material-icons");
+            goalItemIcon.textContent = categoryMaterialIcons[g_category];
+            goalItemTitle.textContent = g_title;
+            goalList.appendChild(goalItem);
+            goalItem.append(goalItemIcon, goalItemTitle);
+            if (g_id == renderGoalId) {
+              goalItem.classList.add("selected");
+            }
+            goalItemTitle.addEventListener("click", (e) => {
+              goalItem.click();
+            });
+            goalItemIcon.addEventListener("click", (e) => {
+              goalItem.click();
+            });
+          });
+
+          goalList.addEventListener("click", (e) => {
+            if (e.target.classList.contains("list-group-item")) {
+              const targetId = e.target.dataset.goalId;
+              if (!targetId) {
+                return;
+              }
+              renderGoalProgress(targetId);
+              const selectedItem = document.querySelector(".selected");
+              if (selectedItem) {
+                selectedItem.classList.remove("selected");
+              }
+              e.target.classList.add("selected");
+            }
+          });
+        } else {
+          const goalItem = document.createElement("li");
+          goalItem.classList.add("list-group-item");
+          goalItem.textContent = "You don't have any goal yet";
+          goalList.appendChild(goalItem);
+        }
+
+        const addNewGoalButton = document.createElement("div");
+        addNewGoalButton.classList.add(
+          "list-group-item",
+          "ps-2",
+          "add-new-goal-button"
+        );
+        addNewGoalButtonIcon = document.createElement("span");
+        addNewGoalButtonTitle = document.createElement("span");
+        addNewGoalButtonIcon.classList.add("material-icons");
+        addNewGoalButtonIcon.textContent = "add_circle";
+        addNewGoalButtonTitle.textContent = "Add a new goal";
+        goalList.appendChild(addNewGoalButton);
+        addNewGoalButton.append(addNewGoalButtonIcon, addNewGoalButtonTitle);
+        addNewGoalButton.addEventListener("click", (e) => {
+          addNewGoal();
+        });
+        console.log(params.get("goal"));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+};
+
+//new goal 還沒寫完
+const addNewGoal = async () => {
+  const accessToken = localStorage.getItem("access_token");
+  const dueDate = getTodayYMD();
+  const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
+  const body = {};
+  const swalResult = await Swal.fire({
+    title: "What is your goal?",
+    input: "text",
+    showCancelButton: true,
+    inputValidator: (value) => {
+      if (!value) {
+        return "You need to write something!";
+      }
+    },
+  });
+  if (!swalResult.value) {
+    newGoal++
+    InitializePage()
+    return
+  };
+  body[`goal_title`] = swalResult.value;
+  body[`goal_due_date`] = dueDate;
+  body[`goal_due_date_unix`] = dueDateUnix;
+
+  console.log("body: ", body);
+  fetch(`/api/goal`, {
+    method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify(body),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      const goalList = document.querySelector(".goal-list");
-      if (data.length) {
-        const params = new URLSearchParams(window.location.search)
-        const renderGoalId = params.get("goal_id")? Number(params.get("goal_id")):data[0].g_id
-        console.log("render goal: ", renderGoalId)
-        renderGoalProgress(renderGoalId);
-        data.forEach((goal) => {
-          const { g_id, g_title, g_category } = goal;
-          const goalItem = document.createElement("div");
-          goalItem.setAttribute("data-goal-id", g_id);
-          goalItem.classList.add("list-group-item", "ps-2");
-          goalItemIcon = document.createElement("span")
-          goalItemTitle = document.createElement("span")
-          goalItemIcon.classList.add("material-icons");
-          goalItemIcon.textContent = categoryMaterialIcons[g_category];
-          goalItemTitle.textContent = g_title;
-          goalList.appendChild(goalItem);
-          goalItem.append(goalItemIcon, goalItemTitle)
-          if (g_id == renderGoalId) {
-            goalItem.classList.add("selected");
-          }
-        });
-        goalList.addEventListener("click", (e) => {
-          if (e.target.classList.contains("list-group-item")) {
-            const targetId = e.target.dataset.goalId;
-            renderGoalProgress(targetId);
-            const selectedItem = document.querySelector(".selected");
-            if (selectedItem) {
-              selectedItem.classList.remove("selected");
-            }
-            e.target.classList.add("selected");
-          }
+      console.log("restuls: ", data);
+      if (data.error) {
+        Swal.fire({
+          icon: "warning",
+          title: data.error,
+          showConfirmButton: false,
         });
       } else {
-        const goalItem = document.createElement("li");
-
-        goalItem.classList.add("list-group-item");
-        goalItem.textContent = "You don't have any goal yet";
-        goalList.appendChild(goalItem);
+        InitializePage(data.goal_id);
+        renderGoalEditor(data.goal_id);
+        swal
+          .fire({
+            title: "Start planning now!",
+            html: '<div class="swal-align-left">Step 1. Pick a <strong>category</strong> for this goal <br> Step 2. Break down the goal into <strong>milestones</strong> and <strong>tasks</strong> <br> Step 3. Make sure to set <strong>due dates</strong> <br> Step 4. <a href="/horizon">Awesome! Then you will see the approach on your "Horizon" </a></div>',
+            showConfirmButton: true,
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              const goalEditorButton = document.querySelector(
+                ".progress-view-goal-button"
+              );
+              goalEditorButton.click();
+            }
+          });
       }
     })
     .catch((err) => {
       console.log(err);
     });
 };
-
-
 
 getUser();
 window.onload = InitializePage();
