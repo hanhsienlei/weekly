@@ -57,10 +57,6 @@ h4,
   margin-left: 8px;
 }
 
-.event-title {
-  font-size: 1.2rem;
-}
-
 a {
   text-decoration: none;
   color: #111111;
@@ -100,4 +96,15 @@ a:hover {
   background-color: lightgrey;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.event-parents-container {
+ font-size: 12px;
+ font-weight:400;
+}
+.event-parents-container>.material-icons {
+ font-size: 16px;
+}
+.event-parents-container>.event-parents {
+ font-size: 14px;
 }

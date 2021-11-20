@@ -104,3 +104,6 @@ select {
 .event-title {
   font-size: 1.2rem;
 }
+.badge {
+  font-weight:300;
+}

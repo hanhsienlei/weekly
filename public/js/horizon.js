@@ -337,31 +337,33 @@ const renderEvents = async (date) => {
             );
           }
         });
-        // data.year.tasks.forEach((task) => {
-        //   if (task.t_status > -1) {
-        //     const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-        //     if (task.t_id) {
-        //       createEventComponent(
-        //         "year",
-        //         "task",
-        //         task.t_id,
-        //         task.t_title,
-        //         task.t_status,
-        //         task.t_due_date,
-        //         task.t_description,
-        //         task.t_parent.join(">"),
-        //         repeated_frequency,
-        //         task.r_end_date,
-        //         task.m_id,
-        //         task.m_due_date,
-        //         task.g_id,
-        //         task.g_due_date,
-        //         task.t_origin_id,
-        //         task.t_origin_date
-        //       );
-        //     }
-        //   }
-        // });
+        data.year.tasks.forEach((task) => {
+          if (task.t_status > -1) {
+            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+            if (task.t_id) {
+              createEventComponent(
+                "year",
+                "task",
+                task.t_id,
+                task.t_title,
+                task.t_status,
+                task.t_due_date,
+                task.t_description,
+                task.t_parent.join("．"),
+                repeated_frequency,
+                task.r_end_date,
+                task.m_id,
+                task.m_due_date,
+                task.g_id,
+                task.g_due_date,
+                task.g_category,
+                task.t_origin_id,
+                task.t_origin_date
+              );
+            }
+          }
+        });
+        
       }
     })
     .catch((err) => {
