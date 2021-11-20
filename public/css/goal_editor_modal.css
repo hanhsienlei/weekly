@@ -19,6 +19,11 @@ select {
   font-size: large;
 }
 
+.event-label-date {
+  background-color: #dad8d8;
+  color: #474749;
+  margin-left: 0.3rem;
+}
 
 .add-milestone-outer-container {
   padding-left: 0;

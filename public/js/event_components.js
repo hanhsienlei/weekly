@@ -156,6 +156,7 @@ const createEventComponent = (
   const eventInfoContainer = document.createElement("div");
   const eventLabelContainer = document.createElement("div");
   const eventLabel = document.createElement("span");
+  const eventLabelDate = document.createElement("span");
   const editButton = document.createElement("span");
   const eventTitleContainer = document.createElement("div");
   const checkBoxContainer = document.createElement("div");
@@ -394,6 +395,13 @@ const createEventComponent = (
     "rounded-pill"
   );
   eventLabel.textContent = eventType;
+  eventLabelDate.classList.add(
+    "event-label",
+    "event-label-date",
+    "badge",
+    "rounded-pill"
+  );
+  eventLabelDate.textContent = dueDate;
   editButton.classList.add("edit-button", "material-icons", "align-middle");
   editButton.setAttribute("data-bs-toggle", "tooltip");
   editButton.setAttribute("data-bs-placement", "top");
@@ -512,6 +520,11 @@ const createEventComponent = (
   if (task_origin_date) {
     eventDueDate.setAttribute("data-origin-date", task_origin_date);
   }
+
+  eventDueDate.addEventListener("change", e => {
+    eventLabelDate.textContent = eventDueDate.value
+  })
+
   eventDescriptionContainer.classList.add(
     "event-description-container",
     "row",
@@ -595,7 +608,7 @@ const createEventComponent = (
 
   checkBoxContainer.appendChild(checkBox);
   eventTitleContentContainer.appendChild(eventTitle);
-  eventLabelContainer.append(eventLabel, editButton);
+  eventLabelContainer.append(eventLabel, eventLabelDate, editButton);
   if (eventType === "task") {
     eventTitleContainer.append(checkBoxContainer);
   }
@@ -612,7 +625,7 @@ const createEventComponent = (
     repeatIcon.setAttribute("data-bs-toggle", "tooltip");
     repeatIcon.setAttribute("data-bs-placement", "top");
     repeatIcon.setAttribute("title", "Reoccurring task");
-    eventLabel.after(repeatIcon);
+    eventLabelDate.after(repeatIcon);
   }
   if (eventParents.textContent) {
     eventParentsContainer.append(

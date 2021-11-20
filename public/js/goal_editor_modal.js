@@ -215,6 +215,7 @@ const createMilestoneContainer = (
   const milestoneContainer = document.createElement("div");
   const milestoneLabelContainer = document.createElement("div");
   const milestoneLabel = document.createElement("span");
+  const milestoneLabelDate = document.createElement("span");
   const milestoneTitleContainer = document.createElement("div");
   
   const milestoneTitle = document.createElement("input");
@@ -312,6 +313,13 @@ const createMilestoneContainer = (
     "rounded-pill"
   );
   milestoneLabel.textContent = "milestone";
+  milestoneLabelDate.classList.add(
+    "event-label",
+    "event-label-date",
+    "badge",
+    "rounded-pill"
+  );
+  milestoneLabelDate.textContent = dueDate;
 
   milestoneTitleContainer.classList.add(
     "milestone-title-container",
@@ -362,6 +370,9 @@ const createMilestoneContainer = (
   milestoneDueDate.classList.add("milestone-due-date", "form-control", "mb-3");
   milestoneDueDate.setAttribute("max", goalDueDate);
   milestoneDueDate.value = dueDate;
+  milestoneDueDate.addEventListener("change", e => {
+    milestoneLabelDate.textContent = milestoneDueDate.value
+  })
   // milestoneDescriptionContainer.classList.add(
   //   "milestone-description-container",
   //   "row",
@@ -509,7 +520,7 @@ const createMilestoneContainer = (
     milestoneTitleContainer,
     milestoneEditorContainer
   );
-  milestoneLabelContainer.append(milestoneLabel, milestoneEditButton);
+  milestoneLabelContainer.append(milestoneLabel,milestoneLabelDate, milestoneEditButton);
   milestoneTitleContainer.append(milestoneTitle);
   milestoneButtonsContainer.append(milestoneSaveButton, milestoneDeleteButton);
   milestoneEditorContainer.append(
