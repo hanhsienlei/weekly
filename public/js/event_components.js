@@ -42,6 +42,10 @@ const deleteGoalAndChildren = (goalId) => {
                 document.querySelector(".date-value").dataset.dueDate;
               renderEvents(currentDate);
             }
+
+            if (window.location.pathname.includes("review")) {
+              InitializePage()
+            }
           } else {
             //nothing changed
             Swal.fire({

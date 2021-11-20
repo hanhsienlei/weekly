@@ -254,6 +254,7 @@ const InitializePage = async (goalId) => {
             goalItem.append(goalItemIcon, goalItemTitle);
             if (g_id == renderGoalId) {
               goalItem.classList.add("selected");
+              goalItem.click();
             }
             goalItemTitle.addEventListener("click", (e) => {
               goalItem.click();
@@ -353,7 +354,7 @@ const addNewGoal = async () => {
         });
       } else {
         InitializePage(data.goal_id);
-        renderGoalEditor(data.goal_id);
+        // renderGoalEditor(data.goal_id);
         swal
           .fire({
             title: "Start planning now!",
