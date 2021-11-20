@@ -7,6 +7,17 @@
   font-size: 1rem;
 }
 
+.material-icons {
+  color: #474749;
+  font-size: 1.2rem;
+  vertical-align: middle;
+  margin-top:-3px;
+}
+
+.list-group-item {
+  vertical-align: middle;
+}
+
 .list-group-item:hover {
   color: #fd6e6e;
   background-color: #d8d8e0;
@@ -15,6 +26,10 @@
 .list-group-item.selected {
   color: #474749;
   background-color: #ffafaf;
+}
+.list-group>p{
+  overflow-wrap: normal;
+
 }
 .progress-goal-title {
   font-size: 2rem;
@@ -68,3 +83,4 @@
   padding-top: 1rem;
   color: #fd6e6e;
 }
+

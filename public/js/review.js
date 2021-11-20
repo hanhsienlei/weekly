@@ -222,12 +222,17 @@ const InitializePage = async () => {
         console.log("render goal: ", renderGoalId)
         renderGoalProgress(renderGoalId);
         data.forEach((goal) => {
-          const { g_id, g_title } = goal;
-          const goalItem = document.createElement("li");
+          const { g_id, g_title, g_category } = goal;
+          const goalItem = document.createElement("div");
           goalItem.setAttribute("data-goal-id", g_id);
-          goalItem.classList.add("list-group-item", "ps-4");
-          goalItem.textContent = g_title;
+          goalItem.classList.add("list-group-item", "ps-2");
+          goalItemIcon = document.createElement("span")
+          goalItemTitle = document.createElement("span")
+          goalItemIcon.classList.add("material-icons");
+          goalItemIcon.textContent = categoryMaterialIcons[g_category];
+          goalItemTitle.textContent = g_title;
           goalList.appendChild(goalItem);
+          goalItem.append(goalItemIcon, goalItemTitle)
           if (g_id == renderGoalId) {
             goalItem.classList.add("selected");
           }
