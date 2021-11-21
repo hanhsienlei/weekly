@@ -34,6 +34,11 @@
 .progress-goal-title {
   font-size: 2rem;
 }
+.progress-goal-title:hover {
+  font-size: 2rem;
+  color: #fd6e6e;
+  cursor: pointer;
+}
 .progress-view-goal-button:hover {
   color: #fd6e6e;
   cursor: pointer;
@@ -85,10 +90,15 @@
 }
 
 .add-new-goal-button>span {
-  color: #c73737;
+  color: #61cc5e;
 }
 
 .swal-align-left {
   text-align: left;
   line-height: 2rem;
+}
+
+.clock-icon, .calendar-icon {
+  font-size:24px;
+  margin-top: -10px;
 }

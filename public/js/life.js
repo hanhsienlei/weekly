@@ -52,15 +52,14 @@ const renderGoals = (goals) => {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
+        timer: 5000,
+        timerProgressBar: false,
         didOpen: (toast) => {
           toast.addEventListener("mouseenter", Swal.stopTimer);
           toast.addEventListener("mouseleave", Swal.resumeTimer);
         },
       });
       Toast.fire({
-        icon: "success",
         title: `<a href="/review?goal_id=${goal.id}">Check out ${goal.title}! </a> `,
       });
     });

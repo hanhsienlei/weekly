@@ -467,7 +467,7 @@ const createEventComponent = (
   );
   eventParentsIcon.setAttribute("data-bs-toggle", "tooltip");
   eventParentsIcon.setAttribute("data-bs-placement", "top");
-  eventParentsIcon.setAttribute("title", "Checkout goal");
+  eventParentsIcon.setAttribute("title", "Check out goal");
   eventParentsIcon.setAttribute("data-bs-toggle", "modal");
   eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
   eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
@@ -484,7 +484,7 @@ const createEventComponent = (
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
-    eventParents.textContent = "check goal";
+    eventParents.textContent = "check out goal";
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
     eventParentsIcon.textContent = "zoom_in";
   }

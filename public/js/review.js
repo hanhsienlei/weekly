@@ -24,11 +24,11 @@ const renderGoalProgress = async (goal_id) => {
       const progressGoalButton = document.querySelector(
         ".progress-view-goal-button"
       );
-
+      const calendarIcon = document.querySelector(".calendar-icon")
       const progressGoalDueDate = document.querySelector(
         ".progress-goal-due-date"
       );
-
+      const clockIcon = document.querySelector(".clock-icon")
       const progressWeeksFromNowValue = document.querySelector(
         ".progress-weeks-from-now-value"
       );
@@ -57,7 +57,7 @@ const renderGoalProgress = async (goal_id) => {
       let weeksFromNowText = "";
 
       if (g_weeks_from_now > 1) {
-        weeksFromNowText = ` week away`;
+        weeksFromNowText = ` weeks away`;
       } else if (g_weeks_from_now == 1) {
         weeksFromNowValue = "";
         weeksFromNowText = `Some days ago`;
@@ -180,10 +180,14 @@ const renderGoalProgress = async (goal_id) => {
       });
 
       progressGoalTitle.textContent = g_title;
+      progressGoalTitle.setAttribute("onclick", `renderGoalEditor(${g_id})`);
       progressGoalButton.setAttribute("onclick", `renderGoalEditor(${g_id})`);
-      progressGoalButton.textContent = "🔍  checkout goal";
-      progressGoalDueDate.textContent = `🗓 ${g_due_date}`;
-      progressWeeksFromNowValue.textContent = "🕰 " + weeksFromNowValue;
+      progressGoalButton.classList.add("material-icons")
+      progressGoalButton.textContent = "zoom_in";
+      calendarIcon.textContent = "event"
+      progressGoalDueDate.textContent = g_due_date;
+      clockIcon.textContent = "hourglass_empty"
+      progressWeeksFromNowValue.textContent = weeksFromNowValue;
       progressWeeksFromNowText.textContent = weeksFromNowText;
       progressTaskSum.textContent = `${g_summary.task[0]} / ${g_summary.task[1]} tasks done`;
       progressMilestoneSum.textContent = `${g_summary.milestone[0]} / ${g_summary.milestone[1]} milestones achieved`;

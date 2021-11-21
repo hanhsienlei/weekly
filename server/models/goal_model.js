@@ -51,7 +51,7 @@ const getGoalWithPlan = async (goalId) => {
   LEFT JOIN task t ON m.id = t.milestone_id
   LEFT JOIN repeated_task r ON t.id = r.task_id
   WHERE (g.id = ?) 
-  ORDER BY m.due_date;
+  ORDER BY t.due_date, m.due_date;
   `, goalId)
   console.log(result)
   return result
