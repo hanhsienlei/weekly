@@ -180,7 +180,9 @@ const renderGoalProgress = async (goal_id) => {
       });
 
       progressGoalTitle.textContent = g_title;
+      progressGoalTitle.removeAttribute("onclick");
       progressGoalTitle.setAttribute("onclick", `renderGoalEditor(${g_id})`);
+      progressGoalButton.removeAttribute("onclick");
       progressGoalButton.setAttribute("onclick", `renderGoalEditor(${g_id})`);
       progressGoalButton.classList.add("material-icons")
       progressGoalButton.textContent = "zoom_in";
@@ -214,7 +216,7 @@ const renderGoalProgress = async (goal_id) => {
     });
 };
 
-const InitializePage = async (goalId) => {
+const initializePage = async (goalId) => {
   const accessToken = localStorage.getItem("access_token");
   const goalList = document.querySelector(".goal-list");
   goalList.innerHTML = "";
@@ -313,7 +315,6 @@ const InitializePage = async (goalId) => {
   }
 };
 
-//new goal 還沒寫完
 const addNewGoal = async () => {
   const accessToken = localStorage.getItem("access_token");
   const dueDate = getTodayYMD();
@@ -331,7 +332,7 @@ const addNewGoal = async () => {
   });
   if (!swalResult.value) {
     newGoal++
-    InitializePage()
+    initializePage()
     return
   };
   body[`goal_title`] = swalResult.value;
@@ -357,7 +358,7 @@ const addNewGoal = async () => {
           showConfirmButton: false,
         });
       } else {
-        InitializePage(data.goal_id);
+        initializePage(data.goal_id);
         // renderGoalEditor(data.goal_id);
         swal
           .fire({
@@ -381,4 +382,4 @@ const addNewGoal = async () => {
 };
 
 getUser();
-window.onload = InitializePage();
+window.onload = initializePage();

@@ -446,6 +446,7 @@ const createMilestoneContainer = (
   newTaskInput.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
       newTaskButton.click();
+      newTaskInput.value=""
     }
   });
 
@@ -552,5 +553,6 @@ document
   .addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
       document.querySelector(".new-milestone-button").click();
+      document.querySelector(".new-milestone-title").value = ""
     }
   });

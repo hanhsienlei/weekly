@@ -44,7 +44,7 @@ const deleteGoalAndChildren = (goalId) => {
             }
 
             if (window.location.pathname.includes("review")) {
-              InitializePage()
+              initializePage()
             }
           } else {
             //nothing changed
