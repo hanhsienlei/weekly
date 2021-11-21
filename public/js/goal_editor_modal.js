@@ -7,7 +7,7 @@ const renderGoalEditor = (goalId) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      //console.log(data);
+      console.log(data);
       const modal = document.querySelector("#modal-goal");
       const goalTitleIcon = modal.querySelector(".modal-title-icon");
       const goalTitle = modal.querySelector(".goal-title");
@@ -512,7 +512,8 @@ const createMilestoneContainer = (
       });
   });
 
-  parent.prepend(containerOuter);
+  parent.append(containerOuter);
+  parent.scrollLeft = parent.scrollWidth;
   containerOuter.append(containerInner, addNewTaskContainer);
   containerInner.append(milestoneContainer, tasksContainer);
   milestoneContainer.append(

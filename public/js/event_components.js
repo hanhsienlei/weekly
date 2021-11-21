@@ -299,6 +299,8 @@ const createEventComponent = (
               title: "Oops...",
               text: data.error,
             });
+            eventDueDate.value = dueDate
+            eventLabelDate.textContent = dueDate
             return;
           }
           const alertText = task_origin_id
