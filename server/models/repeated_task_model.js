@@ -41,11 +41,11 @@ const saveNewRepeatedTask = async (
   WHERE id = ?;`;
   const queryData = [title, description, status, dueDate, dueDateUnix, 0, originId, originDate, originDateUnix, originId];
   const [result] = await pool.query(query, queryData);
-  console.log("[model saveNewRepeatedTask] result :", result);
-  console.log(
-    "[status, dueDate, dueDateUnix, 0, originId, originId]",
-    queryData
-  );
+  // console.log("[model saveNewRepeatedTask] result :", result);
+  // console.log(
+  //   "[status, dueDate, dueDateUnix, 0, originId, originId]",
+  //   queryData
+  // );
   return result.insertId;
 };
 
@@ -57,11 +57,11 @@ const deleteNewRepeatedTask = async (originId, originDate, originDateUnix) => {
   WHERE id = ?;`;
   const queryData = [originId, originDate, originDateUnix, originId];
   const [result] = await pool.query(query, queryData);
-  console.log("[model saveNewRepeatedTask] result :", result);
-  console.log(
-    "[status, dueDate, dueDateUnix, 0, originId, originId]",
-    queryData
-  );
+  // console.log("[model saveNewRepeatedTask] result :", result);
+  // console.log(
+  //   "[status, dueDate, dueDateUnix, 0, originId, originId]",
+  //   queryData
+  // );
   return result.insertId;
 };
 

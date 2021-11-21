@@ -2,7 +2,7 @@ const { pool } = require("./config_mysql")
 
 const createMilestone = async (milestoneDetails) => {
   const [result] = await pool.query("INSERT INTO milestone SET ?", milestoneDetails)
-  console.log("[createMilestone model] insertId: ", result.insertId)
+  // console.log("[createMilestone model] insertId: ", result.insertId)
   return result.insertId
 }
 
@@ -53,7 +53,7 @@ const getMilestonesByGoalId = async (GoalId) => {
   WHERE m.goal_id = ?
   AND m.status>-1 ; 
   `, GoalId)
-  console.log(result)
+  // console.log(result)
   return result
 }
 
@@ -71,7 +71,7 @@ const getGoalByMilestone = async (milestoneId) => {
   JOIN goal g ON (g.id = m.goal_id)
   WHERE m.id = ? ;
   `, milestoneId)
-  console.log(result)
+  // console.log(result)
   return result
 }
 
@@ -91,7 +91,7 @@ const getTasksByMilestone = async (milestoneId) => {
   LEFT JOIN repeated_task r ON (t.id = r.task_id)
   WHERE m.id = ? AND t.status > -1;
   `, milestoneId)
-  console.log(result)
+  // console.log(result)
   return result
 }
 

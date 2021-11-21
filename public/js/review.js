@@ -2,7 +2,7 @@ let newGoal = 0;
 
 const goalList = document.querySelector(".goal-list");
 const renderGoalProgress = async (goal_id) => {
-  console.log("fetch: ", goal_id);
+  // console.log("fetch: ", goal_id);
   fetch(`/api/goal/progress?goal_id=${goal_id}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -19,7 +19,7 @@ const renderGoalProgress = async (goal_id) => {
         });
         return;
       }
-      console.log(data);
+      // console.log(data);
       const progressGoalTitle = document.querySelector(".progress-goal-title");
       const progressGoalButton = document.querySelector(
         ".progress-view-goal-button"
@@ -220,7 +220,7 @@ const InitializePage = async (goalId) => {
   goalList.innerHTML = "";
   const params = new URLSearchParams(window.location.search);
   if (params.get("goal") === "new" && !newGoal) {
-    console.log("add new goal");
+    // console.log("add new goal");
     newGoal++;
     addNewGoal();
   } else {
@@ -231,7 +231,7 @@ const InitializePage = async (goalId) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         const goalList = document.querySelector(".goal-list");
         goalList.innerHTML = "";
         const params = new URLSearchParams(window.location.search);
@@ -242,7 +242,7 @@ const InitializePage = async (goalId) => {
           if (goalId) {
             renderGoalId = goalId;
           }
-          console.log("render goal: ", renderGoalId);
+          // console.log("render goal: ", renderGoalId);
           renderGoalProgress(renderGoalId);
           data.forEach((goal) => {
             const { g_id, g_title, g_category } = goal;
@@ -305,7 +305,7 @@ const InitializePage = async (goalId) => {
         addNewGoalButton.addEventListener("click", (e) => {
           addNewGoal();
         });
-        console.log(params.get("goal"));
+        // console.log(params.get("goal"));
       })
       .catch((err) => {
         console.log(err);
@@ -338,7 +338,7 @@ const addNewGoal = async () => {
   body[`goal_due_date`] = dueDate;
   body[`goal_due_date_unix`] = dueDateUnix;
 
-  console.log("body: ", body);
+  // console.log("body: ", body);
   fetch(`/api/goal`, {
     method: "POST",
     headers: {
@@ -349,7 +349,7 @@ const addNewGoal = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("restuls: ", data);
+      // console.log("restuls: ", data);
       if (data.error) {
         Swal.fire({
           icon: "warning",

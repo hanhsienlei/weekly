@@ -53,7 +53,7 @@ const getGoalWithPlan = async (goalId) => {
   WHERE (g.id = ?) 
   ORDER BY t.due_date, m.due_date;
   `, goalId)
-  console.log(result)
+  // console.log(result)
   return result
 }
 

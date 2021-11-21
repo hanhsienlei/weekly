@@ -7,7 +7,7 @@ const renderGoalEditor = (goalId) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
       const modal = document.querySelector("#modal-goal");
       const goalTitleIcon = modal.querySelector(".modal-title-icon");
       const goalTitle = modal.querySelector(".goal-title");
@@ -39,7 +39,7 @@ const renderGoalEditor = (goalId) => {
             goal_description: goalDescription.value.trim(),
             //goal_purpose_id: goalPurposeId,
           };
-          console.log("dave goal body:", body)
+          //console.log("dave goal body:", body)
           fetch("/api/goal", {
             method: "POST",
             headers: {
@@ -50,7 +50,7 @@ const renderGoalEditor = (goalId) => {
           })
             .then((response) => response.json())
             .then((data) => {
-              console.log("return from save: ", data);
+              //console.log("return from save: ", data);
               if (data.error) {
                 Swal.fire({
                   icon: "error",
@@ -82,7 +82,7 @@ const renderGoalEditor = (goalId) => {
           milestone_goal_id: goalId,
           milestone_due_date: goalDueDate.value,
         };
-        console.log(body);
+        //console.log(body);
         fetch("/api/milestone", {
           method: "POST",
           headers: {
@@ -94,7 +94,7 @@ const renderGoalEditor = (goalId) => {
           .then((response) => response.json())
           .then((data) => {
             const milestoneId = data.milestone_id;
-            console.log("newMilestoneButton: milestoneId: ", milestoneId);
+            //console.log("newMilestoneButton: milestoneId: ", milestoneId);
             createMilestoneContainer(
               milestoneId,
               newTitle,
@@ -256,7 +256,7 @@ const createMilestoneContainer = (
         new Date(milestoneDueDate.value + "T23:59:59")
       );
 
-      console.log("body: ", body);
+      //console.log("body: ", body);
       fetch(`/api/milestone`, {
         method: "POST",
         headers: {
@@ -267,7 +267,7 @@ const createMilestoneContainer = (
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("return from save: ", data);
+          //console.log("return from save: ", data);
           if (data.error) {
             Swal.fire({
               icon: "error",
@@ -462,7 +462,7 @@ const createMilestoneContainer = (
     body.task_due_date = milestoneDueDate.value;
     body.task_milestone_id = milestoneId;
 
-    console.log("body: ", body);
+    //console.log("body: ", body);
     fetch(`/api/task`, {
       method: "POST",
       headers: {
@@ -474,7 +474,7 @@ const createMilestoneContainer = (
       .then((response) => response.json())
       .then((data) => {
         const taskId = data.task_id;
-        console.log(taskId);
+        //console.log(taskId);
         // createTaskComponent(
         //   milestoneId,
         //   taskId,

@@ -18,7 +18,7 @@ const deleteGoalAndChildren = (goalId) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          //console.log(data);
           if (data.error) {
             //something went wrong
             Swal.fire({
@@ -73,7 +73,7 @@ const deleteMilestoneAndChildren = (milestoneId) => {
     confirmButtonText: "Yes, delete it!",
   }).then((result) => {
     if (result.isConfirmed) {
-      console.log("delete milestone : ", milestoneId);
+      //console.log("delete milestone : ", milestoneId);
       const accessToken = localStorage.getItem("access_token");
       fetch(`/api/milestone?milestone_id=${milestoneId}`, {
         method: "DELETE",
@@ -83,7 +83,7 @@ const deleteMilestoneAndChildren = (milestoneId) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          //console.log(data);
           if (data.error) {
             //something went wrong
             Swal.fire({
@@ -111,7 +111,7 @@ const deleteMilestoneAndChildren = (milestoneId) => {
             const currentContainer = goalModal.querySelector(
               `.milestone-outer-container-${milestoneId}`
             );
-            console.log(parent, currentContainer);
+            //console.log(parent, currentContainer);
             if (currentContainer) {
               parent.removeChild(currentContainer);
             }
@@ -257,7 +257,7 @@ const createEventComponent = (
         body.task_r_frequency = task_r_frequency;
         body.task_r_end_date = task_r_end_date;
         //task due date > repeat end date的話，error
-        console.log(body);
+        //console.log(body);
         if (!task_r_end_date) {
         } else if (task_repeat && task_r_end_date < eventDueDate.value) {
           Swal.fire({
@@ -270,7 +270,7 @@ const createEventComponent = (
         }
       }
 
-      console.log("body: ", body);
+      //console.log("body: ", body);
 
       let apiEndpoint = "";
       if (!id && task_origin_id) {
@@ -280,8 +280,8 @@ const createEventComponent = (
       } else {
         apiEndpoint = `/api/${eventType}`;
       }
-      console.log("body: ", body);
-      console.log("apiEndpoint: ", apiEndpoint);
+      //console.log("body: ", body);
+      //console.log("apiEndpoint: ", apiEndpoint);
       fetch(apiEndpoint, {
         method: "POST",
         headers: {
@@ -292,7 +292,7 @@ const createEventComponent = (
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("return from save: ", data);
+          //console.log("return from save: ", data);
           if (data.error) {
             Swal.fire({
               icon: "error",
@@ -326,7 +326,7 @@ const createEventComponent = (
             eventContainers.forEach((c) =>
               containerDueDates.push(c.dataset.dueDate)
             );
-            console.log(newEventDueDate, containerDueDates);
+            //console.log(newEventDueDate, containerDueDates);
 
             const relocateEvent = (index) => {
               if (parentContainer === eventContainers[index]) return;
@@ -480,7 +480,7 @@ const createEventComponent = (
     eventParentsIcon.textContent = "zoom_in";
   }
   if (eventType === "goal") {
-    console.log("add check goalll for goallll");
+    //console.log("add check goalll for goallll");
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
@@ -547,7 +547,7 @@ const createEventComponent = (
   );
   eventDescription.value = description;
   eventDescription.addEventListener("focus", (e) => {
-    console.log("click");
+    //console.log("click");
     eventDescription.classList.remove("off-focus");
   });
   eventDescription.addEventListener("blur", (e) => {
@@ -618,7 +618,7 @@ const createEventComponent = (
   }
   eventTitleContainer.append(eventTitleContentContainer);
   if (task_repeat_frequency > 0 || task_origin_id) {
-    console.log(id, task_repeat_frequency, task_origin_id);
+    //console.log(id, task_repeat_frequency, task_origin_id);
     const repeatIcon = document.createElement("span");
     repeatIcon.classList.add(
       "material-icons",
@@ -807,7 +807,7 @@ const createDeleteTaskButton = (
         } else {
           apiEndpoint = `/api/task?task_id=${id}`;
         }
-        console.log("apiEndpoint: ", apiEndpoint);
+        //console.log("apiEndpoint: ", apiEndpoint);
         fetch(apiEndpoint, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${accessToken}` },

@@ -39,7 +39,7 @@ const renderBaseWeeks = (birthday, today, byeDay) => {
 
       labelYear.before(divWeek);
     }
-    console.log("done");
+    // console.log("done");
   }
 };
 const renderGoals = (goals) => {
@@ -80,7 +80,7 @@ const renderLife = () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       const { birthday, today, byeDay, goals, userName } = data;
       const birthdayTitle = "Your birthday: " + birthday.date;
       const todayTitle = "Today: " + today.date;

@@ -7,7 +7,7 @@ const renderEvents = async (date) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      //console.log(data);
 
       //titles and buttons
       //empty events container
@@ -111,12 +111,12 @@ const renderEvents = async (date) => {
           if (!task.t_id) {
             repeated_frequency = task.r_frequency;
           }
-          console.log(
-            "render event: task.t_id, repeated_frequency, task.r_end_date, ",
-            task.t_id,
-            repeated_frequency,
-            task.r_end_date
-          );
+          // console.log(
+          //   "render event: task.t_id, repeated_frequency, task.r_end_date, ",
+          //   task.t_id,
+          //   repeated_frequency,
+          //   task.r_end_date
+          // );
           if (task.t_status > -1) {
             createEventComponent(
               "date",
@@ -389,7 +389,7 @@ const addNewEvent = (timeScale, eventType) => {
     });
     return;
   }
-  console.log("body: ", body);
+  //console.log("body: ", body);
   fetch(`/api/${eventType}`, {
     method: "POST",
     headers: {
@@ -400,7 +400,7 @@ const addNewEvent = (timeScale, eventType) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("restuls: ", data);
+      //console.log("restuls: ", data);
       if (data.error) {
         Swal.fire({
           icon: "warning",
@@ -550,7 +550,7 @@ const createStopTodayButton = (
   originId,
   dueDate
 ) => {
-  console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate);
+  // console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate);
   const button = document.createElement("button");
   button.setAttribute("type", "button");
   button.classList.add("btn", "btn-outline-warning");
@@ -558,14 +558,14 @@ const createStopTodayButton = (
 
   button.addEventListener("click", (e) => {
     const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_r_end_date=${dueDate}`;
-    console.log("apiEndpoint: ", apiEndpoint);
+    // console.log("apiEndpoint: ", apiEndpoint);
     fetch(apiEndpoint, {
       method: "POST",
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("return from stop: ", data);
+        // console.log("return from stop: ", data);
 
         if (data.error) {
           Swal.fire({
@@ -610,7 +610,7 @@ getUser();
 document.onload = renderEventsToday();
 
 $("#modal-goal").on("hidden.bs.modal", () => {
-  console.log("listen!");
+  // console.log("listen!");
   const currentDate = document.querySelector(".date-value").dataset.dueDate;
   renderEvents(currentDate);
 });
