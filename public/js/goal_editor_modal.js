@@ -17,7 +17,6 @@ const renderGoalEditor = (goalId) => {
       const goalDueDate = modal.querySelector(".goal-due-date");
       const goalCategory = modal.querySelector(".goal-category-selector");
       const goalDescription = modal.querySelector(".goal-description");
-      //const purposeSelector = modal.querySelector(".purpose-selector");
       const goalSaveButton = modal.querySelector(".save-goal-button");
       const newMilestoneTitle = modal.querySelector(".new-milestone-title");
       const newMilestoneButton = modal.querySelector(".new-milestone-button");
@@ -37,7 +36,6 @@ const renderGoalEditor = (goalId) => {
             ),
             goal_category: goalCategory.options[goalCategory.selectedIndex].value,
             goal_description: goalDescription.value.trim(),
-            //goal_purpose_id: goalPurposeId,
           };
           //console.log("dave goal body:", body)
           fetch("/api/goal", {

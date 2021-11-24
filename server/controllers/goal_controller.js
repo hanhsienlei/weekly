@@ -13,12 +13,9 @@ const saveGoal = async (req, res) => {
     description: body.goal_description,
     due_date: body.goal_due_date,
     due_date_unix: body.goal_due_date_unix,
-    purpose_id: body.goal_purpose_id,
     category:body.goal_category
   };
-  if (!goalDetails.purpose_id) {
-    delete goalDetails.purpose_id;
-  }
+  
 
   if (!goalDetails.category) {
     goalDetails.category = 0
@@ -72,9 +69,6 @@ const getGoalWithPlan = async (req, res) => {
       g_title,
       g_description,
       g_status,
-      g_group_id,
-      g_popularity,
-      g_publish,
       g_category
     } = result[0];
     const g_due_date = result[0].g_due_date
@@ -87,9 +81,6 @@ const getGoalWithPlan = async (req, res) => {
       g_description,
       g_due_date,
       g_status,
-      g_group_id,
-      g_popularity,
-      g_publish,
       g_category,
       milestones: [],
     };

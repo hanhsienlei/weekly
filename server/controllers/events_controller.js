@@ -122,7 +122,6 @@ const getEventsByDate = async (req, res) => {
               g_description,
               g_due_date,
               g_status,
-              g_parent: [row.p_title],
               g_category
             };
             data[range].goals.push(newGoal);
@@ -143,7 +142,7 @@ const getEventsByDate = async (req, res) => {
               m_description,
               m_due_date,
               m_status,
-              m_parent: [row.p_title, row.g_title],
+              m_parent: [row.g_title],
               g_id,
               g_due_date,
               g_category
@@ -177,7 +176,7 @@ const getEventsByDate = async (req, res) => {
                 t_description,
                 t_due_date,
                 t_status,
-                t_parent: [row.p_title, row.g_title, row.m_title],
+                t_parent: [row.g_title, row.m_title],
                 t_repeat,
                 t_origin_id,
                 r_frequency,
@@ -219,7 +218,7 @@ const getEventsByDate = async (req, res) => {
           t_description,
           t_due_date: targetDate,
           t_status: 0,
-          t_parent: [row.p_title, row.g_title, row.m_title],
+          t_parent: [row.g_title, row.m_title],
           t_origin_id: t_id,
           t_origin_date: targetDate,
           r_frequency,

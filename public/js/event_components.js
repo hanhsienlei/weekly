@@ -477,10 +477,16 @@ const createEventComponent = (
     // eventParents.setAttribute("data-bs-toggle", "modal");
     // eventParents.setAttribute("data-bs-target", "#modal-goal");
     // eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-    eventParents.textContent = parents ? parents.slice(1) : null;
+    eventParents.textContent = parents ? parents : null;
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
     eventParentsIcon.textContent = "zoom_in";
   }
+  
+  if (parents == null) {
+    eventParents.textContent = null;
+    eventParentsIcon.textContent = null;
+  }
+
   if (eventType === "goal") {
     //console.log("add check goalll for goallll");
     // eventParents.setAttribute("data-bs-toggle", "modal");
@@ -489,11 +495,6 @@ const createEventComponent = (
     eventParents.textContent = "check out goal";
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
     eventParentsIcon.textContent = "zoom_in";
-  }
-
-  if (parents == null) {
-    eventParents.textContent = null;
-    eventParentsIcon.textContent = null;
   }
 
   eventEditor.classList.add("event-editor", "col", "collapse", "px-2");
