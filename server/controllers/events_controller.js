@@ -80,8 +80,6 @@ const getEventsByDate = async (req, res) => {
       targetDate,
       dataEndDate
     );
-    // console.log("controller: ", result);
-
     
     if (!result.length) {
       return res.status(200).send(data);
@@ -249,14 +247,17 @@ const getEventsByDate = async (req, res) => {
         !isRepeatedTaskRecorded &&
         isInDateRange
       ) {
-        //console.log("repeatedTaskIds: ", repeatedTaskIds);
-        //console.log(row.t_id, "...", row.r_frequency)
+        const repeatFrequency = {
+          daily:1,
+          weekly:7,
+          monthly:30,
+        }
         switch (row.r_frequency) {
-          case 1:
+          case repeatFrequency.daily:
             console.log("r_f =1!!!");
             addNewRepeatingTask();
             break;
-          case 7:
+          case repeatFrequency.weekly:
             const dateStartRepeatValue = new Date(t_due_date).valueOf();
             const dateEndValue = new Date(targetDate).valueOf();
             const sevenDaysInMilliSecond = 60 * 60 * 24 * 1000 * 7;
@@ -268,7 +269,7 @@ const getEventsByDate = async (req, res) => {
               addNewRepeatingTask();
             }
             break;
-          case 30:
+          case repeatFrequency.monthly:
             let dateInit = t_due_date;
             while (dateInit <= targetDate) {
               let dateNew = getDateYMD(getNextMonthThisDay(new Date(dateInit)));

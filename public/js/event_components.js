@@ -1,3 +1,9 @@
+const repeatFrequency = {
+          daily:1,
+          weekly:7,
+          monthly:30,
+        }
+
 const deleteGoalAndChildren = (goalId) => {
   Swal.fire({
     title: "Are you sure?",
@@ -654,13 +660,13 @@ const createTaskRepeatSelector = (
   );
   if (task_origin_id) {
     switch (task_repeat_frequency) {
-      case 1:
+      case repeatFrequency.daily:
         container.textContent = `Repeated daily until ${task_repeat_end_date}`;
         break;
-      case 7:
+      case repeatFrequency.weekly:
         container.textContent = `Repeated weekly until ${task_repeat_end_date}`;
         break;
-      case 30:
+      case repeatFrequency.monthly:
         container.textContent = `Repeated monthly until ${task_repeat_end_date}`;
         break;
     }
@@ -714,13 +720,13 @@ const createTaskRepeatSelector = (
         repeatEndDate.setAttribute("disabled", "true");
         repeatEndDate.value = null;
         break;
-      case 1:
+      case repeatFrequency.daily:
         optionEveryday.setAttribute("selected", "true");
         break;
-      case 7:
+      case repeatFrequency.weekly:
         optionOnceAWeek.setAttribute("selected", "true");
         break;
-      case 30:
+      case repeatFrequency.monthly:
         optionOnceAMonth.setAttribute("selected", "true");
         break;
     }
