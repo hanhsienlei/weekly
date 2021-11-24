@@ -4,67 +4,45 @@ const { getInputLength } = require("../../utils/util");
 
 const updateTask = async (req, res) => {
   const body = req.body;
-  console.log("updateTask controller, req.body: ", body);
-
   const taskDetails = {
     title: body.task_title,
     description: body.task_description,
     status: body.task_status,
     due_date: body.task_due_date,
-    due_date_unix: body.task_due_date_unix,
-    milestone_id: body.task_milestone_id,
+    due_date_unix: Math.ceil(new Date(body.task_due_date + "T23:59:59")),
     repeat: body.task_repeat,
   };
   const repeatDetails = {
     frequency: body.task_r_frequency,
     end_date: body.task_r_end_date,
-    end_date_unix: body.task_r_end_date_unix,
+    end_date_unix: Math.ceil(new Date(body.task_r_end_date + "T23:59:59")),
   };
-  console.log(getInputLength(body.task_title))
   if (getInputLength(body.task_title) > 100) {
     res.status(400).send({ error: "title too long" });
     return;
   }
-  if (!taskDetails.milestone_id) {
-    delete taskDetails.milestone_id;
+  if (body.task_milestone_id) {
+    taskDetails.milestone_id = body.task_milestone_id;
   }
-
-  console.log("taskDetails: ", taskDetails);
 
   if (!body.task_id) {
     taskDetails.user_id = req.user.id;
-    console.log("taskDetails with user id: ", taskDetails);
     const taskId = await Task.createTask(taskDetails);
     res.status(200).send({ task_id: taskId });
   } else {
-    console.log("body.task_id: ", body.task_id);
-    console.log("repeatDetails: ", repeatDetails);
     const row = await Task.getTask(body.task_id);
     if (!row) {
       taskDetails.user_id = req.user.id;
-      const taskId = await Number(Task.createTask(taskDetails));
-      if (body.task_repeat) {
-        console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
-        await handleRepeatRule(repeatDetails, taskId);
-      }
+      const taskId = await Task.createTask(taskDetails);
       res.status(200).send({ task_id: taskId });
     } else {
       if (body.task_repeat) {
-        console.log("[updateTask controller ]repeatDetails: ", repeatDetails);
-        const repeatedRuleResult = await handleRepeatRule(
-          repeatDetails,
-          body.task_id
-        );
-        console.log("repeatedRuleResult: ", repeatedRuleResult);
+        await handleRepeatRule(repeatDetails, body.task_id);
         const taskContent = {
           title: body.task_title,
           description: body.task_description,
         };
-        const repeatedTasksResult = await RepeatedTask.updateRepeatedTasks(
-          taskContent,
-          body.task_id
-        );
-        console.log("repeatedTasksResult: ", repeatedTasksResult);
+        await RepeatedTask.updateRepeatedTasks(taskContent, body.task_id);
       }
       const updateResult = await Task.updateTask(taskDetails, body.task_id);
       res.status(200).send({ message: `Update succeeded (${updateResult})` });
@@ -72,33 +50,13 @@ const updateTask = async (req, res) => {
   }
 };
 
-const getTask = async (req, res) => {
-  const taskId = req.body.task_id;
-  if (!taskId) {
-    return res.status(400).send({ error: "task id is required." });
-  } else {
-    const result = await Task.getTask(Number(taskId));
-    if (!result) {
-      return res.status(400).send({ error: "Task id doesn't exist." });
-    } else {
-      return res.status(200).send(result);
-    }
-  }
-};
-
 const handleRepeatRule = async (repeatDetails, taskId) => {
-  //only fired when task repeat = true
-  //if rule exist, update rule
-  if (taskId > 0) {
-    const repeatRule = await RepeatedTask.getRepeatRule(taskId);
-    if (!repeatRule) {
-      repeatDetails.task_id = taskId;
-      const ruleId = await RepeatedTask.createRepeatRule(repeatDetails);
-      console.log("create new repeat rule: ", ruleId);
-    } else {
-      const result = await RepeatedTask.updateRepeatRule(repeatDetails, taskId);
-      console.log("update repeat rule: ", result);
-    }
+  const repeatRule = await RepeatedTask.getRepeatRule(taskId);
+  if (!repeatRule) {
+    repeatDetails.task_id = taskId;
+    await RepeatedTask.createRepeatRule(repeatDetails);
+  } else {
+    await RepeatedTask.updateRepeatRule(repeatDetails, taskId);
   }
 };
 
@@ -117,6 +75,5 @@ const deleteTask = async (req, res) => {
 
 module.exports = {
   updateTask,
-  getTask,
   deleteTask,
 };

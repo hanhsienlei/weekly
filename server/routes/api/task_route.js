@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { authentication, wrapAsync, validateTaskDueDate } = require("../../../utils/util");
 
-const { updateTask, getTask, deleteTask } = require("../../controllers/task_controller");
+const { updateTask, deleteTask } = require("../../controllers/task_controller");
 const {
     USER_ROLE
 } = require('../../models/user_model');
