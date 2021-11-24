@@ -26,15 +26,15 @@ const stopRepeatTask = async (req, res) => {
 };
 
 const saveNewRepeatedTask = async (req, res) => {
-  const originId = req.body.task_origin_id;
-  const title = req.body.task_title;
-  const description = req.body.task_description;
-  const dueDate = req.body.task_due_date;
+  const originId = req.body.taskOriginId;
+  const title = req.body.taskTitle;
+  const description = req.body.taskDescription;
+  const dueDate = req.body.taskDueDate;
   const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
-  const originDate = req.body.task_origin_date;
+  const originDate = req.body.taskOriginDate;
   const originDateUnix = Math.ceil(new Date(originDate + "T23:59:59"));
-  const status = req.body.task_status;
-  if (getInputLength(req.body.task_title) > 100) {
+  const status = req.body.taskStatus;
+  if (getInputLength(req.body.taskTitle) > 100) {
     res.status(400).send({ error: "title too long" });
     return;
   }
@@ -64,14 +64,14 @@ const deleteNewRepeatedTask = async (req, res) => {
 };
 
 const updateSavedRepeatedTask = async (req, res) => {
-  const taskId = req.body.task_id;
+  const taskId = req.body.taskId;
   const body = req.body;
   const taskDetails = {
-    title: body.task_title,
-    description: body.task_description,
-    status: body.task_status,
-    due_date: body.task_due_date,
-    due_date_unix: Math.ceil(new Date(body.task_due_date + "T23:59:59")),
+    title: body.taskTitle,
+    description: body.taskDescription,
+    status: body.taskStatus,
+    due_date: body.taskDueDate,
+    due_date_unix: Math.ceil(new Date(body.taskDueDate + "T23:59:59")),
   };
   const result = await Task.updateTask(taskDetails, taskId);
   res.status(200).send({ result });

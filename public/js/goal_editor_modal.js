@@ -28,11 +28,11 @@ const renderGoalEditor = (goalId) => {
           });
         } else {
           const body = {
-            goal_id: goalId,
-            goal_title: goalTitle.value.trim(),
-            goal_due_date: goalDueDate.value,
-            goal_category: goalCategory.options[goalCategory.selectedIndex].value,
-            goal_description: goalDescription.value.trim(),
+            goalId,
+            goalTitle: goalTitle.value.trim(),
+            goalDueDate: goalDueDate.value,
+            goalCategory: goalCategory.options[goalCategory.selectedIndex].value,
+            goalDescription: goalDescription.value.trim(),
           };
           //console.log("dave goal body:", body)
           fetch("/api/goal", {
@@ -72,10 +72,10 @@ const renderGoalEditor = (goalId) => {
           return alert("Please name the milestone before adding ");
         }
         const body = {
-          milestone_title: newTitle,
-          milestone_status: 0,
-          milestone_goal_id: goalId,
-          milestone_due_date: goalDueDate.value,
+          milestoneTitle: newTitle,
+          milestoneStatus: 0,
+          milestoneGoalId: goalId,
+          milestoneDueDate: goalDueDate.value,
         };
         fetch("/api/milestone", {
           method: "POST",
@@ -87,7 +87,7 @@ const renderGoalEditor = (goalId) => {
         })
           .then((response) => response.json())
           .then((data) => {
-            const milestoneId = data.milestone_id;
+            const milestoneId = data.milestoneId;
             createMilestoneContainer(
               milestoneId,
               newTitle,
@@ -103,8 +103,8 @@ const renderGoalEditor = (goalId) => {
       };
 
       modal.dataset.goalId = goalId;
-      goalTitleIcon.textContent = categoryMaterialIcons[data.g_category]
-      goalTitle.value = data.g_title;
+      goalTitleIcon.textContent = categoryMaterialIcons[data.goalCategory]
+      goalTitle.value = data.goalTitle;
       goalTitle.addEventListener("keyup", (e) => {
         if (e.keyCode === 13) {
           saveGoal();
@@ -115,14 +115,14 @@ const renderGoalEditor = (goalId) => {
         "onclick",
         `deleteGoalAndChildren(${goalId})`
       );
-      goalDueDate.value = data.g_due_date;
+      goalDueDate.value = data.goalDueDate;
       
-      goalDescription.value = data.g_description;
+      goalDescription.value = data.goalDescription;
       goalSaveButton.addEventListener("click", saveGoal);
       goalSaveButton.setAttribute("data-bs-toggle", "collapse")
       goalSaveButton.setAttribute("data-bs-target", ".goal-container-row")
-      let goalCategoryIndex = data.g_category
-      if(data.g_category>8||data.g_category<0){
+      let goalCategoryIndex = data.goalCategory
+      if(data.goalCategory>8||data.goalCategory<0){
         goalCategoryIndex = 0
       }
       goalCategory.options[goalCategoryIndex].selected = true
@@ -139,38 +139,38 @@ const renderGoalEditor = (goalId) => {
       });
       if (data.milestones && data.milestones.length > 0) {
         data.milestones.forEach((milestone) => {
-          const milestoneId = milestone.m_id;
-          const milestoneDueDate = milestone.m_deu_date;
-          if (milestone.m_status > -1) {
+          const milestoneId = milestone.milestoneId;
+          const milestoneDueDate = milestone.milestoneDueDate;
+          if (milestone.milestoneStatus > -1) {
             createMilestoneContainer(
               milestoneId,
-              milestone.m_title,
-              milestone.m_due_date,
-              milestone.m_description,
+              milestone.milestoneTitle,
+              milestone.milestoneDueDate,
+              milestone.milestoneDescription,
               goalId
             );
           }
           if (milestone.tasks) {
             milestone.tasks.forEach((task) => {
-              if (task.t_status > -1 || !task.t_origin_id) {
+              if (task.taskStatus > -1 || !task.taskOriginId) {
                 
                 createEventComponent(
                   `milestone-${milestoneId}`,
                   "task",
-                  task.t_id,
-                  task.t_title,
-                  task.t_status,
-                  task.t_due_date,
-                  task.t_description,
+                  task.taskId,
+                  task.taskTitle,
+                  task.taskStatus,
+                  task.taskDueDate,
+                  task.taskDescription,
                   null,
-                  task.r_frequency,
-                  task.r_end_date,
+                  task.repeatFrequency,
+                  task.repeatEndDate,
                   milestoneId,
-                  milestone.m_due_date,
+                  milestone.milestoneDueDate,
                   goalId,
                   goalDueDate.value,
                   0,
-                  task.t_origin_id,
+                  task.taskOriginId,
                   null
                 );
               }
@@ -224,10 +224,10 @@ const createMilestoneContainer = (
       });
     } else {
       const body = {};
-      body.milestone_id = milestoneId;
-      body.milestone_title = milestoneTitle.value.trim();
-      body.milestone_description = milestoneDescription.value.trim();
-      body.milestone_due_date =
+      body.milestoneId = milestoneId;
+      body.milestoneTitle = milestoneTitle.value.trim();
+      body.milestoneDescription = milestoneDescription.value.trim();
+      body.milestoneDueDate =
       milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
 
       fetch(`/api/milestone`, {
@@ -409,10 +409,10 @@ const createMilestoneContainer = (
       return alert("Please name the task before adding");
     }
     const body = {};
-    body.task_title = newTaskTitle;
-    body.task_status = 0;
-    body.task_due_date = milestoneDueDate.value;
-    body.task_milestone_id = milestoneId;
+    body.taskTitle = newTaskTitle;
+    body.taskStatus = 0;
+    body.taskDueDate = milestoneDueDate.value;
+    body.taskMilestoneId = milestoneId;
 
     fetch(`/api/task`, {
       method: "POST",
@@ -424,7 +424,7 @@ const createMilestoneContainer = (
     })
       .then((response) => response.json())
       .then((data) => {
-        const taskId = data.task_id;
+        const taskId = data.taskId;
         
         createEventComponent(
           `milestone-${milestoneId}`,

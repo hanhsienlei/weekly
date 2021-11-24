@@ -78,9 +78,9 @@ const authorizationGoalProgress = () => {
       if (userId !== returnedUserId.user_id) {
         res.status(400).send({ error: "This is not your goal!" });
         return;
-      }else {
-      next()
-    }
+      } else {
+        next();
+      }
     }
   };
 };
@@ -89,8 +89,8 @@ const validateGoalDueDate = () => {
   return async function (req, res, next) {
     const userBirthday = new Date(req.user.birthday);
     const userByeDay = getUserByeDay(userBirthday);
-    const goalDueDate = getDateObjectFromYMD(req.body.goal_due_date);
-    const goalId = req.body.goal_id;
+    const goalDueDate = getDateObjectFromYMD(req.body.goalDueDate);
+    const goalId = req.body.goalId;
 
     // user
     if (goalId) {
@@ -136,7 +136,6 @@ const validateGoalDueDate = () => {
           }
           next();
         }
-
       } catch (err) {
         res.status(500).send({ error: "Something went wrong" });
         return;
@@ -149,9 +148,9 @@ const validateMilestoneDueDate = () => {
   return async function (req, res, next) {
     const userBirthday = new Date(req.user.birthday);
     const userByeDay = getUserByeDay(userBirthday);
-    const milestoneDueDate = getDateObjectFromYMD(req.body.milestone_due_date);
-    const milestoneId = req.body.milestone_id;
-    const goalId = req.body.milestone_goal_id;
+    const milestoneDueDate = getDateObjectFromYMD(req.body.milestoneDueDate);
+    const milestoneId = req.body.milestoneId;
+    const goalId = req.body.milestoneGoalId;
     const userId = Number(req.user.id);
 
     if (milestoneDueDate < userBirthday) {
@@ -189,12 +188,11 @@ const validateMilestoneDueDate = () => {
     }
 
     // milestone's family
-    
+
     if (!milestoneId) {
       next();
     } else {
       try {
-        
         const goal = await getGoalByMilestone(milestoneId);
         const goalDueDate = new Date(goal[0].g_due_date);
         const goalDueDateYMD = getDateYMD(goalDueDate);
@@ -210,41 +208,42 @@ const validateMilestoneDueDate = () => {
         }
 
         // task
-        
+
         if (!tasks.length) {
           next();
           return;
-        }else {
-        for (let i = 0; i < tasks.length; i++) {
-          const taskDueDate = new Date(tasks[i].t_due_date);
-          const taskDueDateYMD = getDateYMD(taskDueDate);
-          const taskTitle = tasks[i].t_title;
-          console.log("milestoneDueDate,  taskDueDate ",milestoneDueDate,  taskDueDate)
-          if (milestoneDueDate < taskDueDate) {
-            console.log("400 error: ",milestoneDueDate,  taskDueDate)
-            res.status(400).send({
-              error: `Milestone shouldn't due before its task ${taskTitle} (${taskDueDateYMD}).`,
-            });
-            return;
-          }
-          // task repeat
-          if (tasks[i].t_repeat) {
-            const repeatEndDate = new Date(tasks[i].r_end_date);
-            const repeatEndDateYMD = getDateYMD(repeatEndDate);
+        } else {
+          for (let i = 0; i < tasks.length; i++) {
+            const taskDueDate = new Date(tasks[i].t_due_date);
+            const taskDueDateYMD = getDateYMD(taskDueDate);
+            const taskTitle = tasks[i].t_title;
+            console.log(
+              "milestoneDueDate,  taskDueDate ",
+              milestoneDueDate,
+              taskDueDate
+            );
+            if (milestoneDueDate < taskDueDate) {
+              console.log("400 error: ", milestoneDueDate, taskDueDate);
+              res.status(400).send({
+                error: `Milestone shouldn't due before its task ${taskTitle} (${taskDueDateYMD}).`,
+              });
+              return;
+            }
+            // task repeat
+            if (tasks[i].t_repeat) {
+              const repeatEndDate = new Date(tasks[i].r_end_date);
+              const repeatEndDateYMD = getDateYMD(repeatEndDate);
 
-
-            if (milestoneDueDate < repeatEndDate) {
-
-            res.status(400).send({
-              error: `Milestone shouldn't due before its task ${taskTitle} (repeat until ${repeatEndDateYMD}).`,
-            });
-            return;
+              if (milestoneDueDate < repeatEndDate) {
+                res.status(400).send({
+                  error: `Milestone shouldn't due before its task ${taskTitle} (repeat until ${repeatEndDateYMD}).`,
+                });
+                return;
+              }
+            }
           }
-          }
+          next();
         }
-        next();
-        }
-        
       } catch (err) {
         console.log(err);
         res.status(500).send({ error: "Something went wrong." });
@@ -258,13 +257,12 @@ const validateTaskDueDate = () => {
   return async function (req, res, next) {
     const userBirthday = new Date(req.user.birthday);
     const userByeDay = getUserByeDay(userBirthday);
-    const taskDueDate = getDateObjectFromYMD(req.body.task_due_date);
-    const taskId = req.body.task_id;
-    const milestoneId = req.body.task_milestone_id;
+    const taskDueDate = getDateObjectFromYMD(req.body.taskDueDate);
+    const taskId = req.body.taskId;
+    const milestoneId = req.body.taskMilestoneId;
     const userId = Number(req.user.id);
-    console.log("req.body: ", req.body)
+    console.log("req.body: ", req.body);
 
-    
     if (taskDueDate < userBirthday) {
       res.status(400).send({ error: "You were not born yet." });
       return;
@@ -278,33 +276,37 @@ const validateTaskDueDate = () => {
     }
     //repeat end date
     if (req.body.task_repeat) {
-      const taskRepeatEndDate = req.body.task_r_end_date?getDateObjectFromYMD(req.body.task_r_end_date): null
-      
-      if(!taskRepeatEndDate && !milestoneId) {
-        req.body.task_r_end_date = getDateYMD(userByeDay)
-        console.log("independent task repeat end date set to forever")
-      }else {
-        if (taskDueDate > taskRepeatEndDate) {
-        res.status(400).send({
-          error: `Task shouldn't due after its repeat end date (${getDateYMD(
-            taskRepeatEndDate
-          )}).`,
-        });
-        return;
-      }
-      
-      if (taskRepeatEndDate < userBirthday) {
-        res.status(400).send({ error: "You were not born yet." });
-        return;
-      }
+      const taskRepeatEndDate = req.body.taskRepeatEndDate
+        ? getDateObjectFromYMD(req.body.taskRepeatEndDate)
+        : null;
 
-      if (taskRepeatEndDate > userByeDay) {
-        res
-          .status(400)
-          .send({ error: "Let's plan something before 80 year old." });
-        return;
+      if (!taskRepeatEndDate && !milestoneId) {
+        req.body.taskRepeatEndDate = getDateYMD(userByeDay);
+        console.log("independent task repeat end date set to forever");
+      } else {
+
+
+        if (taskDueDate > taskRepeatEndDate) {
+          res.status(400).send({
+            error: `Task shouldn't due after its repeat end date (${getDateYMD(
+              taskRepeatEndDate
+            )}).`,
+          });
+          return;
+        }
+
+        if (taskRepeatEndDate < userBirthday) {
+          res.status(400).send({ error: "You were not born yet." });
+          return;
+        }
+
+        if (taskRepeatEndDate > userByeDay) {
+          res
+            .status(400)
+            .send({ error: "Let's plan something before 80 year old." });
+          return;
+        }
       }
-    }
     }
 
     //user
@@ -328,8 +330,6 @@ const validateTaskDueDate = () => {
       }
     }
 
-
-    
     //new task
     if (!taskId) {
       console.log("it's a new task");
@@ -355,22 +355,21 @@ const validateTaskDueDate = () => {
             });
             return;
           }
-          if (req.body.task_repeat) {
+          if (req.body.taskRepeat) {
             const taskRepeatEndDate = getDateObjectFromYMD(
-              req.body.task_r_end_date
+              req.body.taskRepeatEndDate
             );
             if (taskRepeatEndDate > milestoneDueDate) {
               res.status(400).send({
-                error: `Task can only repeat until when its milestone dues: ${milestoneTitle} (${milestoneDueDateYMD}).`,
+                error: `Task should only repeat until when its milestone dues: ${milestoneTitle} (${milestoneDueDateYMD}).`,
               });
               return;
             }
           }
           next();
-        }else{
+        } else {
           next();
         }
-        
       } catch (err) {
         console.log(err);
         res.status(500).send({ error: "Something went wrong." });
@@ -380,10 +379,9 @@ const validateTaskDueDate = () => {
   };
 };
 
-
 const getInputLength = (string) => {
-  return string.replace(/[^\x00-\xff]/g,"xx").length;
-}
+  return string.replace(/[^\x00-\xff]/g, "xx").length;
+};
 
 module.exports = {
   wrapAsync,
@@ -392,5 +390,5 @@ module.exports = {
   validateGoalDueDate,
   validateMilestoneDueDate,
   validateTaskDueDate,
-  getInputLength
+  getInputLength,
 };

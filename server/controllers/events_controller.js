@@ -21,12 +21,12 @@ const getEventsByDate = async (req, res) => {
   const dateEndMonth = getMonthEndByDate(targetDateObject);
   const dateEndYear = new Date(targetDate.split("-")[0], 11, 31);
   const data = {
-    buttons_date: getButtonsDate(targetDateObject),
+    buttonsDate: getButtonsDate(targetDateObject),
     date: {
-      start_date: targetDate,
-      due_date: targetDate,
+      startDate: targetDate,
+      dueDate: targetDate,
       value: targetDate.split("-")[1] + "-" + targetDate.split("-")[2],
-      week_day: targetDateObject.toLocaleString("default", {
+      weekDay: targetDateObject.toLocaleString("default", {
         weekday: "long",
       }),
       tasks: [],
@@ -34,16 +34,16 @@ const getEventsByDate = async (req, res) => {
       goals: [],
     },
     week: {
-      start_date: targetDate,
-      due_date: getDateYMD(dateEndWeek),
+      startDate: targetDate,
+      dueDate: getDateYMD(dateEndWeek),
       value: getWeekNumberByDate(targetDateObject).weekNumber,
       tasks: [],
       milestones: [],
       goals: [],
     },
     month: {
-      start_date: targetDate,
-      due_date: getDateYMD(dateEndMonth),
+      startDate: targetDate,
+      dueDate: getDateYMD(dateEndMonth),
       value: targetDateObject.toLocaleString("default", {
         month: "long",
       }),
@@ -52,8 +52,8 @@ const getEventsByDate = async (req, res) => {
       goals: [],
     },
     year: {
-      start_date: targetDate,
-      due_date: getDateYMD(dateEndYear),
+      startDate: targetDate,
+      dueDate: getDateYMD(dateEndYear),
       value: targetDate.split("-")[0],
       tasks: [],
       milestones: [],
@@ -99,11 +99,11 @@ const getEventsByDate = async (req, res) => {
       events.forEach((row) => {
         //javascript會自動將時區加入到date string再做成ISO string(UTC), 例如2021-10-25會變成2021-10-24T16:00:00.000Z
         //要自己轉回local time zone 的 date string (YYYY-MM-DD)
-        const g_due_date = row.g_due_date ? getDateYMD(row.g_due_date) : null;
-        const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
-        const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
-        const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
-        const t_origin_date = row.t_origin_date
+        const goalDueDate = row.g_due_date ? getDateYMD(row.g_due_date) : null;
+        const milestoneDueDate = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+        const taskDueDate = row.t_due_date ? getDateYMD(row.t_due_date) : null;
+        const repeatEndDate = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+        const taskOriginDate = row.t_origin_date
           ? getDateYMD(row.t_origin_date)
           : null;
         for (let i = 0; i < 4; i++) {
@@ -112,19 +112,19 @@ const getEventsByDate = async (req, res) => {
           if (
             row.g_id &&
             row.g_status !== -1 &&
-            g_due_date >= targetDate &&
-            g_due_date <= dateEnd &&
+            goalDueDate >= targetDate &&
+            goalDueDate <= dateEnd &&
             !records.goalIds.includes(row.g_id)
           ) {
             records.goalIds.push(row.g_id);
             const { g_id, g_title, g_description, g_status, g_category } = row;
             const newGoal = {
-              g_id,
-              g_title,
-              g_description,
-              g_due_date,
-              g_status,
-              g_category,
+              goalId: g_id,
+              goalTitle: g_title,
+              goalDescription: g_description,
+              goalDueDate,
+              goalStatus: g_status,
+              goalCategory: g_category,
             };
             data[range].goals.push(newGoal);
           }
@@ -132,30 +132,30 @@ const getEventsByDate = async (req, res) => {
           if (
             row.m_id &&
             row.m_status !== -1 &&
-            m_due_date >= targetDate &&
-            m_due_date <= dateEnd &&
+            milestoneDueDate >= targetDate &&
+            milestoneDueDate <= dateEnd &&
             !records.milestoneIds.includes(row.m_id)
           ) {
             records.milestoneIds.push(row.m_id);
             const { m_id, m_title, m_description, m_status, g_id, g_category } =
               row;
             const newMilestone = {
-              m_id,
-              m_title,
-              m_description,
-              m_due_date,
-              m_status,
-              m_parent: [row.g_title],
-              g_id,
-              g_due_date,
-              g_category,
+              milestoneId: m_id,
+              milestoneTitle: m_title,
+              milestoneDescription: m_description,
+              milestoneDueDate,
+              milestoneStatus: m_status,
+              milestoneParent: [row.g_title],
+              goalId: g_id,
+              goalDueDate,
+              goalCategory: g_category,
             };
             data[range].milestones.push(newMilestone);
           }
 
           if (
-            t_due_date >= targetDate &&
-            t_due_date <= dateEnd &&
+            taskDueDate >= targetDate &&
+            taskDueDate <= dateEnd &&
             !records.taskIds.includes(row.t_id)
           ) {
             if (row.t_status !== -1) {
@@ -169,35 +169,35 @@ const getEventsByDate = async (req, res) => {
                 t_repeat,
                 t_origin_id,
               } = row;
-              const m_id = row.m_id ? row.m_id : null;
-              const g_id = row.g_id ? row.g_id : null;
-              const g_category = row.g_category ? row.g_category : null;
+              const milestoneId = row.m_id ? row.m_id : null;
+              const goalId = row.g_id ? row.g_id : null;
+              const goalCategory = row.g_category ? row.g_category : null;
 
               const newTask = {
-                t_id,
-                t_title,
-                t_description,
-                t_due_date,
-                t_status,
-                t_repeat,
-                t_origin_id,
-                r_frequency,
-                r_end_date,
-                m_id,
-                m_due_date,
-                g_id,
-                g_due_date,
-                g_category,
+                taskId: t_id,
+                taskTitle: t_title,
+                taskDescription: t_description,
+                taskDueDate,
+                taskStatus: t_status,
+                taskRepeat: t_repeat,
+                taskOriginId: t_origin_id,
+                repeatFrequency: r_frequency,
+                repeatEndDate,
+                milestoneId,
+                milestoneDueDate,
+                goalId,
+                goalDueDate,
+                goalCategory,
               };
-              newTask.t_parent = row.m_id ? [row.g_title, row.m_title] : null;
+              newTask.taskParent = row.m_id ? [row.g_title, row.m_title] : null;
 
               if (row.t_origin_id) {
-                newTask.t_origin_date = t_origin_date;
+                newTask.taskOriginDate = taskOriginDate;
               }
               data[range].tasks.push(newTask);
             }
           }
-          if (t_origin_date >= targetDate && t_origin_date <= dateEnd) {
+          if (taskOriginDate >= targetDate && taskOriginDate <= dateEnd) {
             repeatedTaskIds.push(row.t_origin_id);
           }
         }
@@ -205,10 +205,10 @@ const getEventsByDate = async (req, res) => {
 
       //render repeated task only for date container
       events.forEach((row) => {
-        const g_due_date = row.g_due_date ? getDateYMD(row.g_due_date) : null;
-        const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
-        const t_due_date = row.t_due_date ? getDateYMD(row.t_due_date) : null;
-        const r_end_date = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+        const goalDueDate = row.g_due_date ? getDateYMD(row.g_due_date) : null;
+        const milestoneDueDate = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+        const taskDueDate = row.t_due_date ? getDateYMD(row.t_due_date) : null;
+        const repeatEndDate = row.r_end_date ? getDateYMD(row.r_end_date) : null;
         function addNewRepeatingTask() {
           const {
             t_id,
@@ -220,31 +220,31 @@ const getEventsByDate = async (req, res) => {
             g_category,
           } = row;
           const newTask = {
-            t_id: null,
-            t_title,
-            t_description,
-            t_due_date: targetDate,
-            t_status: 0,
-            //t_parent: [row.g_title, row.m_title],
-            t_origin_id: t_id,
-            t_origin_date: targetDate,
-            r_frequency,
-            r_end_date,
-            m_id,
-            m_due_date,
-            g_id,
-            g_due_date,
-            g_category,
+            taskId: null,
+            taskTitle:t_title,
+            taskDescription: t_description,
+            taskDueDate: targetDate,
+            taskStatus: 0,
+            taskParent: [row.g_title, row.m_title],
+            taskOriginId: t_id,
+            taskOriginDate: targetDate,
+            repeatFrequency: r_frequency,
+            repeatEndDate,
+            milestoneId: m_id,
+            milestoneDueDate,
+            goalId: g_id,
+            goalDueDate,
+            goalCategory: g_category,
           };
 
           data.date.tasks.push(newTask);
-          repeatedTaskIds.push(t_id);
+          repeatedTaskIds.push(row.t_id);
         }
 
         const isRepeatedTaskRecorded = repeatedTaskIds.includes(row.t_id);
         const isTaskListed = records.taskIds.includes(row.t_id);
         const isInDateRange =
-          t_due_date < targetDate && r_end_date >= targetDate;
+          taskDueDate < targetDate && repeatEndDate >= targetDate;
 
         if (
           row.t_status != -1 &&
@@ -263,7 +263,7 @@ const getEventsByDate = async (req, res) => {
               addNewRepeatingTask();
               break;
             case repeatFrequency.weekly:
-              const dateStartRepeatValue = new Date(t_due_date).valueOf();
+              const dateStartRepeatValue = new Date(taskDueDate).valueOf();
               const dateEndValue = new Date(targetDate).valueOf();
               const sevenDaysInMilliSecond = 60 * 60 * 24 * 1000 * 7;
               const isWeekly =
@@ -275,7 +275,7 @@ const getEventsByDate = async (req, res) => {
               }
               break;
             case repeatFrequency.monthly:
-              let dateInit = t_due_date;
+              let dateInit = taskDueDate;
               while (dateInit <= targetDate) {
                 let dateNew = getDateYMD(
                   getNextMonthThisDay(new Date(dateInit))
@@ -299,20 +299,20 @@ const getEventsByDate = async (req, res) => {
 const getButtonsDate = (dateObject) => {
   const dayMilliSecond = 60 * 60 * 24 * 1000;
   const data = {};
-  data.date_before = getDateYMD(
+  data.dateBefore = getDateYMD(
     new Date(dateObject.valueOf() - dayMilliSecond)
   );
-  data.date_after = getDateYMD(new Date(dateObject.valueOf() + dayMilliSecond));
-  data.week_before = getDateYMD(
+  data.dateAfter = getDateYMD(new Date(dateObject.valueOf() + dayMilliSecond));
+  data.weekBefore = getDateYMD(
     new Date(dateObject.valueOf() - dayMilliSecond * 7)
   );
-  data.week_after = getDateYMD(
+  data.weekAfter = getDateYMD(
     new Date(dateObject.valueOf() + dayMilliSecond * 7)
   );
-  data.month_before = getDateYMD(new Date(getPreviousMonthThisDay(dateObject)));
-  data.month_after = getDateYMD(new Date(getNextMonthThisDay(dateObject)));
-  data.year_before = getDateYMD(new Date(getPreviousYearThisDay(dateObject)));
-  data.year_after = getDateYMD(new Date(getNextYearThisDay(dateObject)));
+  data.monthBefore = getDateYMD(new Date(getPreviousMonthThisDay(dateObject)));
+  data.monthAfter = getDateYMD(new Date(getNextMonthThisDay(dateObject)));
+  data.yearBefore = getDateYMD(new Date(getPreviousYearThisDay(dateObject)));
+  data.yearAfter = getDateYMD(new Date(getNextYearThisDay(dateObject)));
   return data;
 };
 

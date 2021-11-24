@@ -16,42 +16,40 @@ const renderEvents = async (date) => {
         const title = document.querySelector(`.${container}-value`);
         const beforeButton = document.querySelector(`.${container}-before`);
         const afterButton = document.querySelector(`.${container}-after`);
-        const beforeKey = `${container}_before`;
-        const afterKey = `${container}_after`;
-        const dateBefore = data.buttons_date[beforeKey];
-        const dateAfter = data.buttons_date[afterKey];
+        const beforeKey = `${container}Before`;
+        const afterKey = `${container}After`;
+        const dateBefore = data.buttonsDate[beforeKey];
+        const dateAfter = data.buttonsDate[afterKey];
         const subTitle = document.querySelector(`.${container}-sub-title`);
         const eventsContainer = document.querySelector(
           `.${container}-events-container`
         );
 
-        title.setAttribute("data-due-date", data[container].due_date);
+        title.setAttribute("data-due-date", data[container].dueDate);
 
         title.textContent = data[container].value;
         beforeButton.setAttribute("onclick", `renderEvents('${dateBefore}')`);
         afterButton.setAttribute("onclick", `renderEvents('${dateAfter}')`);
         if (container === "date") {
-          subTitle.textContent = data[container].week_day;
+          subTitle.textContent = data[container].weekDay;
         } else {
-          const startDate = data[container].start_date
-            ? data[container].start_date.split("-")[1] +
+          const startDate = data[container].startDate
+            ? data[container].startDate.split("-")[1] +
               "-" +
-              data[container].start_date.split("-")[2]
+              data[container].startDate.split("-")[2]
             : null;
-          const endDate = data[container].due_date
-            ? data[container].due_date.split("-")[1] +
+          const endDate = data[container].dueDate
+            ? data[container].dueDate.split("-")[1] +
               "-" +
-              data[container].due_date.split("-")[2]
+              data[container].dueDate.split("-")[2]
             : null;
           subTitle.textContent = startDate + " ~ " + endDate;
         }
-        // eventsContainer.classList.add(
-        //   `events-container-${data[container].due_date}`
-        // );
-        eventsContainer.setAttribute("data-due-date", data[container].due_date);
+       
+        eventsContainer.setAttribute("data-due-date", data[container].dueDate);
         eventsContainer.setAttribute(
           "data-start-date",
-          data[container].start_date
+          data[container].startDate
         );
         eventsContainer.innerHTML = "";
         if (container === "week") {
@@ -61,77 +59,77 @@ const renderEvents = async (date) => {
       //events
       if (data.date.tasks) {
         data.date.goals.forEach((goal) => {
-          if (goal.g_status > -1) {
+          if (goal.goalStatus > -1) {
             createEventComponent(
               "date",
               "goal",
-              goal.g_id,
-              goal.g_title,
-              goal.g_status,
-              goal.g_due_date,
-              goal.g_description,
+              goal.goalId,
+              goal.goalTitle,
+              goal.goalStatus,
+              goal.goalDueDate,
+              goal.goalDescription,
               null,
               null,
               null,
               null,
               null,
-              goal.g_id,
+              goal.goalId,
               null,
-              goal.g_category,
+              goal.goalCategory,
               null,
               null
             );
           }
         });
         data.date.milestones.forEach((milestone) => {
-          if (milestone.m_status > -1) {
+          if (milestone.milestoneStatus > -1) {
             createEventComponent(
               "date",
               "milestone",
-              milestone.m_id,
-              milestone.m_title,
-              milestone.m_status,
-              milestone.m_due_date,
-              milestone.m_description,
-              milestone.m_parent.join("．"),
+              milestone.milestoneId,
+              milestone.milestoneTitle,
+              milestone.milestoneStatus,
+              milestone.milestoneDueDate,
+              milestone.milestoneDescription,
+              milestone.milestoneParent.join("．"),
               null,
               null,
               null,
               null,
-              milestone.g_id,
-              milestone.g_due_date,
-              milestone.g_category,
+              milestone.goalId,
+              milestone.goalDueDate,
+              milestone.goalCategory,
               null,
               null
             );
           }
         });
         data.date.tasks.forEach((task) => {
-          let repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-          const taskParents = task.t_parent ? task.t_parent.join("．") : null
-          if (!task.t_id) {
-            repeated_frequency = task.r_frequency;
+          let repeatedFrequency = task.taskRepeat ? task.repeatFrequency : 0;
+          const taskParents = task.taskParent ? task.taskParent.join("．") : null
+          if (!task.taskId) {
+            repeatedFrequency = task.repeatFrequency;
           }
           
-          if (task.t_status > -1) {
+          if (task.taskStatus > -1) {
             createEventComponent(
               "date",
               "task",
-              task.t_id,
-              task.t_title,
-              task.t_status,
-              task.t_due_date,
-              task.t_description,
+              task.taskId,
+              task.taskTitle,
+              task.taskStatus,
+              task.taskDueDate,
+              task.taskDescription,
               taskParents,
-              repeated_frequency,
-              task.r_end_date,
-              task.m_id,
-              task.m_due_date,
-              task.g_id,
-              task.g_due_date,
-              task.g_category,
-              task.t_origin_id,
-              task.t_origin_date
+              repeatedFrequency,
+              task.repeatEndDate,
+              task.milestoneId,
+              task.milestoneDueDate,
+              task.goalId,
+              task.goalDueDate,
+              task.goalCategory,
+              task.taskOriginId,
+              task.taskOriginDate
             );
           }
         });
@@ -139,74 +137,74 @@ const renderEvents = async (date) => {
 
       if (data.week.tasks) {
         data.week.goals.forEach((goal) => {
-          if (goal.g_status > -1) {
+          if (goal.goalStatus > -1) {
             createEventComponent(
               "week",
               "goal",
-              goal.g_id,
-              goal.g_title,
-              goal.g_status,
-              goal.g_due_date,
-              goal.g_description,
+              goal.goalId,
+              goal.goalTitle,
+              goal.goalStatus,
+              goal.goalDueDate,
+              goal.goalDescription,
               null,
               null,
               null,
               null,
               null,
-              goal.g_id,
+              goal.goalId,
               null,
-              goal.g_category,
+              goal.goalCategory,
               null,
               null
             );
           }
         });
         data.week.milestones.forEach((milestone) => {
-          if (milestone.m_status > -1) {
+          if (milestone.milestoneStatus > -1) {
             createEventComponent(
               "week",
               "milestone",
-              milestone.m_id,
-              milestone.m_title,
-              milestone.m_status,
-              milestone.m_due_date,
-              milestone.m_description,
-              milestone.m_parent.join("．"),
+              milestone.milestoneId,
+              milestone.milestoneTitle,
+              milestone.milestoneStatus,
+              milestone.milestoneDueDate,
+              milestone.milestoneDescription,
+              milestone.milestoneParent.join("．"),
               null,
               null,
               null,
               null,
-              milestone.g_id,
-              milestone.g_due_date,
-              milestone.g_category,
+              milestone.goalId,
+              milestone.goalDueDate,
+              milestone.goalCategory,
               null,
               null
             );
           }
         });
         data.week.tasks.forEach((task) => {
-          if (task.t_status > -1) {
-            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-            const taskParents = task.t_parent ? task.t_parent.join("．") : null
-            if (task.t_id) {
+          if (task.taskStatus > -1) {
+            const repeatedFrequency = task.taskRepeat ? task.repeatfrequency : 0;
+            const taskParents = task.taskParent ? task.taskParent.join("．") : null
+            if (task.taskId) {
               createEventComponent(
                 "week",
                 "task",
-                task.t_id,
-                task.t_title,
-                task.t_status,
-                task.t_due_date,
-                task.t_description,
+                task.taskId,
+                task.taskTitle,
+                task.taskStatus,
+                task.taskDueDate,
+                task.taskDescription,
                 taskParents,
-                repeated_frequency,
-                task.r_end_date,
-                task.m_id,
-                task.m_due_date,
-                task.g_id,
-                task.g_due_date,
-                task.g_category,
-                task.t_origin_id,
-                task.t_origin_date
+                repeatedFrequency,
+                task.repeatEndDate,
+                task.milestoneId,
+                task.milestoneDueDate,
+                task.goalId,
+                task.goalDueDate,
+                task.goalCategory,
+                task.taskOriginId,
+                task.taskOriginDate
               );
             }
           }
@@ -215,74 +213,74 @@ const renderEvents = async (date) => {
 
       if (data.month.tasks) {
         data.month.goals.forEach((goal) => {
-          if (goal.g_status > -1) {
+          if (goal.goalStatus > -1) {
             createEventComponent(
               "month",
               "goal",
-              goal.g_id,
-              goal.g_title,
-              goal.g_status,
-              goal.g_due_date,
-              goal.g_description,
+              goal.goalId,
+              goal.goalTitle,
+              goal.goalStatus,
+              goal.goalDueDate,
+              goal.goalDescription,
               null,
               null,
               null,
               null,
               null,
-              goal.g_id,
+              goal.goalId,
               null,
-              goal.g_category,
+              goal.goalCategory,
               null,
               null
             );
           }
         });
         data.month.milestones.forEach((milestone) => {
-          if (milestone.m_status > -1) {
+          if (milestone.milestoneStatus > -1) {
             createEventComponent(
               "month",
               "milestone",
-              milestone.m_id,
-              milestone.m_title,
-              milestone.m_status,
-              milestone.m_due_date,
-              milestone.m_description,
-              milestone.m_parent.join("．"),
+              milestone.milestoneId,
+              milestone.milestoneTitle,
+              milestone.milestoneStatus,
+              milestone.milestoneDueDate,
+              milestone.milestoneDescription,
+              milestone.milestoneParent.join("．"),
               null,
               null,
               null,
               null,
-              milestone.g_id,
-              milestone.g_due_date,
-              milestone.g_category,
+              milestone.goalId,
+              milestone.goalDueDate,
+              milestone.goalCategory,
               null,
               null
             );
           }
         });
         data.month.tasks.forEach((task) => {
-          if (task.t_status > -1) {
-            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-            const taskParents = task.t_parent ? task.t_parent.join("．") : null
-            if (task.t_id) {
+          if (task.taskStatus > -1) {
+            const repeatedFrequency = task.taskRepeat ? task.repeatfrequency : 0;
+            const taskParents = task.taskParent ? task.taskParent.join("．") : null
+            if (task.taskId) {
               createEventComponent(
                 "month",
                 "task",
-                task.t_id,
-                task.t_title,
-                task.t_status,
-                task.t_due_date,
-                task.t_description,
+                task.taskId,
+                task.taskTitle,
+                task.taskStatus,
+                task.taskDueDate,
+                task.taskDescription,
                 taskParents,
-                repeated_frequency,
-                task.r_end_date,
-                task.m_id,
-                task.m_due_date,
-                task.g_id,
-                task.g_due_date,
-                task.g_category,
-                task.t_origin_id,
-                task.t_origin_date
+                repeatedFrequency,
+                task.repeatEndDate,
+                task.milestoneId,
+                task.milestoneDueDate,
+                task.goalId,
+                task.goalDueDate,
+                task.goalCategory,
+                task.taskOriginId,
+                task.taskOriginDate
               );
             }
           }
@@ -290,75 +288,75 @@ const renderEvents = async (date) => {
       }
       if (data.year.tasks) {
         data.year.goals.forEach((goal) => {
-          if (goal.g_status > -1) {
+          if (goal.goalStatus > -1) {
             createEventComponent(
               "year",
               "goal",
-              goal.g_id,
-              goal.g_title,
-              goal.g_status,
-              goal.g_due_date,
-              goal.g_description,
+              goal.goalId,
+              goal.goalTitle,
+              goal.goalStatus,
+              goal.goalDueDate,
+              goal.goalDescription,
               null,
               null,
               null,
               null,
               null,
-              goal.g_id,
+              goal.goalId,
               null,
-              goal.g_category,
+              goal.goalCategory,
               null,
               null
             );
           }
         });
         data.year.milestones.forEach((milestone) => {
-          if (milestone.m_status > -1) {
+          if (milestone.milestoneStatus > -1) {
             createEventComponent(
               "year",
               "milestone",
-              milestone.m_id,
-              milestone.m_title,
-              milestone.m_status,
-              milestone.m_due_date,
-              milestone.m_description,
-              milestone.m_parent.join("．"),
+              milestone.milestoneId,
+              milestone.milestoneTitle,
+              milestone.milestoneStatus,
+              milestone.milestoneDueDate,
+              milestone.milestoneDescription,
+              milestone.milestoneParent.join("．"),
               null,
               null,
               null,
               null,
-              milestone.g_id,
-              milestone.g_due_date,
-              milestone.g_category,
+              milestone.goalId,
+              milestone.goalDueDate,
+              milestone.goalCategory,
               null,
               null
             );
           }
         });
         data.year.tasks.forEach((task) => {
-          if (task.t_status > -1) {
-            const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
-            const taskParents = task.t_parent ? task.t_parent.join("．") : null
-            if (task.t_id) {
+          if (task.taskStatus > -1) {
+            const repeatedFrequency = task.taskRepeat ? task.repeatFrequency : 0;
+            const taskParents = task.taskParent ? task.taskParent.join("．") : null
+            if (task.taskId) {
 
               createEventComponent(
                 "year",
                 "task",
-                task.t_id,
-                task.t_title,
-                task.t_status,
-                task.t_due_date,
-                task.t_description,
+                task.taskId,
+                task.taskTitle,
+                task.taskStatus,
+                task.taskDueDate,
+                task.taskDescription,
                 taskParents,
-                repeated_frequency,
-                task.r_end_date,
-                task.m_id,
-                task.m_due_date,
-                task.g_id,
-                task.g_due_date,
-                task.g_category,
-                task.t_origin_id,
-                task.t_origin_date
+                repeatedFrequency,
+                task.repeatEndDate,
+                task.milestoneId,
+                task.milestoneDueDate,
+                task.goalId,
+                task.goalDueDate,
+                task.goalCategory,
+                task.taskOriginId,
+                task.taskOriginDate
               );
             }
           }
@@ -377,8 +375,8 @@ const addNewEvent = (timeScale, eventType) => {
   const title = input.value.trim();
   const dueDate = document.querySelector(`.${timeScale}-value`).dataset.dueDate;
   const body = {};
-  body[`${eventType}_title`] = title;
-  body[`${eventType}_due_date`] = dueDate;
+  body[`${eventType}Title`] = title;
+  body[`${eventType}DueDate`] = dueDate;
 
   if (!title) {
     Swal.fire({
@@ -398,7 +396,6 @@ const addNewEvent = (timeScale, eventType) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      //console.log("restuls: ", data);
       if (data.error) {
         Swal.fire({
           icon: "warning",
@@ -409,9 +406,9 @@ const addNewEvent = (timeScale, eventType) => {
         const eventContainer = document.querySelector(
           `.${timeScale}-events-container`
         );
-        const eventId = data.task_id || data.goal_id;
+        const eventId = data.taskId || data.goalId;
 
-        if (data.task_id) {
+        if (data.taskId) {
           //沒有goal button
           createEventComponent(
             timeScale,
@@ -463,13 +460,13 @@ const addNewEvent = (timeScale, eventType) => {
 };
 
 //打開modal 用的
-const createViewGoalButton = (goal_id) => {
+const createViewGoalButton = (goalId) => {
   const button = document.createElement("button");
   button.classList.add("btn", "btn-outline-primary", "edit-goal-button");
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "modal");
   button.setAttribute("data-bs-target", "#modal-goal");
-  button.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
+  button.setAttribute("onclick", `renderGoalEditor(${goalId})`);
   button.textContent = "view goal";
   return button;
 };
@@ -517,7 +514,7 @@ const createStopTodayButton = (
   button.textContent = "stop repeating today";
 
   button.addEventListener("click", (e) => {
-    const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_r_end_date=${dueDate}`;
+    const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_end_date=${dueDate}`;
     // console.log("apiEndpoint: ", apiEndpoint);
     fetch(apiEndpoint, {
       method: "POST",

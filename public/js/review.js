@@ -1,9 +1,9 @@
 let newGoal = 0;
 
 const goalList = document.querySelector(".goal-list");
-const renderGoalProgress = async (goal_id) => {
-  // console.log("fetch: ", goal_id);
-  fetch(`/api/goal/progress?goal_id=${goal_id}`, {
+const renderGoalProgress = async (goalId) => {
+  // console.log("fetch: ", goalId);
+  fetch(`/api/goal/progress?goal_id=${goalId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -43,49 +43,49 @@ const renderGoalProgress = async (goal_id) => {
       const progressEmptyNote = document.querySelector(".progress-empty-note");
       const goalPercentageSpan = document.querySelector(".goal-percentage");
       const {
-        g_id,
-        g_title,
-        g_due_date,
-        g_weeks_from_now,
-        g_summary,
-        m_titles,
-        m_number_of_task,
-        m_number_of_task_done,
+        goalId,
+        goalTitle,
+        goalDueDate,
+        goalWeeksFromNow,
+        goalSummary,
+        milestoneTitles,
+        milestoneNumberOfTask,
+        milestoneNumberOfTaskDone,
       } = data;
       let weeksFromNowValue =
-        g_weeks_from_now > 0 ? g_weeks_from_now : Math.abs(g_weeks_from_now);
+        goalWeeksFromNow > 0 ? goalWeeksFromNow : Math.abs(goalWeeksFromNow);
       let weeksFromNowText = "";
 
-      if (g_weeks_from_now > 1) {
+      if (goalWeeksFromNow > 1) {
         weeksFromNowText = ` weeks away`;
-      } else if (g_weeks_from_now == 1) {
+      } else if (goalWeeksFromNow == 1) {
         weeksFromNowValue = "";
         weeksFromNowText = `Some days ago`;
-      } else if (g_weeks_from_now == 0) {
+      } else if (goalWeeksFromNow == 0) {
         weeksFromNowValue = "";
         weeksFromNowText = `Today is the big day!`;
-      } else if (g_weeks_from_now == -1) {
+      } else if (goalWeeksFromNow == -1) {
         weeksFromNowValue = "";
         weeksFromNowText = `Some days away`;
-      } else if (g_weeks_from_now < -1) {
+      } else if (goalWeeksFromNow < -1) {
         weeksFromNowText = ` weeks ago`;
       }
 
-      const GoalEmptyNote = m_titles.length
+      const GoalEmptyNote = milestoneTitles.length
         ? ""
         : "⚠️ No plans are made for this goal yet. The charts show how they would look like when you start working on your goals.";
 
-      const goalDonePercentage = g_summary.task[1]
-        ? Math.ceil((g_summary.task[0] / g_summary.task[1]) * 100)
+      const goalDonePercentage = goalSummary.task[1]
+        ? Math.ceil((goalSummary.task[0] / goalSummary.task[1]) * 100)
         : 0;
-      const numberOfTaskOpen = g_summary.task[1] - g_summary.task[0];
-      let doughnutData = new Array(...m_number_of_task_done, numberOfTaskOpen);
-      let doughnutLabels = new Array(...m_titles, "Not done yet");
-      let barLabels = m_titles;
-      let barDataDone = m_number_of_task_done;
-      let barDataTotal = m_number_of_task;
-      let doneColor = m_titles.length ? "#ffafaf" : "#d8d8e0";
-      if (!m_titles.length) {
+      const numberOfTaskOpen = goalSummary.task[1] - goalSummary.task[0];
+      let doughnutData = new Array(...milestoneNumberOfTaskDone, numberOfTaskOpen);
+      let doughnutLabels = new Array(...milestoneTitles, "Not done yet");
+      let barLabels = milestoneTitles;
+      let barDataDone = milestoneNumberOfTaskDone;
+      let barDataTotal = milestoneNumberOfTask;
+      let doneColor = milestoneTitles.length ? "#ffafaf" : "#d8d8e0";
+      if (!milestoneTitles.length) {
         doughnutData = [1, 4, 3, 2, 5];
         doughnutLabels = [
           "milestone 1",
@@ -179,20 +179,20 @@ const renderGoalProgress = async (goal_id) => {
         },
       });
 
-      progressGoalTitle.textContent = g_title;
+      progressGoalTitle.textContent = goalTitle;
       progressGoalTitle.removeAttribute("onclick");
-      progressGoalTitle.setAttribute("onclick", `renderGoalEditor(${g_id})`);
+      progressGoalTitle.setAttribute("onclick", `renderGoalEditor(${goalId})`);
       progressGoalButton.removeAttribute("onclick");
-      progressGoalButton.setAttribute("onclick", `renderGoalEditor(${g_id})`);
+      progressGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
       progressGoalButton.classList.add("material-icons")
       progressGoalButton.textContent = "zoom_in";
       calendarIcon.textContent = "event"
-      progressGoalDueDate.textContent = g_due_date;
+      progressGoalDueDate.textContent = goalDueDate;
       clockIcon.textContent = "hourglass_empty"
       progressWeeksFromNowValue.textContent = weeksFromNowValue;
       progressWeeksFromNowText.textContent = weeksFromNowText;
-      progressTaskSum.textContent = `${g_summary.task[0]} / ${g_summary.task[1]} tasks done`;
-      progressMilestoneSum.textContent = `${g_summary.milestone[0]} / ${g_summary.milestone[1]} milestones achieved`;
+      progressTaskSum.textContent = `${goalSummary.task[0]} / ${goalSummary.task[1]} tasks done`;
+      progressMilestoneSum.textContent = `${goalSummary.milestone[0]} / ${goalSummary.milestone[1]} milestones achieved`;
       goalPercentageSpan.textContent = goalDonePercentage;
       progressEmptyNote.textContent = GoalEmptyNote;
       goalList.addEventListener("click", (e) => {
@@ -205,10 +205,10 @@ const renderGoalProgress = async (goal_id) => {
       });
       $("#modal-goal").on("hidden.bs.modal", () => {
         const selectedGoal = document.querySelector(".selected");
-        const selectedGoalId = selectedGoal.dataset.goalId;
+        const selectedgoalId = selectedGoal.dataset.goalId;
         doughnut.destroy();
         bar.destroy();
-        renderGoalProgress(selectedGoalId);
+        renderGoalProgress(selectedgoalId);
       });
     })
     .catch((err) => {
@@ -238,27 +238,27 @@ const initializePage = async (goalId) => {
         goalList.innerHTML = "";
         const params = new URLSearchParams(window.location.search);
         if (data.length) {
-          let renderGoalId = params.get("goal_id")
-            ? Number(params.get("goal_id"))
-            : data[0].g_id;
+          let rendergoalId = params.get("goalId")
+            ? Number(params.get("goalId"))
+            : data[0].goalId;
           if (goalId) {
-            renderGoalId = goalId;
+            rendergoalId = goalId;
           }
-          // console.log("render goal: ", renderGoalId);
-          renderGoalProgress(renderGoalId);
+          // console.log("render goal: ", rendergoalId);
+          renderGoalProgress(rendergoalId);
           data.forEach((goal) => {
-            const { g_id, g_title, g_category } = goal;
+            const { goalId, goalTitle, goalcategory } = goal;
             const goalItem = document.createElement("div");
-            goalItem.setAttribute("data-goal-id", g_id);
+            goalItem.setAttribute("data-goal-id", goalId);
             goalItem.classList.add("list-group-item", "ps-2");
             goalItemIcon = document.createElement("span");
             goalItemTitle = document.createElement("span");
             goalItemIcon.classList.add("material-icons");
-            goalItemIcon.textContent = categoryMaterialIcons[g_category];
-            goalItemTitle.textContent = g_title;
+            goalItemIcon.textContent = categoryMaterialIcons[goalcategory];
+            goalItemTitle.textContent = goalTitle;
             goalList.appendChild(goalItem);
             goalItem.append(goalItemIcon, goalItemTitle);
-            if (g_id == renderGoalId) {
+            if (goalId == rendergoalId) {
               goalItem.classList.add("selected");
               goalItem.click();
             }
@@ -334,10 +334,9 @@ const addNewGoal = async () => {
     initializePage()
     return
   };
-  body[`goal_title`] = swalResult.value;
-  body[`goal_due_date`] = dueDate;
+  body[`goalTitle`] = swalResult.value;
+  body[`goalDueDate`] = dueDate;
 
-  // console.log("body: ", body);
   fetch(`/api/goal`, {
     method: "POST",
     headers: {
@@ -348,7 +347,6 @@ const addNewGoal = async () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      // console.log("restuls: ", data);
       if (data.error) {
         Swal.fire({
           icon: "warning",
@@ -356,8 +354,7 @@ const addNewGoal = async () => {
           showConfirmButton: false,
         });
       } else {
-        initializePage(data.goal_id);
-        // renderGoalEditor(data.goal_id);
+        initializePage(data.goalId);
         swal
           .fire({
             title: "Start planning now!",

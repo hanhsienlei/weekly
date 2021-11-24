@@ -4,30 +4,31 @@ const { getInputLength } = require("../../utils/util");
 const saveMilestone = async (req, res) => {
   const body = req.body;
   const milestoneDetails = {
-    title: body.milestone_title,
-    description: body.milestone_description,
-    due_date: body.milestone_due_date,
-    due_date_unix: Math.ceil(new Date(body.milestone_due_date + "T23:59:59")),
-    goal_id: body.milestone_goal_id,
+    title: body.milestoneTitle,
+    description: body.milestoneDescription,
+    due_date: body.milestoneDueDate,
+    due_date_unix: Math.ceil(new Date(body.milestoneDueDate + "T23:59:59")),
   };
-  if (!milestoneDetails.goal_id){delete milestoneDetails.goal_id}
-  if (getInputLength(body.milestone_title) > 100) {
+  if(body.milestoneGoalId){
+    milestoneDetails.goal_id = body.milestoneGoalId
+  }
+
+  if (getInputLength(body.milestoneTitle) > 100) {
     res.status(400).send({ error: "title too long" });
     return;
   }
   console.log("milestoneDetails: ", milestoneDetails);
-  if (!body.milestone_id) {
+  if (!body.milestoneId) {
     const milestoneId = await Milestone.createMilestone(milestoneDetails);
-    res.status(200).send({milestone_id: milestoneId});
+    res.status(200).send({milestoneId});
     return
   } else {
-    console.log("body.milestone_id: ", body.milestone_id);
-    const row = await Milestone.getMilestone(body.milestone_id);
+    const row = await Milestone.getMilestone(body.milestoneId);
     if (!row) {
       res.status(400).send({error:"Milestone id doesn't exist."});
       return
     } else {
-      const updateResult = await Milestone.saveMilestone(milestoneDetails, body.milestone_id);
+      const updateResult = await Milestone.saveMilestone(milestoneDetails, body.milestoneId);
       res.status(200).send({message: `Update succeeded (${updateResult})`});
       return
     }
@@ -35,7 +36,7 @@ const saveMilestone = async (req, res) => {
 };
 
 const getMilestone = async (req, res) => {
-  const milestoneId = req.body.milestone_id;
+  const milestoneId = req.body.milestoneId;
   if (!milestoneId) {
     return res.status(400).send("Milestone id is required.");
   } else {

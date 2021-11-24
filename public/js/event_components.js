@@ -137,15 +137,15 @@ const createEventComponent = (
   dueDate,
   description,
   parents,
-  task_repeat_frequency = 0,
-  task_repeat_end_date = null,
-  milestone_id = null,
-  milestone_due_date = null,
-  goal_id = null,
-  goal_due_date = null,
-  goal_category = 0,
-  task_origin_id = null,
-  task_origin_date = null
+  taskRepeatFrequency = 0,
+  taskRepeatEndDate = null,
+  milestoneId = null,
+  milestoneDueDate = null,
+  goalId = null,
+  goalDueDate = null,
+  goalCategory = 0,
+  taskOriginId = null,
+  taskOriginDate = null
 ) => {
   const accessToken = localStorage.getItem("access_token");
   //如果移動要改parentContainer所以用let
@@ -180,18 +180,18 @@ const createEventComponent = (
     eventType === "task"
       ? createTaskRepeatSelector(
           id,
-          task_repeat_frequency,
-          task_repeat_end_date,
+          taskRepeatFrequency,
+          taskRepeatEndDate,
           dueDate,
-          milestone_due_date,
+          milestoneDueDate,
           eventDueDate,
-          task_origin_id
+          taskOriginId
         )
       : null;
   const taskRepeatSelector = taskRepeatSelectorContainer
     ? taskRepeatSelectorContainer.querySelector("select")
     : null;
-  const taskRepeatEndDate = taskRepeatSelectorContainer
+  const taskRepeatEndDateSelector = taskRepeatSelectorContainer
     ? taskRepeatSelectorContainer.querySelector("input")
     : null;
 
@@ -201,27 +201,27 @@ const createEventComponent = (
     eventType === "task"
       ? createDeleteTaskButton(
           id,
-          task_origin_id,
-          task_origin_date,
+          taskOriginId,
+          taskOriginDate,
           title,
-          task_repeat_frequency,
+          taskRepeatFrequency,
           parentContainer,
           eventOuterContainer
         )
       : null;
   const stopRepeatButton =
-    task_origin_id && !id
+    taskOriginId && !id
       ? createStopTodayButton(
           parentContainer,
           eventOuterContainer,
-          task_origin_id,
+          taskOriginId,
           dueDate
         )
       : null;
   const goalDeleteButton =
     eventType === "goal" ? createDeleteGoalButton(id) : null;
   const milestoneDeleteButton =
-    eventType === "milestone" ? createDeleteMilestoneButton(id, goal_id) : null;
+    eventType === "milestone" ? createDeleteMilestoneButton(id, goalId) : null;
 
   const saveEvent = (relocateEvent) => {
     if (!eventTitle.value.trim()) {
@@ -234,26 +234,25 @@ const createEventComponent = (
       });
     } else {
       const body = {};
-      body[`${eventType}_id`] = id;
-      body[`${eventType}_title`] = eventTitle.value.trim();
-      body[`${eventType}_description`] = eventDescription.value;
-      body[`${eventType}_status`] = checkBox.hasAttribute("checked") ? 1 : 0;
-      body[`${eventType}_due_date`] = eventDueDate.value;
-      body.task_origin_id = task_origin_id;
-      body.task_origin_date = task_origin_date;
+      body[`${eventType}Id`] = id;
+      body[`${eventType}Title`] = eventTitle.value.trim();
+      body[`${eventType}Description`] = eventDescription.value;
+      body[`${eventType}Status`] = checkBox.hasAttribute("checked") ? 1 : 0;
+      body[`${eventType}DueDate`] = eventDueDate.value;
+      body.taskOriginId = taskOriginId;
+      body.taskOriginDate = taskOriginDate;
 
       if (taskRepeatSelector) {
-        const task_r_frequency =
+        const taskRepeatFrequency =
           taskRepeatSelector.options[taskRepeatSelector.selectedIndex].value;
-        const task_repeat = task_r_frequency != 0 ? 1 : 0;
-        const task_r_end_date = taskRepeatEndDate.value;
-        body.task_repeat = task_repeat;
-        body.task_r_frequency = task_r_frequency;
-        body.task_r_end_date = task_r_end_date;
+        const taskRepeat = taskRepeatFrequency != 0 ? 1 : 0;
+        const taskRepeatEndDate = taskRepeatEndDateSelector.value;
+        body.taskRepeat = taskRepeat;
+        body.taskRepeatFrequency = taskRepeatFrequency;
+        body.taskRepeatEndDate = taskRepeatEndDate;
         //task due date > repeat end date的話，error
         //console.log(body);
-        if (!task_r_end_date) {
-        } else if (task_repeat && task_r_end_date < eventDueDate.value) {
+        if (taskRepeat && taskRepeatEndDate < eventDueDate.value) {
           Swal.fire({
             title: "Invalid repeat rule",
             text: "Repeat end date should be later than starting date. ",
@@ -264,18 +263,15 @@ const createEventComponent = (
         }
       }
 
-      //console.log("body: ", body);
-
       let apiEndpoint = "";
-      if (!id && task_origin_id) {
+      if (!id && taskOriginId) {
         apiEndpoint = `/api/repeated-task/new`;
-      } else if (task_origin_id) {
+      } else if (taskOriginId) {
         apiEndpoint = `/api/repeated-task/saved`;
       } else {
         apiEndpoint = `/api/${eventType}`;
       }
-      //console.log("body: ", body);
-      //console.log("apiEndpoint: ", apiEndpoint);
+
       fetch(apiEndpoint, {
         method: "POST",
         headers: {
@@ -286,7 +282,6 @@ const createEventComponent = (
       })
         .then((response) => response.json())
         .then((data) => {
-          //console.log("return from save: ", data);
           if (data.error) {
             Swal.fire({
               icon: "error",
@@ -297,7 +292,7 @@ const createEventComponent = (
             eventLabelDate.textContent = dueDate
             return;
           }
-          const alertText = task_origin_id
+          const alertText = taskOriginId
             ? "Update successfully. The rest of the repeating tasks remain the same."
             : "Update successfully";
           Swal.fire({
@@ -369,17 +364,17 @@ const createEventComponent = (
     "mb-2"
   );
   eventOuterContainer.setAttribute("id", `${eventType}-${id}`);
-  eventOuterContainer.setAttribute("data-milestone-id", milestone_id);
+  eventOuterContainer.setAttribute("data-milestone-id", milestoneId);
   eventOuterContainer.setAttribute(
     "data-milestone-due-date",
-    milestone_due_date
+    milestoneDueDate
   );
-  eventOuterContainer.setAttribute("data-goal-id", goal_id);
-  eventOuterContainer.setAttribute("data-goal-due-date", goal_due_date);
-  if (task_origin_id) {
-    eventOuterContainer.setAttribute("data-origin-id", task_origin_id);
+  eventOuterContainer.setAttribute("data-goal-id", goalId);
+  eventOuterContainer.setAttribute("data-goal-due-date", goalDueDate);
+  if (taskOriginId) {
+    eventOuterContainer.setAttribute("data-origin-id", taskOriginId);
   }
-  eventOuterContainer.setAttribute("data-goal-due-date", goal_due_date);
+  eventOuterContainer.setAttribute("data-goal-due-date", goalDueDate);
   eventOuterContainer.classList.add("event-info-container", "col-10");
   eventHeaderContainer.classList.add(
     "event-header-container",
@@ -466,10 +461,10 @@ const createEventComponent = (
   eventParentsIcon.setAttribute("title", "Check out goal");
   eventParentsIcon.setAttribute("data-bs-toggle", "modal");
   eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
-  eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
+  eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goalId})`);
   if (parents != "．") {
     eventParents.textContent = parents ? parents : null;
-    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
+    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goalCategory];
     eventParentsIcon.textContent = "zoom_in";
   }
   
@@ -480,7 +475,7 @@ const createEventComponent = (
 
   if (eventType === "goal") {
     eventParents.textContent = "check out goal";
-    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
+    eventGoalCategoryIcon.textContent = categoryMaterialIcons[goalCategory];
     eventParentsIcon.textContent = "zoom_in";
   }
 
@@ -504,15 +499,15 @@ const createEventComponent = (
   eventDueDate.value = dueDate;
   switch (eventType) {
     case "milestone":
-      eventDueDate.setAttribute("max", goal_due_date);
+      eventDueDate.setAttribute("max", goalDueDate);
       break;
     case "goal":
-      eventDueDate.setAttribute("max", milestone_due_date);
+      eventDueDate.setAttribute("max", milestoneDueDate);
       break;
   }
 
-  if (task_origin_date) {
-    eventDueDate.setAttribute("data-origin-date", task_origin_date);
+  if (taskOriginDate) {
+    eventDueDate.setAttribute("data-origin-date", taskOriginDate);
   }
 
   eventDueDate.addEventListener("change", e => {
@@ -546,9 +541,9 @@ const createEventComponent = (
 
   eventDueDate.addEventListener("change", () => {
     if (taskRepeatSelector) {
-      taskRepeatEndDate.min = eventDueDate.value;
-      if (taskRepeatEndDate.value < eventDueDate.value) {
-        taskRepeatEndDate.value = eventDueDate.value;
+      taskRepeatEndDateSelector.min = eventDueDate.value;
+      if (taskRepeatEndDateSelector.value < eventDueDate.value) {
+        taskRepeatEndDateSelector.value = eventDueDate.value;
       }
     }
   });
@@ -607,7 +602,7 @@ const createEventComponent = (
     eventTitleContainer.append(checkBoxContainer);
   }
   eventTitleContainer.append(eventTitleContentContainer);
-  if (task_repeat_frequency > 0 || task_origin_id) {
+  if (taskRepeatFrequency > 0 || taskOriginId) {
     const repeatIcon = document.createElement("span");
     repeatIcon.classList.add(
       "material-icons",
@@ -640,31 +635,31 @@ const createEventComponent = (
 };
 
 const createTaskRepeatSelector = (
-  task_id,
-  task_repeat_frequency,
-  task_repeat_end_date,
-  min_date,
-  max_date,
-  task_due_date_element,
-  task_origin_id
+  taskId,
+  taskRepeatFrequency,
+  taskRepeatEndDate,
+  minDate,
+  maxDate,
+  taskDueDateElement,
+  taskOriginId
 ) => {
   const container = document.createElement("div");
   container.classList.add(
-    `task-repeat-container-${task_id}`,
+    `task-repeat-container-${taskId}`,
     "task-repeat-container",
     "row",
     "mb-3"
   );
-  if (task_origin_id) {
-    switch (task_repeat_frequency) {
+  if (taskOriginId) {
+    switch (  taskRepeatFrequency) {
       case repeatFrequency.daily:
-        container.textContent = `Repeated daily until ${task_repeat_end_date}`;
+        container.textContent = `Repeated daily until ${taskRepeatEndDate}`;
         break;
       case repeatFrequency.weekly:
-        container.textContent = `Repeated weekly until ${task_repeat_end_date}`;
+        container.textContent = `Repeated weekly until ${taskRepeatEndDate}`;
         break;
       case repeatFrequency.monthly:
-        container.textContent = `Repeated monthly until ${task_repeat_end_date}`;
+        container.textContent = `Repeated monthly until ${taskRepeatEndDate}`;
         break;
     }
   } else {
@@ -687,31 +682,31 @@ const createTaskRepeatSelector = (
     optionNoRepeat.setAttribute("value", 0);
     optionNoRepeat.textContent = "No repeat";
     optionNoRepeat.setAttribute("selected", "true");
-    optionEveryday.setAttribute("value", 1);
+    optionEveryday.setAttribute("value", repeatFrequency.daily);
     optionEveryday.textContent = "Everyday";
-    optionOnceAWeek.setAttribute("value", 7);
+    optionOnceAWeek.setAttribute("value", repeatFrequency.weekly);
     optionOnceAWeek.textContent = "Once a week";
-    optionOnceAMonth.setAttribute("value", 30);
+    optionOnceAMonth.setAttribute("value", repeatFrequency.monthly);
     optionOnceAMonth.textContent = "Once a month";
     repeatEndDateDescription.classList.add("repeat-end-date-description");
     repeatEndDateDescription.textContent = "Until...";
     repeatEndDate.classList.add("event-due-date", "col", "form-control");
     repeatEndDate.type = "date";
-    if (!task_repeat_frequency) {
+    if (!taskRepeatFrequency) {
       repeatEndDate.setAttribute("disabled", "true");
     }
-    repeatEndDate.value = task_repeat_end_date;
-    repeatEndDate.setAttribute("min", min_date);
-    repeatEndDate.setAttribute("max", max_date);
+    repeatEndDate.value = taskRepeatEndDate;
+    repeatEndDate.setAttribute("min", minDate);
+    repeatEndDate.setAttribute("max", maxDate);
     selector.addEventListener("change", (e) => {
       if (selector.value == 0) {
         repeatEndDate.setAttribute("disabled", "true");
       } else {
         repeatEndDate.removeAttribute("disabled");
-        repeatEndDate.setAttribute("min", task_due_date_element.value);
+        repeatEndDate.setAttribute("min", taskDueDateElement.value);
       }
     });
-    switch (task_repeat_frequency) {
+    switch (taskRepeatFrequency) {
       case 0:
         optionNoRepeat.setAttribute("selected", "true");
         repeatEndDate.setAttribute("disabled", "true");
@@ -747,10 +742,10 @@ const createTaskRepeatSelector = (
 
 const createDeleteTaskButton = (
   id,
-  task_origin_id,
-  task_origin_date,
+  taskOriginId,
+  taskOriginDate,
   title,
-  task_repeat_frequency,
+  taskRepeatFrequency,
   parentContainer,
   eventOuterContainer
 ) => {
@@ -766,7 +761,7 @@ const createDeleteTaskButton = (
   button.setAttribute("type", "button");
   button.setAttribute("data-bs-toggle", "collapse");
   button.setAttribute("data-bs-target", `#editor-task-${id}`);
-  if (task_repeat_frequency > 0) {
+  if (taskRepeatFrequency > 0) {
     button.setAttribute("data-bs-toggle", "tooltip");
     button.setAttribute("data-bs-placement", "top");
     button.setAttribute(
@@ -786,9 +781,9 @@ const createDeleteTaskButton = (
     }).then((result) => {
       if (result.isConfirmed) {
         let apiEndpoint = "";
-        if (!id && task_origin_id) {
-          apiEndpoint = `/api/repeated-task/new?task_origin_id=${task_origin_id}&task_origin_date=${task_origin_date}`;
-        } else if (task_origin_id) {
+        if (!id && taskOriginId) {
+          apiEndpoint = `/api/repeated-task/new?task_origin_id=${taskOriginId}&task_origin_date=${taskOriginDate}`;
+        } else if (taskOriginId) {
           apiEndpoint = `/api/repeated-task/saved?task_id=${id}`;
         } else {
           apiEndpoint = `/api/task?task_id=${id}`;
@@ -804,6 +799,7 @@ const createDeleteTaskButton = (
                 title: "Deleted!",
                 showConfirmButton: false,
               });
+              parentContainer.removeChild(eventOuterContainer)
               const currentDate =
                 document.querySelector(".date-value").dataset.dueDate;
               renderEvents(currentDate);

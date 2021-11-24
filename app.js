@@ -35,9 +35,6 @@ app.get("/review", (req, res) => {
   res.render("review");
 });
 
-// app.get("/library", (req, res) => {
-//   res.render("goal_library");
-// });
 
 //api routes
 app.use("/api",[
