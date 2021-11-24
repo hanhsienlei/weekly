@@ -56,9 +56,6 @@ const deleteNewRepeatedTask = async (req, res) => {
   const originId = req.query.task_origin_id;
   const originDate = req.query.task_origin_date;
   const originDateUnix = Math.ceil(new Date(originDate + "T23:59:59"));
-  console.log(originId,
-    originDate,
-    originDateUnix)
   const returnedId = await RepeatedTask.deleteNewRepeatedTask(
     originId,
     originDate,

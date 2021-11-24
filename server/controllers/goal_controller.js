@@ -12,7 +12,7 @@ const saveGoal = async (req, res) => {
     title: body.goal_title,
     description: body.goal_description,
     due_date: body.goal_due_date,
-    due_date_unix: body.goal_due_date_unix,
+    due_date_unix: Math.ceil(new Date(body.goal_due_date + "T23:59:59")),
     category:body.goal_category
   };
   

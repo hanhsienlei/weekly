@@ -376,11 +376,9 @@ const addNewEvent = (timeScale, eventType) => {
   const input = document.querySelector(`.${timeScale}-new-${eventType}-title`);
   const title = input.value.trim();
   const dueDate = document.querySelector(`.${timeScale}-value`).dataset.dueDate;
-  const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
   const body = {};
   body[`${eventType}_title`] = title;
   body[`${eventType}_due_date`] = dueDate;
-  body[`${eventType}_due_date_unix`] = dueDateUnix;
 
   if (!title) {
     Swal.fire({

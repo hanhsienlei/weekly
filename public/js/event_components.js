@@ -239,9 +239,6 @@ const createEventComponent = (
       body[`${eventType}_description`] = eventDescription.value;
       body[`${eventType}_status`] = checkBox.hasAttribute("checked") ? 1 : 0;
       body[`${eventType}_due_date`] = eventDueDate.value;
-      body[`${eventType}_due_date_unix`] = Math.ceil(
-        new Date(eventDueDate.value + "T23:59:59")
-      );
       body.task_origin_id = task_origin_id;
       body.task_origin_date = task_origin_date;
 

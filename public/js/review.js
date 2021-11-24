@@ -318,7 +318,6 @@ const initializePage = async (goalId) => {
 const addNewGoal = async () => {
   const accessToken = localStorage.getItem("access_token");
   const dueDate = getTodayYMD();
-  const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
   const body = {};
   const swalResult = await Swal.fire({
     title: "What is your goal?",
@@ -337,7 +336,6 @@ const addNewGoal = async () => {
   };
   body[`goal_title`] = swalResult.value;
   body[`goal_due_date`] = dueDate;
-  body[`goal_due_date_unix`] = dueDateUnix;
 
   // console.log("body: ", body);
   fetch(`/api/goal`, {

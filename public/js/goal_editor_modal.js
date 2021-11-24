@@ -31,9 +31,6 @@ const renderGoalEditor = (goalId) => {
             goal_id: goalId,
             goal_title: goalTitle.value.trim(),
             goal_due_date: goalDueDate.value,
-            goal_due_date_unix: Math.ceil(
-              new Date(goalDueDate.value + "T23:59:59")
-            ),
             goal_category: goalCategory.options[goalCategory.selectedIndex].value,
             goal_description: goalDescription.value.trim(),
           };
@@ -231,10 +228,7 @@ const createMilestoneContainer = (
       body.milestone_title = milestoneTitle.value.trim();
       body.milestone_description = milestoneDescription.value.trim();
       body.milestone_due_date =
-        milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
-      body.task_due_date_unix = Math.ceil(
-        new Date(milestoneDueDate.value + "T23:59:59")
-      );
+      milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
 
       fetch(`/api/milestone`, {
         method: "POST",
