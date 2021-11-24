@@ -96,7 +96,6 @@ const getEventsByDate = async (req, res) => {
     if (!events.length) {
       return;
     } else {
-      //先做所有事件
       events.forEach((row) => {
         //javascript會自動將時區加入到date string再做成ISO string(UTC), 例如2021-10-25會變成2021-10-24T16:00:00.000Z
         //要自己轉回local time zone 的 date string (YYYY-MM-DD)
@@ -190,10 +189,8 @@ const getEventsByDate = async (req, res) => {
                 g_due_date,
                 g_category,
               };
+              newTask.t_parent = row.m_id ? [row.g_title, row.m_title] : null;
 
-              if(row.m_id){
-                newTask.t_parent = [row.g_title, row.m_title]
-              }
               if (row.t_origin_id) {
                 newTask.t_origin_date = t_origin_date;
               }
@@ -206,7 +203,7 @@ const getEventsByDate = async (req, res) => {
         }
       });
 
-      //repeated tasks only for date container
+      //render repeated task only for date container
       events.forEach((row) => {
         const g_due_date = row.g_due_date ? getDateYMD(row.g_due_date) : null;
         const m_due_date = row.m_due_date ? getDateYMD(row.m_due_date) : null;
@@ -228,7 +225,7 @@ const getEventsByDate = async (req, res) => {
             t_description,
             t_due_date: targetDate,
             t_status: 0,
-            t_parent: [row.g_title, row.m_title],
+            //t_parent: [row.g_title, row.m_title],
             t_origin_id: t_id,
             t_origin_date: targetDate,
             r_frequency,
