@@ -108,15 +108,11 @@ const renderEvents = async (date) => {
         });
         data.date.tasks.forEach((task) => {
           let repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+          const taskParents = task.t_parent ? task.t_parent.join("．") : null
           if (!task.t_id) {
             repeated_frequency = task.r_frequency;
           }
-          // console.log(
-          //   "render event: task.t_id, repeated_frequency, task.r_end_date, ",
-          //   task.t_id,
-          //   repeated_frequency,
-          //   task.r_end_date
-          // );
+          
           if (task.t_status > -1) {
             createEventComponent(
               "date",
@@ -126,7 +122,7 @@ const renderEvents = async (date) => {
               task.t_status,
               task.t_due_date,
               task.t_description,
-              task.t_parent.join("．"),
+              taskParents,
               repeated_frequency,
               task.r_end_date,
               task.m_id,
@@ -191,6 +187,7 @@ const renderEvents = async (date) => {
         data.week.tasks.forEach((task) => {
           if (task.t_status > -1) {
             const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+            const taskParents = task.t_parent ? task.t_parent.join("．") : null
             if (task.t_id) {
               createEventComponent(
                 "week",
@@ -200,7 +197,7 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join("．"),
+                taskParents,
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
@@ -266,6 +263,7 @@ const renderEvents = async (date) => {
         data.month.tasks.forEach((task) => {
           if (task.t_status > -1) {
             const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+            const taskParents = task.t_parent ? task.t_parent.join("．") : null
             if (task.t_id) {
               createEventComponent(
                 "month",
@@ -275,7 +273,7 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join("．"),
+                taskParents,
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
@@ -340,7 +338,9 @@ const renderEvents = async (date) => {
         data.year.tasks.forEach((task) => {
           if (task.t_status > -1) {
             const repeated_frequency = task.t_repeat ? task.r_frequency : 0;
+            const taskParents = task.t_parent ? task.t_parent.join("．") : null
             if (task.t_id) {
+
               createEventComponent(
                 "year",
                 "task",
@@ -349,7 +349,7 @@ const renderEvents = async (date) => {
                 task.t_status,
                 task.t_due_date,
                 task.t_description,
-                task.t_parent.join("．"),
+                taskParents,
                 repeated_frequency,
                 task.r_end_date,
                 task.m_id,
@@ -484,25 +484,6 @@ const createDeleteGoalButton = (goalId) => {
 
   button.addEventListener("click", (e) => {
     deleteGoalAndChildren(goalId)
-
-    // const deleteGoalModal = document.querySelector("#deleteGoalModal");
-    // const modalFooter = deleteGoalModal.querySelector(".modal-footer");
-    // const deleteGoalButton = deleteGoalModal.querySelector(
-    //   ".delete-goal-button"
-    // );
-    // deleteGoalButton.setAttribute(
-    //   "onclick",
-    //   `deleteGoalAndChildren(${goalId})`
-    // );
-    // const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
-    // console.log("oldViewGoalButton: ", oldViewGoalButton);
-    // if (oldViewGoalButton) {
-    //   oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
-    // } else {
-    //   const viewGoalButton = createViewGoalButton(goalId);
-    //   viewGoalButton.setAttribute("data-bs-dismiss", "modal");
-    //   modalFooter.appendChild(viewGoalButton);
-    // }
   });
 
   return button;
@@ -518,26 +499,7 @@ const createDeleteMilestoneButton = (milestoneId, goalId) => {
 
   button.addEventListener("click", (e) => {
     deleteMilestoneAndChildren(milestoneId)
-    // const deleteMilestoneModal = document.querySelector(
-    //   "#deleteMilestoneModal"
-    // );
-    // const modalFooter = deleteMilestoneModal.querySelector(".modal-footer");
-    // const deleteMilestoneButton = deleteMilestoneModal.querySelector(
-    //   ".delete-milestone-button"
-    // );
-    // deleteMilestoneButton.setAttribute(
-    //   "onclick",
-    //   `deleteMilestoneAndChildren(${milestoneId})`
-    // );
-    // const oldViewGoalButton = modalFooter.querySelector(".edit-goal-button");
-    // console.log("oldViewGoalButton: ", oldViewGoalButton);
-    // if (oldViewGoalButton) {
-    //   oldViewGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
-    // } else {
-    //   const viewGoalButton = createViewGoalButton(goalId);
-    //   viewGoalButton.setAttribute("data-bs-dismiss", "modal");
-    //   modalFooter.appendChild(viewGoalButton);
-    // }
+    
   });
   return button;
 };
