@@ -80,7 +80,6 @@ const renderGoalEditor = (goalId) => {
           milestone_goal_id: goalId,
           milestone_due_date: goalDueDate.value,
         };
-        //console.log(body);
         fetch("/api/milestone", {
           method: "POST",
           headers: {
@@ -92,7 +91,6 @@ const renderGoalEditor = (goalId) => {
           .then((response) => response.json())
           .then((data) => {
             const milestoneId = data.milestone_id;
-            //console.log("newMilestoneButton: milestoneId: ", milestoneId);
             createMilestoneContainer(
               milestoneId,
               newTitle,
@@ -158,17 +156,7 @@ const renderGoalEditor = (goalId) => {
           if (milestone.tasks) {
             milestone.tasks.forEach((task) => {
               if (task.t_status > -1 || !task.t_origin_id) {
-                // createTaskComponent(
-                //   milestoneId,
-                //   task.t_id,
-                //   task.t_title,
-                //   task.t_status,
-                //   task.t_due_date,
-                //   task.t_description,
-                //   task.r_frequency,
-                //   task.r_end_date,
-                //   milestoneDueDate
-                // );
+                
                 createEventComponent(
                   `milestone-${milestoneId}`,
                   "task",
@@ -219,21 +207,15 @@ const createMilestoneContainer = (
   const milestoneTitle = document.createElement("input");
   const milestoneEditButton = document.createElement("span");
   const milestoneEditorContainer = document.createElement("div");
-  // const milestoneDueDateContainer = document.createElement("div");
   const milestoneDueDateLabel = document.createElement("span");
   const milestoneDueDate = document.createElement("input");
-  // const milestoneDescriptionContainer = document.createElement("div");
   const milestoneDescriptionLabel = document.createElement("span");
   const milestoneDescription = document.createElement("textarea");
-  // const milestoneTagsContainer = document.createElement("div");
   const milestoneButtonsContainer = document.createElement("div");
-  // const milestoneSaveButtonContainer = document.createElement("div");
   const milestoneSaveButton = document.createElement("button");
-  // const milestoneDeleteButtonContainer = document.createElement("div");
   const milestoneDeleteButton = document.createElement("button");
   const tasksContainer = document.createElement("div");
   const addNewTaskContainer = document.createElement("div");
-  // const newTaskInputContainer = document.createElement("div");
   const newTaskInput = document.createElement("input");
   const newTaskButton = document.createElement("button");
 
@@ -254,7 +236,6 @@ const createMilestoneContainer = (
         new Date(milestoneDueDate.value + "T23:59:59")
       );
 
-      //console.log("body: ", body);
       fetch(`/api/milestone`, {
         method: "POST",
         headers: {
@@ -265,7 +246,6 @@ const createMilestoneContainer = (
       })
         .then((response) => response.json())
         .then((data) => {
-          //console.log("return from save: ", data);
           if (data.error) {
             Swal.fire({
               icon: "error",
@@ -290,7 +270,6 @@ const createMilestoneContainer = (
 
   containerOuter.classList.add(
     "milestone-outer-container",
-    // "col-4",
     "overflow-auto",
     "smooth-scroll",
     `milestone-outer-container-${milestoneId}`,
@@ -357,12 +336,7 @@ const createMilestoneContainer = (
     "my-2",
     "py-2"
   );
-  // milestoneDueDateContainer.classList.add(
-  //   "milestone-due-date-container",
-  //   "row",
-  //   "mb-3",
-  //   "px-2"
-  // );
+  
   milestoneDueDateLabel.textContent = "Milestone due date"
   milestoneDueDate.type = "date";
   milestoneDueDate.classList.add("milestone-due-date", "form-control", "mb-3");
@@ -371,11 +345,7 @@ const createMilestoneContainer = (
   milestoneDueDate.addEventListener("change", e => {
     milestoneLabelDate.textContent = milestoneDueDate.value
   })
-  // milestoneDescriptionContainer.classList.add(
-  //   "milestone-description-container",
-  //   "row",
-  //   "mb-3"
-  // );
+  
   milestoneDescriptionLabel.textContent = "Milestone description"
   milestoneDescription.classList.add(
     "modal-milestone-description",
@@ -391,11 +361,6 @@ const createMilestoneContainer = (
     `Description of the milestone...`
   );
 
-  // milestoneSaveButtonContainer.classList.add(
-  //   "save-milestone-button-container",
-  //   "col-auto",
-  //   "mb-3"
-  // );
   milestoneButtonsContainer.classList.add("milestone-buttons-container");
   milestoneSaveButton.classList.add(
     "save-milestone-button",
@@ -410,11 +375,6 @@ const createMilestoneContainer = (
   );
   milestoneSaveButton.onclick = modalSaveMilestone
 
-  // milestoneDeleteButtonContainer.classList.add(
-  //   "delete-milestone-button-container",
-  //   "col-auto",
-  //   "mb-3"
-  // );
   milestoneDeleteButton.classList.add(
     "delete-milestone-button",
     "btn",
@@ -436,7 +396,6 @@ const createMilestoneContainer = (
     "smooth-scroll"
   );
   addNewTaskContainer.classList.add("modal-add-new-task-container");
-  // newTaskInputContainer.classList.add("new-task-input-container", "col");
   newTaskInput.type = "text";
   newTaskInput.classList.add("modal-new-task-title", "col-10");
   newTaskInput.setAttribute("placeholder", "New task for the milestone");
@@ -461,7 +420,6 @@ const createMilestoneContainer = (
     body.task_due_date = milestoneDueDate.value;
     body.task_milestone_id = milestoneId;
 
-    //console.log("body: ", body);
     fetch(`/api/task`, {
       method: "POST",
       headers: {
@@ -473,18 +431,7 @@ const createMilestoneContainer = (
       .then((response) => response.json())
       .then((data) => {
         const taskId = data.task_id;
-        //console.log(taskId);
-        // createTaskComponent(
-        //   milestoneId,
-        //   taskId,
-        //   newTaskTitle,
-        //   0,
-        //   milestoneDueDate.value,
-        //   null,
-        //   null,
-        //   null,
-        //   milestoneDueDate.value
-        // );
+        
         createEventComponent(
           `milestone-${milestoneId}`,
           "task",
@@ -528,17 +475,9 @@ const createMilestoneContainer = (
     milestoneDueDate,
     milestoneDescriptionLabel,
     milestoneDescription,
-    // milestoneTagsContainer,
     milestoneButtonsContainer
-    // milestoneSaveButtonContainer,
-    // milestoneDeleteButtonContainer
   );
-  // milestoneDueDateContainer.append(milestoneDueDate);
-  // milestoneDescriptionContainer.append(milestoneDescription);
-  // milestoneSaveButtonContainer.append(milestoneSaveButton);
-  // milestoneDeleteButtonContainer.append(milestoneDeleteButton);
   addNewTaskContainer.append(newTaskInput, newTaskButton);
-  // newTaskInputContainer.appendChild(newTaskInput);
 };
 
 const modal = document.querySelector("#modal-goal");

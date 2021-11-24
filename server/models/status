@@ -6,12 +6,6 @@ const EVENT_STATUS = {
   ARCHIVED: -1,
 };
 
-//table: goal
-const GOAL_PUBLISH = {
-  PUBLIC: 1,
-  PRIVATE: 0,
-};
-
 //table: task
 const TASK_REPEAT = {
   YES: 1,

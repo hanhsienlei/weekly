@@ -18,9 +18,7 @@ const deleteGoalAndChildren = (goalId) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          //console.log(data);
           if (data.error) {
-            //something went wrong
             Swal.fire({
               title: "Something went wrong.",
               text: "Please try again",
@@ -30,7 +28,6 @@ const deleteGoalAndChildren = (goalId) => {
             return;
           }
           if (data.affectedRows > 0) {
-            //all deleted
             Swal.fire({
               icon: "success",
               title: "Deleted!",
@@ -47,7 +44,6 @@ const deleteGoalAndChildren = (goalId) => {
               initializePage()
             }
           } else {
-            //nothing changed
             Swal.fire({
               icon: "warning",
               title: "Seems like this goal has already be gone.",
@@ -73,7 +69,6 @@ const deleteMilestoneAndChildren = (milestoneId) => {
     confirmButtonText: "Yes, delete it!",
   }).then((result) => {
     if (result.isConfirmed) {
-      //console.log("delete milestone : ", milestoneId);
       const accessToken = localStorage.getItem("access_token");
       fetch(`/api/milestone?milestone_id=${milestoneId}`, {
         method: "DELETE",
@@ -83,9 +78,7 @@ const deleteMilestoneAndChildren = (milestoneId) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          //console.log(data);
           if (data.error) {
-            //something went wrong
             Swal.fire({
               title: "Something went wrong.",
               text: "Please try again",
@@ -95,7 +88,6 @@ const deleteMilestoneAndChildren = (milestoneId) => {
             return;
           }
           if (data.affectedRows > 0) {
-            //all deleted
             Swal.fire({
               icon: "success",
               title: "Deleted!",
@@ -111,7 +103,6 @@ const deleteMilestoneAndChildren = (milestoneId) => {
             const currentContainer = goalModal.querySelector(
               `.milestone-outer-container-${milestoneId}`
             );
-            //console.log(parent, currentContainer);
             if (currentContainer) {
               parent.removeChild(currentContainer);
             }
@@ -473,10 +464,7 @@ const createEventComponent = (
   eventParentsIcon.setAttribute("data-bs-toggle", "modal");
   eventParentsIcon.setAttribute("data-bs-target", "#modal-goal");
   eventParentsIcon.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
-  if (parents != "．．") {
-    // eventParents.setAttribute("data-bs-toggle", "modal");
-    // eventParents.setAttribute("data-bs-target", "#modal-goal");
-    // eventParents.setAttribute("onclick", `renderGoalEditor(${goal_id})`);
+  if (parents != "．") {
     eventParents.textContent = parents ? parents : null;
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
     eventParentsIcon.textContent = "zoom_in";
@@ -488,10 +476,6 @@ const createEventComponent = (
   }
 
   if (eventType === "goal") {
-    //console.log("add check goalll for goallll");
-    // eventParents.setAttribute("data-bs-toggle", "modal");
-    // eventParents.setAttribute("data-bs-target", "#modal-goal");
-    // eventParents.setAttribute("onclick", `renderGoalEditor(${id})`);
     eventParents.textContent = "check out goal";
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goal_category];
     eventParentsIcon.textContent = "zoom_in";
@@ -621,7 +605,6 @@ const createEventComponent = (
   }
   eventTitleContainer.append(eventTitleContentContainer);
   if (task_repeat_frequency > 0 || task_origin_id) {
-    //console.log(id, task_repeat_frequency, task_origin_id);
     const repeatIcon = document.createElement("span");
     repeatIcon.classList.add(
       "material-icons",
@@ -671,9 +654,6 @@ const createTaskRepeatSelector = (
   );
   if (task_origin_id) {
     switch (task_repeat_frequency) {
-      // case 0:
-      //   container.textContent = "Repeated task";
-      //   break;
       case 1:
         container.textContent = `Repeated daily until ${task_repeat_end_date}`;
         break;
@@ -810,7 +790,6 @@ const createDeleteTaskButton = (
         } else {
           apiEndpoint = `/api/task?task_id=${id}`;
         }
-        //console.log("apiEndpoint: ", apiEndpoint);
         fetch(apiEndpoint, {
           method: "DELETE",
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -822,7 +801,6 @@ const createDeleteTaskButton = (
                 title: "Deleted!",
                 showConfirmButton: false,
               });
-              //parentContainer.removeChild(eventOuterContainer);
               const currentDate =
                 document.querySelector(".date-value").dataset.dueDate;
               renderEvents(currentDate);
