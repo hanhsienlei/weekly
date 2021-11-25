@@ -2,41 +2,15 @@ const express = require("express");
 const app = express();
 const ejs = require("ejs");
 
-//set view engine
 app.set("view engine", "ejs");
 app.set("views", "./public/views");
 app.engine("ejs", ejs.renderFile);
-
-//Front-end public assets
 app.use(express.static(__dirname + "/public"))
-
-//Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 //routes
-app.get("/", (req, res) => {
-  res.render("index");
-});
-app.get("/signup", (req, res) => {
-  res.render("signup");
-});
-app.get("/signin", (req, res) => {
-  res.render("signin");
-});
-app.get("/life", (req, res) => {
-  res.render("life");
-});
-app.get("/horizon", (req, res) => {
-  res.render("horizon");
-});
-app.get("/review", (req, res) => {
-  res.render("review");
-});
-
-
-//api routes
+app.use("/", require("./server/routes/pages_route"))
 app.use("/api",[
   require("./server/routes/api/goal_route"),
   require("./server/routes/api/milestone_route"),
