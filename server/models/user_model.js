@@ -2,7 +2,7 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const { pool } = require("./config_mysql");
 const salt = parseInt(process.env.BCRYPT_SALT);
-const { TOKEN_EXPIRE, TOKEN_SECRET } = process.env; // 30 days in second
+const { TOKEN_EXPIRE, TOKEN_SECRET } = process.env; // 30 days in seconds
 const jwt = require("jsonwebtoken");
 
 const USER_ROLE = {

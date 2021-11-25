@@ -1,6 +1,6 @@
 require("dotenv").config();
 const User = require("../server/models/user_model");
-const { TOKEN_SECRET } = process.env; // 30 days by seconds
+const { TOKEN_SECRET } = process.env; // 30 days in seconds
 const jwt = require("jsonwebtoken");
 const {
   getDateYMD,
