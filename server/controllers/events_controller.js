@@ -11,6 +11,12 @@ const {
   getPreviousYearThisDay,
 } = require("../../utils/date_converter");
 
+const REPEAT_FREQUENCY = {
+  DAILY: 1,
+  WEEKLY: 7,
+  MONTHLY: 30,
+};
+
 const getEventsByDate = async (req, res) => {
   const userId = req.user.id;
   const targetDate = req.params.date;
@@ -100,9 +106,13 @@ const getEventsByDate = async (req, res) => {
         //javascript會自動將時區加入到date string再做成ISO string(UTC), 例如2021-10-25會變成2021-10-24T16:00:00.000Z
         //要自己轉回local time zone 的 date string (YYYY-MM-DD)
         const goalDueDate = row.g_due_date ? getDateYMD(row.g_due_date) : null;
-        const milestoneDueDate = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+        const milestoneDueDate = row.m_due_date
+          ? getDateYMD(row.m_due_date)
+          : null;
         const taskDueDate = row.t_due_date ? getDateYMD(row.t_due_date) : null;
-        const repeatEndDate = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+        const repeatEndDate = row.r_end_date
+          ? getDateYMD(row.r_end_date)
+          : null;
         const taskOriginDate = row.t_origin_date
           ? getDateYMD(row.t_origin_date)
           : null;
@@ -206,9 +216,13 @@ const getEventsByDate = async (req, res) => {
       //render repeated task only for date container
       events.forEach((row) => {
         const goalDueDate = row.g_due_date ? getDateYMD(row.g_due_date) : null;
-        const milestoneDueDate = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+        const milestoneDueDate = row.m_due_date
+          ? getDateYMD(row.m_due_date)
+          : null;
         const taskDueDate = row.t_due_date ? getDateYMD(row.t_due_date) : null;
-        const repeatEndDate = row.r_end_date ? getDateYMD(row.r_end_date) : null;
+        const repeatEndDate = row.r_end_date
+          ? getDateYMD(row.r_end_date)
+          : null;
         function addNewRepeatingTask() {
           const {
             t_id,
@@ -221,7 +235,7 @@ const getEventsByDate = async (req, res) => {
           } = row;
           const newTask = {
             taskId: null,
-            taskTitle:t_title,
+            taskTitle: t_title,
             taskDescription: t_description,
             taskDueDate: targetDate,
             taskStatus: 0,
@@ -253,16 +267,11 @@ const getEventsByDate = async (req, res) => {
           !isRepeatedTaskRecorded &&
           isInDateRange
         ) {
-          const repeatFrequency = {
-            daily: 1,
-            weekly: 7,
-            monthly: 30,
-          };
           switch (row.r_frequency) {
-            case repeatFrequency.daily:
+            case REPEAT_FREQUENCY.DAILY:
               addNewRepeatingTask();
               break;
-            case repeatFrequency.weekly:
+            case REPEAT_FREQUENCY.WEEKLY:
               const dateStartRepeatValue = new Date(taskDueDate).valueOf();
               const dateEndValue = new Date(targetDate).valueOf();
               const sevenDaysInMilliSecond = 60 * 60 * 24 * 1000 * 7;
@@ -274,7 +283,7 @@ const getEventsByDate = async (req, res) => {
                 addNewRepeatingTask();
               }
               break;
-            case repeatFrequency.monthly:
+            case REPEAT_FREQUENCY.MONTHLY:
               let dateInit = taskDueDate;
               while (dateInit <= targetDate) {
                 let dateNew = getDateYMD(
@@ -299,9 +308,7 @@ const getEventsByDate = async (req, res) => {
 const getButtonsDate = (dateObject) => {
   const dayMilliSecond = 60 * 60 * 24 * 1000;
   const data = {};
-  data.dateBefore = getDateYMD(
-    new Date(dateObject.valueOf() - dayMilliSecond)
-  );
+  data.dateBefore = getDateYMD(new Date(dateObject.valueOf() - dayMilliSecond));
   data.dateAfter = getDateYMD(new Date(dateObject.valueOf() + dayMilliSecond));
   data.weekBefore = getDateYMD(
     new Date(dateObject.valueOf() - dayMilliSecond * 7)

@@ -1,8 +1,8 @@
-const repeatFrequency = {
-          daily:1,
-          weekly:7,
-          monthly:30,
-        }
+const REPEAT_FREQUENCY = {
+  DAILY: 1,
+  WEEKLY: 7,
+  MONTHLY: 30,
+};
 
 const deleteGoalAndChildren = (goalId) => {
   Swal.fire({
@@ -47,7 +47,7 @@ const deleteGoalAndChildren = (goalId) => {
             }
 
             if (window.location.pathname.includes("review")) {
-              initializePage()
+              initializePage();
             }
           } else {
             Swal.fire({
@@ -288,8 +288,8 @@ const createEventComponent = (
               title: "Oops...",
               text: data.error,
             });
-            eventDueDate.value = dueDate
-            eventLabelDate.textContent = dueDate
+            eventDueDate.value = dueDate;
+            eventLabelDate.textContent = dueDate;
             return;
           }
           const alertText = taskOriginId
@@ -365,10 +365,7 @@ const createEventComponent = (
   );
   eventOuterContainer.setAttribute("id", `${eventType}-${id}`);
   eventOuterContainer.setAttribute("data-milestone-id", milestoneId);
-  eventOuterContainer.setAttribute(
-    "data-milestone-due-date",
-    milestoneDueDate
-  );
+  eventOuterContainer.setAttribute("data-milestone-due-date", milestoneDueDate);
   eventOuterContainer.setAttribute("data-goal-id", goalId);
   eventOuterContainer.setAttribute("data-goal-due-date", goalDueDate);
   if (taskOriginId) {
@@ -467,7 +464,7 @@ const createEventComponent = (
     eventGoalCategoryIcon.textContent = categoryMaterialIcons[goalCategory];
     eventParentsIcon.textContent = "zoom_in";
   }
-  
+
   if (parents == null) {
     eventParents.textContent = null;
     eventParentsIcon.textContent = null;
@@ -510,9 +507,9 @@ const createEventComponent = (
     eventDueDate.setAttribute("data-origin-date", taskOriginDate);
   }
 
-  eventDueDate.addEventListener("change", e => {
-    eventLabelDate.textContent = eventDueDate.value
-  })
+  eventDueDate.addEventListener("change", (e) => {
+    eventLabelDate.textContent = eventDueDate.value;
+  });
 
   eventDescriptionContainer.classList.add(
     "event-description-container",
@@ -651,14 +648,14 @@ const createTaskRepeatSelector = (
     "mb-3"
   );
   if (taskOriginId) {
-    switch (  taskRepeatFrequency) {
-      case repeatFrequency.daily:
+    switch (taskRepeatFrequency) {
+      case REPEAT_FREQUENCY.DAILY:
         container.textContent = `Repeated daily until ${taskRepeatEndDate}`;
         break;
-      case repeatFrequency.weekly:
+      case REPEAT_FREQUENCY.WEEKLY:
         container.textContent = `Repeated weekly until ${taskRepeatEndDate}`;
         break;
-      case repeatFrequency.monthly:
+      case REPEAT_FREQUENCY.MONTHLY:
         container.textContent = `Repeated monthly until ${taskRepeatEndDate}`;
         break;
     }
@@ -682,11 +679,11 @@ const createTaskRepeatSelector = (
     optionNoRepeat.setAttribute("value", 0);
     optionNoRepeat.textContent = "No repeat";
     optionNoRepeat.setAttribute("selected", "true");
-    optionEveryday.setAttribute("value", repeatFrequency.daily);
+    optionEveryday.setAttribute("value", REPEAT_FREQUENCY.DAILY);
     optionEveryday.textContent = "Everyday";
-    optionOnceAWeek.setAttribute("value", repeatFrequency.weekly);
+    optionOnceAWeek.setAttribute("value", REPEAT_FREQUENCY.WEEKLY);
     optionOnceAWeek.textContent = "Once a week";
-    optionOnceAMonth.setAttribute("value", repeatFrequency.monthly);
+    optionOnceAMonth.setAttribute("value", REPEAT_FREQUENCY.MONTHLY);
     optionOnceAMonth.textContent = "Once a month";
     repeatEndDateDescription.classList.add("repeat-end-date-description");
     repeatEndDateDescription.textContent = "Until...";
@@ -712,13 +709,13 @@ const createTaskRepeatSelector = (
         repeatEndDate.setAttribute("disabled", "true");
         repeatEndDate.value = null;
         break;
-      case repeatFrequency.daily:
+      case REPEAT_FREQUENCY.DAILY:
         optionEveryday.setAttribute("selected", "true");
         break;
-      case repeatFrequency.weekly:
+      case REPEAT_FREQUENCY.WEEKLY:
         optionOnceAWeek.setAttribute("selected", "true");
         break;
-      case repeatFrequency.monthly:
+      case REPEAT_FREQUENCY.MONTHLY:
         optionOnceAMonth.setAttribute("selected", "true");
         break;
     }
@@ -799,7 +796,7 @@ const createDeleteTaskButton = (
                 title: "Deleted!",
                 showConfirmButton: false,
               });
-              parentContainer.removeChild(eventOuterContainer)
+              parentContainer.removeChild(eventOuterContainer);
               const currentDate =
                 document.querySelector(".date-value").dataset.dueDate;
               renderEvents(currentDate);
