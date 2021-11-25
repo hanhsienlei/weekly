@@ -19,7 +19,7 @@ const renderGoalProgress = async (goalId) => {
         });
         return;
       }
-      // console.log(data);
+      console.log(data);
       const progressGoalTitle = document.querySelector(".progress-goal-title");
       const progressGoalButton = document.querySelector(
         ".progress-view-goal-button"
@@ -55,7 +55,7 @@ const renderGoalProgress = async (goalId) => {
       let weeksFromNowValue =
         goalWeeksFromNow > 0 ? goalWeeksFromNow : Math.abs(goalWeeksFromNow);
       let weeksFromNowText = "";
-
+console.log(goalWeeksFromNow, weeksFromNowValue)
       if (goalWeeksFromNow > 1) {
         weeksFromNowText = ` weeks away`;
       } else if (goalWeeksFromNow == 1) {
@@ -233,32 +233,31 @@ const initializePage = async (goalId) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
         const goalList = document.querySelector(".goal-list");
         goalList.innerHTML = "";
         const params = new URLSearchParams(window.location.search);
         if (data.length) {
-          let rendergoalId = params.get("goalId")
-            ? Number(params.get("goalId"))
+          let renderGoalId = params.get("goal_id")
+            ? Number(params.get("goal_id"))
             : data[0].goalId;
           if (goalId) {
-            rendergoalId = goalId;
+            renderGoalId = goalId;
           }
           // console.log("render goal: ", rendergoalId);
-          renderGoalProgress(rendergoalId);
+          renderGoalProgress(renderGoalId);
           data.forEach((goal) => {
-            const { goalId, goalTitle, goalcategory } = goal;
+            const { goalId, goalTitle, goalCategory } = goal;
             const goalItem = document.createElement("div");
             goalItem.setAttribute("data-goal-id", goalId);
             goalItem.classList.add("list-group-item", "ps-2");
             goalItemIcon = document.createElement("span");
             goalItemTitle = document.createElement("span");
             goalItemIcon.classList.add("material-icons");
-            goalItemIcon.textContent = categoryMaterialIcons[goalcategory];
+            goalItemIcon.textContent = categoryMaterialIcons[goalCategory];
             goalItemTitle.textContent = goalTitle;
             goalList.appendChild(goalItem);
             goalItem.append(goalItemIcon, goalItemTitle);
-            if (goalId == rendergoalId) {
+            if (goalId == renderGoalId) {
               goalItem.classList.add("selected");
               goalItem.click();
             }

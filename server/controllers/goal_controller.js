@@ -149,9 +149,9 @@ const getGoalProgress = async (req, res) => {
       : null;
     const todayValue = new Date().valueOf();
     const weekInMilliSecond = 60 * 60 * 24 * 1000 * 7;
-    const GoalDueDateValue = getDateObjectFromYMD(g_due_date);
-    const GoalWeeksFromNow = Math.ceil(
-      (GoalDueDateValue - todayValue) / weekInMilliSecond
+    const goalDueDateValue = getDateObjectFromYMD(goalDueDate);
+    const goalWeeksFromNow = Math.ceil(
+      (goalDueDateValue - todayValue) / weekInMilliSecond
     );
     const goalProgress = {
       userId: user_id,
@@ -160,7 +160,7 @@ const getGoalProgress = async (req, res) => {
       goalDescription: g_description,
       goalDueDate,
       goalCategory: g_category,
-      GoalWeeksFromNow,
+      goalWeeksFromNow,
       goalSummary: { milestone: [], task: [] },
       milestoneIds: [],
       milestoneTitles: [],
@@ -235,11 +235,12 @@ const getGoalsByUser = async (req, res) => {
   if (!userId) {
     return res.status(400).send({ error: "user id is required." });
   } else {
-    const result = await Goal.getGoalsByUser(userId);
+    const result = await Goal.getGoalsByUser(userId);    
     if (!result) {
       return res.status(400).send({ error: "user id doesn't exist." });
     } else {
-      return res.status(200).send(result);
+      data = result.map(goal => { return {goalId: goal.g_id, goalTitle: goal.g_title, goalCategory: goal.g_category}})
+      return res.status(200).send(data);
     }
   }
 };
