@@ -1,3 +1,7 @@
+//Date from database is converted to ISO string(UTC) based on local time zone by javascript
+//eg., 2021-10-25 would become 2021-10-24T16:00:00.000Z
+//So make sure to convert it back to date string (YYYY-MM-DD) based on local time zone
+
 const Events = require("../models/events_model");
 const {
   getDateYMD,
@@ -103,8 +107,7 @@ const getEventsByDate = async (req, res) => {
       return;
     } else {
       events.forEach((row) => {
-        //javascript會自動將時區加入到date string再做成ISO string(UTC), 例如2021-10-25會變成2021-10-24T16:00:00.000Z
-        //要自己轉回local time zone 的 date string (YYYY-MM-DD)
+        
         const goalDueDate = row.g_due_date ? getDateYMD(row.g_due_date) : null;
         const milestoneDueDate = row.m_due_date
           ? getDateYMD(row.m_due_date)

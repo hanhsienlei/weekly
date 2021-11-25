@@ -29,7 +29,7 @@ const getSundayByDate = (dateObject) => {
 
 //return {year: YYYY, weekNumber: WW}
 const getWeekNumberByDate = (dateObject) => {
-  // ISO 8601
+  // week number guideline: ISO 8601
   const jan01 = new Date(dateObject.getFullYear(), 0, 1);
   const jan01DaysFromMonday = (jan01.getDay() + 6) % 7;
   const dec31 = new Date(dateObject.getFullYear(), 11, 31);
@@ -37,7 +37,7 @@ const getWeekNumberByDate = (dateObject) => {
     (dateObject.valueOf() - jan01.valueOf()) / (60 * 60 * 24 * 1000);
   let year = 0;
   let weekNumber = 0;
-  //step 1. get week day offset according to Jan 1st
+  //step 1. get week day offset of Jan 1st
   if (jan01.getDay() > 4 || jan01.getDay() === 0) {
     weekNumber = Math.ceil((daysFromJan01 + jan01DaysFromMonday) / 7) - 1;
     year = dateObject.getFullYear();
@@ -94,8 +94,6 @@ const getNextMonthThisDay = (dateObject) => {
   const monthIndex = dateObject.getMonth();
   const date = dateObject.getDate();
   const monthLengthList = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-  //step 1. get next month
   let monthIndexNew = monthIndex + 1;
   let yearNew = 0;
   let dateNew = 0;
@@ -105,7 +103,6 @@ const getNextMonthThisDay = (dateObject) => {
   } else {
     yearNew = year;
   }
-  //step 2. correct last day of month
   if (date > monthLengthList[monthIndexNew]) {
     dateNew = monthLengthList[monthIndexNew];
     const feb29 = new Date(yearNew, 1, 29);
@@ -124,8 +121,6 @@ const getPreviousMonthThisDay = (dateObject) => {
   const monthIndex = dateObject.getMonth();
   const date = dateObject.getDate();
   const monthLengthList = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-  //step 1. get previous month
   let monthIndexNew = monthIndex - 1;
   let yearNew = 0;
   let dateNew = 0;
@@ -135,7 +130,6 @@ const getPreviousMonthThisDay = (dateObject) => {
   } else {
     yearNew = year;
   }
-  //step 2. correct last day of month
   if (date > monthLengthList[monthIndexNew]) {
     dateNew = monthLengthList[monthIndexNew];
     const feb29 = new Date(yearNew, 1, 29);
@@ -153,13 +147,9 @@ const getNextYearThisDay = (dateObject) => {
   const year = dateObject.getFullYear();
   const monthIndex = dateObject.getMonth();
   const date = dateObject.getDate();
-
-  //step 1. get next year
   let monthIndexNew = monthIndex;
   let yearNew = year + 1;
   let dateNew = date;
-
-  //step 2. correct leap year
   const feb29 = new Date(yearNew, 1, 29);
   if (monthIndexNew == 1 && dateNew == 29 && feb29.getDate() != 29) {
     dateNew = 28;
@@ -172,13 +162,9 @@ const getPreviousYearThisDay = (dateObject) => {
   const year = dateObject.getFullYear();
   const monthIndex = dateObject.getMonth();
   const date = dateObject.getDate();
-
-  //step 1. get previous year
   let monthIndexNew = monthIndex;
   let yearNew = year - 1;
   let dateNew = date;
-
-  //step 2. correct leap year
   const feb29 = new Date(yearNew, 1, 29);
   if (monthIndexNew == 1 && dateNew == 29 && feb29.getDate() != 29) {
     dateNew = 28;

@@ -180,7 +180,6 @@ const getGoalProgress = async (req, res) => {
       }
       if (row.t_id) {
         const index = milestoneIndexes[row.m_id];
-        //status === -1: archived, not calculated here
         if (row.t_status === 1) {
           goalProgress.milestoneNumberOfTask[index] += 1;
           goalProgress.milestoneNumberOfTaskDone[index] += 1;
