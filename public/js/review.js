@@ -1,5 +1,4 @@
 let newGoal = 0;
-
 const goalList = document.querySelector(".goal-list");
 const renderGoalProgress = async (goalId) => {
   fetch(`/api/goal/progress?goal_id=${goalId}`, {
@@ -193,21 +192,23 @@ const renderGoalProgress = async (goalId) => {
       progressMilestoneSum.textContent = `${goalSummary.milestone[0]} / ${goalSummary.milestone[1]} milestones achieved`;
       goalPercentageSpan.textContent = goalDonePercentage;
       progressEmptyNote.textContent = GoalEmptyNote;
-      goalList.addEventListener("click", (e) => {
+      const resetDashboard = () => {
         doughnut.destroy();
         bar.destroy();
-      });
-      goalList.addEventListener("change", (e) => {
-        doughnut.destroy();
-        bar.destroy();
-      });
-      $("#modal-goal").on("hidden.bs.modal", () => {
+        goalList.removeEventListener("click", resetDashboard)
+        goalList.removeEventListener("change", resetDashboard)
+        $("#modal-goal").off("hidden.bs.modal", modalCloseHandler)
+      }
+      const modalCloseHandler = () => {
         const selectedGoal = document.querySelector(".selected");
         const selectedGoalId = selectedGoal.dataset.goalId;
-        doughnut.destroy();
-        bar.destroy();
+        resetDashboard()
         renderGoalProgress(selectedGoalId);
-      });
+      }
+      
+      goalList.addEventListener("click", resetDashboard);
+      goalList.addEventListener("change", resetDashboard);
+      $("#modal-goal").on("hidden.bs.modal", modalCloseHandler);
     })
     .catch((err) => {
       console.log(err);
