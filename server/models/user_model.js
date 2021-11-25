@@ -34,7 +34,6 @@ const signUp = async (name, birthday, roleId, email, password) => {
       email: email,
       password: bcrypt.hashSync(password, salt),
       name: name,
-      picture: null,
       access_expired: TOKEN_EXPIRE,
       login_at: loginAt,
     };
@@ -44,7 +43,6 @@ const signUp = async (name, birthday, roleId, email, password) => {
         birthday: user.birthday,
         name: user.name,
         email: user.email,
-        picture: user.picture,
       },
       TOKEN_SECRET
     );
@@ -86,7 +84,6 @@ const nativeSignIn = async (email, password) => {
         name: user.name,
         birthday: user.birthday,
         email: user.email,
-        picture: user.picture,
       },
       TOKEN_SECRET
     );
@@ -97,9 +94,9 @@ const nativeSignIn = async (email, password) => {
 
     await conn.query("COMMIT");
 
-    user.access_token = accessToken;
-    user.login_at = loginAt;
-    user.access_expired = TOKEN_EXPIRE;
+    user.accessToken = accessToken;
+    user.loginAt = loginAt;
+    user.accessExpired = TOKEN_EXPIRE;
 
     return { user };
   } catch (error) {

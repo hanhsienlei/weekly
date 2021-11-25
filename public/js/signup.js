@@ -39,8 +39,8 @@ submitButton.addEventListener("click", (e) => {
           text: data.error,
         });
       } else {
-        const access_token = data.data.access_token;
-        localStorage.setItem("access_token", access_token);
+        const accessToken = data.data.accessToken;
+        localStorage.setItem("access_token", accessToken);
         window.location.href = "/life";
       }
     })

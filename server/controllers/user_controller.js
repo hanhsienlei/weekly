@@ -57,16 +57,15 @@ const signUp = async (req, res) => {
 
     res.status(200).send({
         data: {
-            access_token: user.access_token,
-            access_expired: user.access_expired,
-            login_at: user.login_at,
+            accessToken: user.access_token,
+            accessExpired: user.access_expired,
+            loginAt: user.login_at,
             user: {
                 id: user.id,
                 provider: user.provider,
                 name: user.name,
                 birthday: user.birthday,
                 email: user.email,
-                picture: user.picture
             }
         }
     });
@@ -97,10 +96,10 @@ const signIn = async (req, res) => {
     }
 
     if (result.error) {
-        const status_code = result.status ? result.status : 403;
+        const statusCode = result.status ? result.status : 403;
         console.log("result.error", result.error)
         const errorMessage = result.error === 'Wrong Request' ? result.error : "Incorrect email or password"
-        res.status(status_code).send({error: errorMessage});
+        res.status(statusCode).send({error: errorMessage});
         return;
     }
 
@@ -112,16 +111,15 @@ const signIn = async (req, res) => {
 
     res.status(200).send({
         data: {
-            access_token: user.access_token,
-            access_expired: user.access_expired,
-            login_at: user.login_at,
+            accessToken: user.access_token,
+            accessExpired: user.access_expired,
+            loginAt: user.login_at,
             user: {
                 id: user.id,
                 provider: user.provider,
                 birthday: getDateYMD(user.birthday),
                 name: user.name,
                 email: user.email,
-                picture: user.picture
             }
         }
     });
@@ -134,7 +132,6 @@ const getUserProfile = async (req, res) => {
             name: req.user.name,
             birthday: getDateYMD(new Date (req.user.birthday)),
             email: req.user.email,
-            picture: req.user.picture
         }
     });
     return;
