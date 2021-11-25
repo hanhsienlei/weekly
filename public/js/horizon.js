@@ -419,7 +419,7 @@ const addNewEvent = (timeScale, eventType) => {
         const eventId = data.taskId || data.goalId;
 
         if (data.taskId) {
-          //沒有goal button
+          //without goal button
           createEventComponent(
             timeScale,
             eventType,
@@ -439,7 +439,7 @@ const addNewEvent = (timeScale, eventType) => {
             null
           );
         } else {
-          //有goal button
+          //with goal button
           createEventComponent(
             timeScale,
             eventType,
@@ -483,26 +483,19 @@ const createViewGoalButton = (goalId) => {
 const createDeleteGoalButton = (goalId) => {
   const button = document.createElement("button");
   button.setAttribute("type", "button");
-  // button.setAttribute("data-bs-toggle", "modal");
-  // button.setAttribute("data-bs-target", "#deleteGoalModal");
   button.classList.add("btn", "btn-outline-danger", "col-6");
   button.textContent = "delete";
-
   button.addEventListener("click", (e) => {
     deleteGoalAndChildren(goalId);
   });
-
   return button;
 };
 
 const createDeleteMilestoneButton = (milestoneId, goalId) => {
   const button = document.createElement("button");
   button.setAttribute("type", "button");
-  // button.setAttribute("data-bs-toggle", "modal");
-  // button.setAttribute("data-bs-target", "#deleteMilestoneModal");
   button.classList.add("btn", "btn-outline-danger", "col-6");
   button.textContent = "delete";
-
   button.addEventListener("click", (e) => {
     deleteMilestoneAndChildren(milestoneId);
   });
@@ -564,12 +557,10 @@ const renderEventsToday = () => {
   renderEvents(todayYMD);
 };
 
-//triggered whenever page is opened
 getUser();
 document.onload = renderEventsToday();
 
 $("#modal-goal").on("hidden.bs.modal", () => {
-  // console.log("listen!");
   const currentDate = document.querySelector(".date-value").dataset.dueDate;
   renderEvents(currentDate);
 });

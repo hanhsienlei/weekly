@@ -6,7 +6,6 @@ const renderGoalEditor = (goalId) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const modal = document.querySelector("#modal-goal");
       const goalTitleIcon = modal.querySelector(".modal-title-icon");
       const goalTitle = modal.querySelector(".goal-title");
@@ -34,7 +33,6 @@ const renderGoalEditor = (goalId) => {
               goalCategory.options[goalCategory.selectedIndex].value,
             goalDescription: goalDescription.value.trim(),
           };
-          //console.log("dave goal body:", body)
           fetch("/api/goal", {
             method: "POST",
             headers: {
@@ -45,7 +43,6 @@ const renderGoalEditor = (goalId) => {
           })
             .then((response) => response.json())
             .then((data) => {
-              //console.log("return from save: ", data);
               if (data.error) {
                 Swal.fire({
                   icon: "error",

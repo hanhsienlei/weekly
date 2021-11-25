@@ -113,7 +113,6 @@ const deleteMilestoneAndChildren = (milestoneId) => {
               parent.removeChild(currentContainer);
             }
           } else {
-            //nothing changed
             Swal.fire({
               icon: "warning",
               title: "Seems like this milestone has already be gone.",
@@ -148,7 +147,6 @@ const createEventComponent = (
   taskOriginDate = null
 ) => {
   const accessToken = localStorage.getItem("access_token");
-  //如果移動要改parentContainer所以用let
   let parentContainer = document.querySelector(
     `.${timeScale}-events-container`
   );
@@ -248,8 +246,7 @@ const createEventComponent = (
         body.taskRepeat = taskRepeat;
         body.taskRepeatFrequency = taskRepeatFrequency;
         body.taskRepeatEndDate = taskRepeatEndDate;
-        //task due date > repeat end date的話，error
-        //console.log(body);
+
         if (taskRepeat && taskRepeatEndDate < eventDueDate.value) {
           Swal.fire({
             title: "Invalid repeat rule",
@@ -315,7 +312,6 @@ const createEventComponent = (
             eventContainers.forEach((c) =>
               containerDueDates.push(c.dataset.dueDate)
             );
-            //console.log(newEventDueDate, containerDueDates);
 
             const relocateEvent = (index) => {
               if (parentContainer === eventContainers[index]) return;
@@ -398,7 +394,6 @@ const createEventComponent = (
   editButton.setAttribute("title", `Edit`);
   editButton.setAttribute("data-bs-toggle", "collapse");
   editButton.setAttribute("data-bs-target", `#editor-${eventType}-${id}`);
-  //editButton.setAttribute("style", "opacity: 0");
   editButton.textContent = "mode_edit";
   eventTitleContainer.classList.add("event-title-container", "mb-1", "d-flex");
   checkBoxContainer.classList.add("check-box-container", "col-1");
@@ -527,7 +522,6 @@ const createEventComponent = (
   );
   eventDescription.value = description;
   eventDescription.addEventListener("focus", (e) => {
-    //console.log("click");
     eventDescription.classList.remove("off-focus");
   });
   eventDescription.addEventListener("blur", (e) => {

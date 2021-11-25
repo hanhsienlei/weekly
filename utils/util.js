@@ -168,19 +168,12 @@ const validateMilestoneDueDate = () => {
     // user
     if (goalId) {
       const returnedUserId = await getUserByGoal(goalId);
-      console.log(goalId, userId, returnedUserId.user_id);
       if (userId !== returnedUserId.user_id) {
         res.status(400).send({ error: "This is not your goal!" });
         return;
       }
     } else if (milestoneId) {
       const returnedUserId = await getUserByMilestone(milestoneId);
-      console.log(
-        "milestone id: ",
-        milestoneId,
-        userId,
-        returnedUserId.user_id
-      );
       if (userId !== returnedUserId.user_id) {
         res.status(400).send({ error: "This is not your milestone!" });
         return;
@@ -217,19 +210,12 @@ const validateMilestoneDueDate = () => {
             const taskDueDate = new Date(tasks[i].t_due_date);
             const taskDueDateYMD = getDateYMD(taskDueDate);
             const taskTitle = tasks[i].t_title;
-            console.log(
-              "milestoneDueDate,  taskDueDate ",
-              milestoneDueDate,
-              taskDueDate
-            );
             if (milestoneDueDate < taskDueDate) {
-              console.log("400 error: ", milestoneDueDate, taskDueDate);
               res.status(400).send({
                 error: `Milestone shouldn't due before its task ${taskTitle} (${taskDueDateYMD}).`,
               });
               return;
             }
-            // task repeat
             if (tasks[i].t_repeat) {
               const repeatEndDate = new Date(tasks[i].r_end_date);
               const repeatEndDateYMD = getDateYMD(repeatEndDate);
@@ -261,13 +247,10 @@ const validateTaskDueDate = () => {
     const taskId = req.body.taskId;
     const milestoneId = req.body.taskMilestoneId;
     const userId = Number(req.user.id);
-    console.log("req.body: ", req.body);
-
     if (taskDueDate < userBirthday) {
       res.status(400).send({ error: "You were not born yet." });
       return;
     }
-
     if (taskDueDate > userByeDay) {
       res
         .status(400)
@@ -282,7 +265,6 @@ const validateTaskDueDate = () => {
 
       if (!taskRepeatEndDate && !milestoneId) {
         req.body.taskRepeatEndDate = getDateYMD(userByeDay);
-        console.log("independent task repeat end date set to forever");
       } else {
         if (taskDueDate > taskRepeatEndDate) {
           res.status(400).send({
@@ -330,7 +312,6 @@ const validateTaskDueDate = () => {
 
     //new task
     if (!taskId) {
-      console.log("it's a new task");
       next();
       return;
     } else {
@@ -338,7 +319,6 @@ const validateTaskDueDate = () => {
         // milestone
         const task = await getTask(taskId);
         const milestoneId = task.milestone_id;
-        console.log("task", task);
         if (!task) {
           next();
           return;
