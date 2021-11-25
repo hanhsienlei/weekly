@@ -1,26 +1,43 @@
 const router = require("express").Router();
-const { authentication, wrapAsync, validateGoalDueDate, authorizationGoalProgress } = require("../../../utils/util");
-
-const { saveGoal, getGoal, getGoalWithPlan, getGoalProgress, getGoalsByUser, deleteGoalAndChildren } = require("../../controllers/goal_controller");
 const {
-    USER_ROLE
-} = require('../../models/user_model');
+  authentication,
+  wrapAsync,
+  validateGoalDueDate,
+  authorizationGoalProgress,
+} = require("../../../utils/util");
+
+const {
+  saveGoal,
+  getGoalWithPlan,
+  getGoalProgress,
+  getGoalsByUser,
+  deleteGoalAndChildren,
+} = require("../../controllers/goal_controller");
+const { USER_ROLE } = require("../../models/user_model");
 
 router
   .route("/goals")
-  .get(authentication(USER_ROLE.ALL), wrapAsync(getGoalsByUser))
+  .get(authentication(USER_ROLE.ALL), wrapAsync(getGoalsByUser));
 
 router
   .route("/goal")
-  .post(authentication(USER_ROLE.ALL), validateGoalDueDate(), wrapAsync(saveGoal))
-  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteGoalAndChildren))
+  .post(
+    authentication(USER_ROLE.ALL),
+    validateGoalDueDate(),
+    wrapAsync(saveGoal)
+  )
+  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteGoalAndChildren));
 
 router
   .route("/goal/plan")
-  .get(authentication(USER_ROLE.ALL), wrapAsync(getGoalWithPlan))
+  .get(authentication(USER_ROLE.ALL), wrapAsync(getGoalWithPlan));
 
 router
   .route("/goal/progress")
-  .get(authentication(USER_ROLE.ALL),authorizationGoalProgress(), wrapAsync(getGoalProgress))
+  .get(
+    authentication(USER_ROLE.ALL),
+    authorizationGoalProgress(),
+    wrapAsync(getGoalProgress)
+  );
 
-module.exports = router
+module.exports = router;

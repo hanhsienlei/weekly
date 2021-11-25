@@ -2,7 +2,6 @@ const submitButton = document.querySelector(".sign-in-button");
 
 submitButton.addEventListener("click", (e) => {
   e.preventDefault();
-  // console.log("sign in go")
   const email = document.querySelector("#email");
   const password = document.querySelector("#password");
   const body = {
@@ -17,7 +16,6 @@ submitButton.addEventListener("click", (e) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      // console.log(data);
       if (data.error) {
         Swal.fire({
           icon: "error",

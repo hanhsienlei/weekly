@@ -1,4 +1,3 @@
-
 const renderGoalEditor = (goalId) => {
   fetch(`/api/goal/plan?goal_id=${goalId}`, {
     headers: {
@@ -31,7 +30,8 @@ const renderGoalEditor = (goalId) => {
             goalId,
             goalTitle: goalTitle.value.trim(),
             goalDueDate: goalDueDate.value,
-            goalCategory: goalCategory.options[goalCategory.selectedIndex].value,
+            goalCategory:
+              goalCategory.options[goalCategory.selectedIndex].value,
             goalDescription: goalDescription.value.trim(),
           };
           //console.log("dave goal body:", body)
@@ -103,7 +103,7 @@ const renderGoalEditor = (goalId) => {
       };
 
       modal.dataset.goalId = goalId;
-      goalTitleIcon.textContent = categoryMaterialIcons[data.goalCategory]
+      goalTitleIcon.textContent = categoryMaterialIcons[data.goalCategory];
       goalTitle.value = data.goalTitle;
       goalTitle.addEventListener("keyup", (e) => {
         if (e.keyCode === 13) {
@@ -116,20 +116,20 @@ const renderGoalEditor = (goalId) => {
         `deleteGoalAndChildren(${goalId})`
       );
       goalDueDate.value = data.goalDueDate;
-      
+
       goalDescription.value = data.goalDescription;
       goalSaveButton.addEventListener("click", saveGoal);
-      goalSaveButton.setAttribute("data-bs-toggle", "collapse")
-      goalSaveButton.setAttribute("data-bs-target", ".goal-container-row")
-      let goalCategoryIndex = data.goalCategory
-      if(data.goalCategory>8||data.goalCategory<0){
-        goalCategoryIndex = 0
+      goalSaveButton.setAttribute("data-bs-toggle", "collapse");
+      goalSaveButton.setAttribute("data-bs-target", ".goal-container-row");
+      let goalCategoryIndex = data.goalCategory;
+      if (data.goalCategory > 8 || data.goalCategory < 0) {
+        goalCategoryIndex = 0;
       }
-      goalCategory.options[goalCategoryIndex].selected = true
-      goalCategory.addEventListener("change", e=> {
-        const goalCategoryNumber = Number(goalCategory.value)
-        goalTitleIcon.textContent = categoryMaterialIcons[goalCategoryNumber]
-      })
+      goalCategory.options[goalCategoryIndex].selected = true;
+      goalCategory.addEventListener("change", (e) => {
+        const goalCategoryNumber = Number(goalCategory.value);
+        goalTitleIcon.textContent = categoryMaterialIcons[goalCategoryNumber];
+      });
 
       newMilestoneButton.addEventListener("click", addNewMilestone);
       modal.addEventListener("hidden.bs.modal", () => {
@@ -153,7 +153,6 @@ const renderGoalEditor = (goalId) => {
           if (milestone.tasks) {
             milestone.tasks.forEach((task) => {
               if (task.taskStatus > -1 || !task.taskOriginId) {
-                
                 createEventComponent(
                   `milestone-${milestoneId}`,
                   "task",
@@ -200,7 +199,7 @@ const createMilestoneContainer = (
   const milestoneLabel = document.createElement("span");
   const milestoneLabelDate = document.createElement("span");
   const milestoneTitleContainer = document.createElement("div");
-  
+
   const milestoneTitle = document.createElement("input");
   const milestoneEditButton = document.createElement("span");
   const milestoneEditorContainer = document.createElement("div");
@@ -216,7 +215,7 @@ const createMilestoneContainer = (
   const newTaskInput = document.createElement("input");
   const newTaskButton = document.createElement("button");
 
-  const modalSaveMilestone = ()=>{
+  const modalSaveMilestone = () => {
     if (!milestoneTitle.value.trim()) {
       Swal.fire({
         icon: "warning",
@@ -228,7 +227,7 @@ const createMilestoneContainer = (
       body.milestoneTitle = milestoneTitle.value.trim();
       body.milestoneDescription = milestoneDescription.value.trim();
       body.milestoneDueDate =
-      milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
+        milestoneDueDate.value.length == 10 ? milestoneDueDate.value : null;
 
       fetch(`/api/milestone`, {
         method: "POST",
@@ -247,20 +246,20 @@ const createMilestoneContainer = (
               text: data.error,
             });
             return;
-          }else{
-          Swal.fire({
-            icon: "success",
-            title: "All good!",
-            text: "Update successfully",
-            showConfirmButton: false,
-          });
+          } else {
+            Swal.fire({
+              icon: "success",
+              title: "All good!",
+              text: "Update successfully",
+              showConfirmButton: false,
+            });
           }
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }
+  };
 
   containerOuter.classList.add(
     "milestone-outer-container",
@@ -297,14 +296,14 @@ const createMilestoneContainer = (
     "row",
     "mb-3"
   );
-  
+
   milestoneTitle.classList.add("milestone-title", "off-focus");
   milestoneTitle.type = "text";
   milestoneTitle.setAttribute("placeholder", `Milestone name`);
   milestoneTitle.value = title;
   milestoneTitle.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
-      modalSaveMilestone()
+      modalSaveMilestone();
     }
   });
   milestoneEditButton.classList.add(
@@ -330,17 +329,17 @@ const createMilestoneContainer = (
     "my-2",
     "py-2"
   );
-  
-  milestoneDueDateLabel.textContent = "Milestone due date"
+
+  milestoneDueDateLabel.textContent = "Milestone due date";
   milestoneDueDate.type = "date";
   milestoneDueDate.classList.add("milestone-due-date", "form-control", "mb-3");
   milestoneDueDate.setAttribute("max", goalDueDate);
   milestoneDueDate.value = dueDate;
-  milestoneDueDate.addEventListener("change", e => {
-    milestoneLabelDate.textContent = milestoneDueDate.value
-  })
-  
-  milestoneDescriptionLabel.textContent = "Milestone description"
+  milestoneDueDate.addEventListener("change", (e) => {
+    milestoneLabelDate.textContent = milestoneDueDate.value;
+  });
+
+  milestoneDescriptionLabel.textContent = "Milestone description";
   milestoneDescription.classList.add(
     "modal-milestone-description",
     "event-description",
@@ -348,7 +347,7 @@ const createMilestoneContainer = (
     "mb-3",
     "form-control"
   );
-  
+
   milestoneDescription.value = description;
   milestoneDescription.setAttribute(
     "placeholder",
@@ -367,7 +366,7 @@ const createMilestoneContainer = (
     "data-bs-target",
     `.modal-milestone-editor-${milestoneId}`
   );
-  milestoneSaveButton.onclick = modalSaveMilestone
+  milestoneSaveButton.onclick = modalSaveMilestone;
 
   milestoneDeleteButton.classList.add(
     "delete-milestone-button",
@@ -377,7 +376,6 @@ const createMilestoneContainer = (
   milestoneDeleteButton.textContent = "Delete";
   milestoneDeleteButton.addEventListener("click", (e) => {
     deleteMilestoneAndChildren(milestoneId);
-    
   });
 
   tasksContainer.classList.add(
@@ -397,7 +395,7 @@ const createMilestoneContainer = (
   newTaskInput.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
       newTaskButton.click();
-      newTaskInput.value=""
+      newTaskInput.value = "";
     }
   });
 
@@ -425,7 +423,7 @@ const createMilestoneContainer = (
       .then((response) => response.json())
       .then((data) => {
         const taskId = data.taskId;
-        
+
         createEventComponent(
           `milestone-${milestoneId}`,
           "task",
@@ -461,7 +459,11 @@ const createMilestoneContainer = (
     milestoneTitleContainer,
     milestoneEditorContainer
   );
-  milestoneLabelContainer.append(milestoneLabel,milestoneLabelDate, milestoneEditButton);
+  milestoneLabelContainer.append(
+    milestoneLabel,
+    milestoneLabelDate,
+    milestoneEditButton
+  );
   milestoneTitleContainer.append(milestoneTitle);
   milestoneButtonsContainer.append(milestoneSaveButton, milestoneDeleteButton);
   milestoneEditorContainer.append(
@@ -484,6 +486,6 @@ document
   .addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
       document.querySelector(".new-milestone-button").click();
-      document.querySelector(".new-milestone-title").value = ""
+      document.querySelector(".new-milestone-title").value = "";
     }
   });

@@ -13,12 +13,11 @@ const saveGoal = async (req, res) => {
     description: body.goalDescription,
     due_date: body.goalDueDate,
     due_date_unix: Math.ceil(new Date(body.goalDueDate + "T23:59:59")),
-    category:body.goalCategory
+    category: body.goalCategory,
   };
-  
 
   if (!goalDetails.category) {
-    goalDetails.category = 0
+    goalDetails.category = 0;
   }
   if (getInputLength(body.goalTitle) > 100) {
     res.status(400).send({ error: "title too long" });
@@ -56,19 +55,12 @@ const getGoal = async (req, res) => {
 
 const getGoalWithPlan = async (req, res) => {
   const goalId = req.query.goal_id;
-  console.log("goalId: ", goalId);
   if (!goalId) {
     return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.getGoalWithPlan(goalId);
-    const {
-      user_id,
-      g_id,
-      g_title,
-      g_description,
-      g_status,
-      g_category
-    } = result[0];
+    const { user_id, g_id, g_title, g_description, g_status, g_category } =
+      result[0];
     const goalDueDate = result[0].g_due_date
       ? getDateYMD(result[0].g_due_date)
       : null;
@@ -84,7 +76,9 @@ const getGoalWithPlan = async (req, res) => {
     };
     const milestoneIndexes = {};
     result.forEach((row) => {
-      const milestoneDueDate = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+      const milestoneDueDate = row.m_due_date
+        ? getDateYMD(row.m_due_date)
+        : null;
       const taskDueDate = row.t_due_date ? getDateYMD(row.t_due_date) : null;
       const repeatEndDate = row.r_end_date ? getDateYMD(row.r_end_date) : null;
       if (row.m_id && row.m_status > -1) {
@@ -137,12 +131,11 @@ const getGoalWithPlan = async (req, res) => {
 
 const getGoalProgress = async (req, res) => {
   const goalId = req.query.goal_id;
-  console.log("goalId: ", goalId);
   if (!goalId) {
     return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.getGoalWithPlan(goalId);
-    
+
     const { user_id, g_id, g_title, g_description, g_category } = result[0];
     const goalDueDate = result[0].g_due_date
       ? getDateYMD(result[0].g_due_date)
@@ -174,7 +167,9 @@ const getGoalProgress = async (req, res) => {
     result.forEach((row) => {
       if (row.m_id && row.m_status > -1) {
         if (!Object.keys(milestoneIndexes).includes(String(row.m_id))) {
-          const milestoneDueDate = row.m_due_date ? getDateYMD(row.m_due_date) : null;
+          const milestoneDueDate = row.m_due_date
+            ? getDateYMD(row.m_due_date)
+            : null;
           goalProgress.milestoneIds.push(row.m_id);
           goalProgress.milestoneTitles.push(row.m_title);
           goalProgress.milestoneDueDates.push(milestoneDueDate);
@@ -201,7 +196,8 @@ const getGoalProgress = async (req, res) => {
       for (let i = 0; i < goalProgress.milestoneNumberOfTask.length; i++) {
         if (
           goalProgress.milestoneNumberOfTask[i] ===
-          goalProgress.milestoneNumberOfTaskDone[i] && goalProgress.milestoneNumberOfTaskDone[i] != 0
+            goalProgress.milestoneNumberOfTaskDone[i] &&
+          goalProgress.milestoneNumberOfTaskDone[i] != 0
         ) {
           count += 1;
         }
@@ -235,11 +231,17 @@ const getGoalsByUser = async (req, res) => {
   if (!userId) {
     return res.status(400).send({ error: "user id is required." });
   } else {
-    const result = await Goal.getGoalsByUser(userId);    
+    const result = await Goal.getGoalsByUser(userId);
     if (!result) {
       return res.status(400).send({ error: "user id doesn't exist." });
     } else {
-      data = result.map(goal => { return {goalId: goal.g_id, goalTitle: goal.g_title, goalCategory: goal.g_category}})
+      data = result.map((goal) => {
+        return {
+          goalId: goal.g_id,
+          goalTitle: goal.g_title,
+          goalCategory: goal.g_category,
+        };
+      });
       return res.status(200).send(data);
     }
   }
@@ -251,7 +253,6 @@ const deleteGoalAndChildren = async (req, res) => {
     return res.status(400).send({ error: "goal id is required." });
   } else {
     const result = await Goal.deleteGoalAndChildren(goalId);
-    console.log(goalId, result);
     return res.status(200).send(result);
   }
 };

@@ -7,10 +7,7 @@ const renderEvents = async (date) => {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-
-      //titles and buttons
-      //empty events container
+      //titles and buttons to empty events containers
       const containers = ["date", "week", "month", "year"];
       containers.forEach((container) => {
         const title = document.querySelector(`.${container}-value`);
@@ -45,7 +42,7 @@ const renderEvents = async (date) => {
             : null;
           subTitle.textContent = startDate + " ~ " + endDate;
         }
-       
+
         eventsContainer.setAttribute("data-due-date", data[container].dueDate);
         eventsContainer.setAttribute(
           "data-start-date",
@@ -56,7 +53,8 @@ const renderEvents = async (date) => {
           title.textContent = "Week " + data[container].value;
         }
       });
-      //events
+
+      //add events
       if (data.date.tasks) {
         data.date.goals.forEach((goal) => {
           if (goal.goalStatus > -1) {
@@ -106,11 +104,13 @@ const renderEvents = async (date) => {
         });
         data.date.tasks.forEach((task) => {
           let repeatedFrequency = task.taskRepeat ? task.repeatFrequency : 0;
-          const taskParents = task.taskParent ? task.taskParent.join("．") : null
+          const taskParents = task.taskParent
+            ? task.taskParent.join("．")
+            : null;
           if (!task.taskId) {
             repeatedFrequency = task.repeatFrequency;
           }
-          
+
           if (task.taskStatus > -1) {
             createEventComponent(
               "date",
@@ -184,8 +184,12 @@ const renderEvents = async (date) => {
         });
         data.week.tasks.forEach((task) => {
           if (task.taskStatus > -1) {
-            const repeatedFrequency = task.taskRepeat ? task.repeatfrequency : 0;
-            const taskParents = task.taskParent ? task.taskParent.join("．") : null
+            const repeatedFrequency = task.taskRepeat
+              ? task.repeatfrequency
+              : 0;
+            const taskParents = task.taskParent
+              ? task.taskParent.join("．")
+              : null;
             if (task.taskId) {
               createEventComponent(
                 "week",
@@ -260,8 +264,12 @@ const renderEvents = async (date) => {
         });
         data.month.tasks.forEach((task) => {
           if (task.taskStatus > -1) {
-            const repeatedFrequency = task.taskRepeat ? task.repeatfrequency : 0;
-            const taskParents = task.taskParent ? task.taskParent.join("．") : null
+            const repeatedFrequency = task.taskRepeat
+              ? task.repeatfrequency
+              : 0;
+            const taskParents = task.taskParent
+              ? task.taskParent.join("．")
+              : null;
             if (task.taskId) {
               createEventComponent(
                 "month",
@@ -286,6 +294,7 @@ const renderEvents = async (date) => {
           }
         });
       }
+
       if (data.year.tasks) {
         data.year.goals.forEach((goal) => {
           if (goal.goalStatus > -1) {
@@ -335,10 +344,13 @@ const renderEvents = async (date) => {
         });
         data.year.tasks.forEach((task) => {
           if (task.taskStatus > -1) {
-            const repeatedFrequency = task.taskRepeat ? task.repeatFrequency : 0;
-            const taskParents = task.taskParent ? task.taskParent.join("．") : null
+            const repeatedFrequency = task.taskRepeat
+              ? task.repeatFrequency
+              : 0;
+            const taskParents = task.taskParent
+              ? task.taskParent.join("．")
+              : null;
             if (task.taskId) {
-
               createEventComponent(
                 "year",
                 "task",
@@ -361,7 +373,6 @@ const renderEvents = async (date) => {
             }
           }
         });
-        
       }
     })
     .catch((err) => {
@@ -385,7 +396,6 @@ const addNewEvent = (timeScale, eventType) => {
     });
     return;
   }
-  //console.log("body: ", body);
   fetch(`/api/${eventType}`, {
     method: "POST",
     headers: {
@@ -459,7 +469,6 @@ const addNewEvent = (timeScale, eventType) => {
     });
 };
 
-//打開modal 用的
 const createViewGoalButton = (goalId) => {
   const button = document.createElement("button");
   button.classList.add("btn", "btn-outline-primary", "edit-goal-button");
@@ -480,7 +489,7 @@ const createDeleteGoalButton = (goalId) => {
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
-    deleteGoalAndChildren(goalId)
+    deleteGoalAndChildren(goalId);
   });
 
   return button;
@@ -495,34 +504,28 @@ const createDeleteMilestoneButton = (milestoneId, goalId) => {
   button.textContent = "delete";
 
   button.addEventListener("click", (e) => {
-    deleteMilestoneAndChildren(milestoneId)
-    
+    deleteMilestoneAndChildren(milestoneId);
   });
   return button;
 };
 
 const createStopTodayButton = (
-  parentContainer,
-  eventOuterContainer,
   originId,
   dueDate
 ) => {
-  // console.log("STOP BUTTON arguments ", parentContainer, originId, dueDate);
   const button = document.createElement("button");
   button.setAttribute("type", "button");
   button.classList.add("btn", "btn-outline-warning");
   button.textContent = "stop repeating today";
 
   button.addEventListener("click", (e) => {
-    const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_end_date=${dueDate}`;
-    // console.log("apiEndpoint: ", apiEndpoint);
+    const apiEndpoint = `/api/repeated-task/stop?task_origin_id=${originId}&task_repeat_end_date=${dueDate}`;
     fetch(apiEndpoint, {
       method: "POST",
       headers: { Authorization: `Bearer ${accessToken}` },
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log("return from stop: ", data);
 
         if (data.error) {
           Swal.fire({
@@ -538,7 +541,6 @@ const createStopTodayButton = (
           text: "this task will no longer repeat. Other older or edited tasks from this series remain the same.",
           showConfirmButton: false,
         });
-        //parentContainer.removeChild(eventOuterContainer);
         const currentDate =
           document.querySelector(".date-value").dataset.dueDate;
         renderEvents(currentDate);

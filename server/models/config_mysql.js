@@ -11,9 +11,9 @@ const mysqlConfig = {
   connectionLimit: 20,
 };
 
-const pool = mysql.createPool(mysqlConfig)
+const pool = mysql.createPool(mysqlConfig);
 
 module.exports = {
   mysql,
-  pool
-}
+  pool,
+};

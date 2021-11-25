@@ -212,8 +212,6 @@ const createEventComponent = (
   const stopRepeatButton =
     taskOriginId && !id
       ? createStopTodayButton(
-          parentContainer,
-          eventOuterContainer,
           taskOriginId,
           dueDate
         )

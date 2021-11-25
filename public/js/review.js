@@ -2,7 +2,6 @@ let newGoal = 0;
 
 const goalList = document.querySelector(".goal-list");
 const renderGoalProgress = async (goalId) => {
-  // console.log("fetch: ", goalId);
   fetch(`/api/goal/progress?goal_id=${goalId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -19,16 +18,15 @@ const renderGoalProgress = async (goalId) => {
         });
         return;
       }
-      console.log(data);
       const progressGoalTitle = document.querySelector(".progress-goal-title");
       const progressGoalButton = document.querySelector(
         ".progress-view-goal-button"
       );
-      const calendarIcon = document.querySelector(".calendar-icon")
+      const calendarIcon = document.querySelector(".calendar-icon");
       const progressGoalDueDate = document.querySelector(
         ".progress-goal-due-date"
       );
-      const clockIcon = document.querySelector(".clock-icon")
+      const clockIcon = document.querySelector(".clock-icon");
       const progressWeeksFromNowValue = document.querySelector(
         ".progress-weeks-from-now-value"
       );
@@ -55,7 +53,6 @@ const renderGoalProgress = async (goalId) => {
       let weeksFromNowValue =
         goalWeeksFromNow > 0 ? goalWeeksFromNow : Math.abs(goalWeeksFromNow);
       let weeksFromNowText = "";
-console.log(goalWeeksFromNow, weeksFromNowValue)
       if (goalWeeksFromNow > 1) {
         weeksFromNowText = ` weeks away`;
       } else if (goalWeeksFromNow == 1) {
@@ -79,7 +76,10 @@ console.log(goalWeeksFromNow, weeksFromNowValue)
         ? Math.ceil((goalSummary.task[0] / goalSummary.task[1]) * 100)
         : 0;
       const numberOfTaskOpen = goalSummary.task[1] - goalSummary.task[0];
-      let doughnutData = new Array(...milestoneNumberOfTaskDone, numberOfTaskOpen);
+      let doughnutData = new Array(
+        ...milestoneNumberOfTaskDone,
+        numberOfTaskOpen
+      );
       let doughnutLabels = new Array(...milestoneTitles, "Not done yet");
       let barLabels = milestoneTitles;
       let barDataDone = milestoneNumberOfTaskDone;
@@ -148,8 +148,6 @@ console.log(goalWeeksFromNow, weeksFromNowValue)
                 display: true,
                 text: "Number of tasks",
               },
-              // min: 0,
-              // max: 100,
               ticks: {
                 stepSize: 1,
               },
@@ -184,11 +182,11 @@ console.log(goalWeeksFromNow, weeksFromNowValue)
       progressGoalTitle.setAttribute("onclick", `renderGoalEditor(${goalId})`);
       progressGoalButton.removeAttribute("onclick");
       progressGoalButton.setAttribute("onclick", `renderGoalEditor(${goalId})`);
-      progressGoalButton.classList.add("material-icons")
+      progressGoalButton.classList.add("material-icons");
       progressGoalButton.textContent = "zoom_in";
-      calendarIcon.textContent = "event"
+      calendarIcon.textContent = "event";
       progressGoalDueDate.textContent = goalDueDate;
-      clockIcon.textContent = "hourglass_empty"
+      clockIcon.textContent = "hourglass_empty";
       progressWeeksFromNowValue.textContent = weeksFromNowValue;
       progressWeeksFromNowText.textContent = weeksFromNowText;
       progressTaskSum.textContent = `${goalSummary.task[0]} / ${goalSummary.task[1]} tasks done`;
@@ -205,10 +203,10 @@ console.log(goalWeeksFromNow, weeksFromNowValue)
       });
       $("#modal-goal").on("hidden.bs.modal", () => {
         const selectedGoal = document.querySelector(".selected");
-        const selectedgoalId = selectedGoal.dataset.goalId;
+        const selectedGoalId = selectedGoal.dataset.goalId;
         doughnut.destroy();
         bar.destroy();
-        renderGoalProgress(selectedgoalId);
+        renderGoalProgress(selectedGoalId);
       });
     })
     .catch((err) => {
@@ -222,7 +220,6 @@ const initializePage = async (goalId) => {
   goalList.innerHTML = "";
   const params = new URLSearchParams(window.location.search);
   if (params.get("goal") === "new" && !newGoal) {
-    // console.log("add new goal");
     newGoal++;
     addNewGoal();
   } else {
@@ -243,7 +240,6 @@ const initializePage = async (goalId) => {
           if (goalId) {
             renderGoalId = goalId;
           }
-          // console.log("render goal: ", rendergoalId);
           renderGoalProgress(renderGoalId);
           data.forEach((goal) => {
             const { goalId, goalTitle, goalCategory } = goal;
@@ -306,7 +302,6 @@ const initializePage = async (goalId) => {
         addNewGoalButton.addEventListener("click", (e) => {
           addNewGoal();
         });
-        // console.log(params.get("goal"));
       })
       .catch((err) => {
         console.log(err);
@@ -329,10 +324,10 @@ const addNewGoal = async () => {
     },
   });
   if (!swalResult.value) {
-    newGoal++
-    initializePage()
-    return
-  };
+    newGoal++;
+    initializePage();
+    return;
+  }
   body[`goalTitle`] = swalResult.value;
   body[`goalDueDate`] = dueDate;
 

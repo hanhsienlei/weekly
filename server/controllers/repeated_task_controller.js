@@ -8,7 +8,7 @@ const {
 const { getInputLength } = require("../../utils/util");
 
 const stopRepeatTask = async (req, res) => {
-  const queryDate = req.query.task_r_end_date;
+  const queryDate = req.query.task_repeat_end_date;
   const queryDateObject = getDateObjectFromYMD(queryDate);
   const endDateObject = new Date(
     queryDateObject.valueOf() - 60 * 60 * 24 * 1000
@@ -22,7 +22,7 @@ const stopRepeatTask = async (req, res) => {
     repeatDetails,
     req.query.task_origin_id
   );
-  res.status(200).send({ result: result });
+  res.status(200).send({ result });
 };
 
 const saveNewRepeatedTask = async (req, res) => {

@@ -2,8 +2,8 @@ const accessToken = localStorage.getItem("access_token");
 const currentPath = window.location.pathname;
 const isSignupSignup = currentPath === "/signin" || currentPath === "/signup";
 const getUser = async () => {
-  if(!accessToken) return
-   fetch(`/api/user/profile`, {
+  if (!accessToken) return;
+  fetch(`/api/user/profile`, {
     headers: new Headers({
       Authorization: `Bearer ${accessToken}`,
     }),
@@ -26,16 +26,25 @@ const getUser = async () => {
           window.location.pathname = "/life";
           return;
         });
-      } else{
-        return
+      } else {
+        return;
       }
     })
     .catch((err) => {
       console.log(err);
     });
 };
-const categoryIcons = ["💼", "👪", "💰", "🎨", "🧘🏼", "🚀", "🤾🏼", "💗", "🗺️"]
-const categoryMaterialIcons = ["business_center", "groups", "savings", "palette", "self_improvement", "rocket_launch", "directions_run",  "volunteer_activism", "sailing"]
+const categoryMaterialIcons = [
+  "business_center",
+  "groups",
+  "savings",
+  "palette",
+  "self_improvement",
+  "rocket_launch",
+  "directions_run",
+  "volunteer_activism",
+  "sailing",
+];
 const getTodayYMD = () => {
   const today = new Date();
   const year = today.getFullYear().toString();
@@ -44,5 +53,5 @@ const getTodayYMD = () => {
   const date = today.getDate().toString();
   const date2Digit = date.length === 1 ? `0${date}` : date;
   const todayYMD = `${year}-${month2Digit}-${date2Digit}`;
-  return todayYMD
-}
+  return todayYMD;
+};

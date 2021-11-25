@@ -1,23 +1,27 @@
-const { pool } = require("./config_mysql")
+const { pool } = require("./config_mysql");
 
 const createGoal = async (goalDetails) => {
-  const [result] = await pool.query("INSERT INTO goal SET ?", goalDetails)
-  return result.insertId
-}
+  const [result] = await pool.query("INSERT INTO goal SET ?", goalDetails);
+  return result.insertId;
+};
 
 const saveGoal = async (goalDetails, goalId) => {
-  const updateQuery = [goalDetails].concat(goalId)
-  const [ result ] = await pool.query("UPDATE goal SET ? WHERE id = ?", updateQuery)
-  return result.info
-}
+  const updateQuery = [goalDetails].concat(goalId);
+  const [result] = await pool.query(
+    "UPDATE goal SET ? WHERE id = ?",
+    updateQuery
+  );
+  return result.info;
+};
 
 const getGoal = async (goalId) => {
-  const [ result ] = await pool.query("SELECT * FROM goal WHERE id = ?", goalId)
-  return result[0]
-}
+  const [result] = await pool.query("SELECT * FROM goal WHERE id = ?", goalId);
+  return result[0];
+};
 
 const getGoalWithPlan = async (goalId) => {
-  const [ result ] = await pool.query(`
+  const [result] = await pool.query(
+    `
   SELECT 
 	  g.user_id user_id,
     g.id g_id,
@@ -46,13 +50,15 @@ const getGoalWithPlan = async (goalId) => {
   LEFT JOIN repeated_task r ON t.id = r.task_id
   WHERE (g.id = ?) 
   ORDER BY t.due_date, m.due_date;
-  `, goalId)
-  // console.log(result)
-  return result
-}
+  `,
+    goalId
+  );
+  return result;
+};
 
 const getGoalsAndMilestonesByUser = async (userId) => {
-  const [ result ] = await pool.query(`
+  const [result] = await pool.query(
+    `
   SELECT 
     g.id g_id,
     g.title g_title,
@@ -66,12 +72,15 @@ const getGoalsAndMilestonesByUser = async (userId) => {
   FROM goal g
   LEFT JOIN milestone m ON g.id = m.goal_id
   WHERE g.user_id = ?  ; 
-  `, userId)
-  return result
-}
+  `,
+    userId
+  );
+  return result;
+};
 
 const getGoalsByUser = async (userId) => {
-  const [ result ] = await pool.query(`
+  const [result] = await pool.query(
+    `
   SELECT 
     g.id g_id,
     g.title g_title,
@@ -81,27 +90,34 @@ const getGoalsByUser = async (userId) => {
   FROM goal g
   WHERE g.user_id = ? AND g.status > -1
   ORDER BY g.due_date DESC; 
-  `, userId)
-  return result
-}
-
+  `,
+    userId
+  );
+  return result;
+};
 
 const deleteGoalAndChildren = async (goalId) => {
-  const [ result ] = await pool.query(`
+  const [result] = await pool.query(
+    `
   UPDATE goal g 
   LEFT JOIN milestone m ON (g.id = m.goal_id)
   LEFT JOIN task t ON (m.id = t.milestone_id)
   SET
   g.status = -1, m.status = -1, t.status = -1 
   WHERE g.id = ? ;
-  `, goalId)
-  return result
-}
+  `,
+    goalId
+  );
+  return result;
+};
 
 const getUserByGoal = async (goalId) => {
-  const [ result ] = await pool.query("SELECT user_id FROM goal WHERE id = ?", goalId)
-  return result[0]
-}
+  const [result] = await pool.query(
+    "SELECT user_id FROM goal WHERE id = ?",
+    goalId
+  );
+  return result[0];
+};
 
 module.exports = {
   createGoal,
@@ -111,5 +127,5 @@ module.exports = {
   getGoalsAndMilestonesByUser,
   getGoalsByUser,
   deleteGoalAndChildren,
-  getUserByGoal
-}
+  getUserByGoal,
+};

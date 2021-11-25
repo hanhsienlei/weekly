@@ -1,8 +1,21 @@
-const { pool } = require("./config_mysql")
+const { pool } = require("./config_mysql");
 
 const getGoalEventsByDateRange = async (userId, dateStart, dateEnd) => {
-  const queryConditions = [userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart]
-  const [result] = await pool.query(`
+  const queryConditions = [
+    userId,
+    dateStart,
+    dateEnd,
+    dateStart,
+    dateEnd,
+    dateStart,
+    dateEnd,
+    dateStart,
+    dateEnd,
+    dateStart,
+    dateStart,
+  ];
+  const [result] = await pool.query(
+    `
     SELECT 
 	  g.user_id user_id,
     g.id g_id,
@@ -38,14 +51,24 @@ const getGoalEventsByDateRange = async (userId, dateStart, dateEnd) => {
     OR (g.due_date  BETWEEN ? AND ?)
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?))
     ORDER BY t_due_date, m_due_date, g_due_date ;  
-  `, queryConditions) 
-  // console.log("[event model] result: ", result)
-  return result
-}
+  `,
+    queryConditions
+  );
+  return result;
+};
 
 const getIndependentTasksByDateRange = async (userId, dateStart, dateEnd) => {
-  const queryConditions = [userId, dateStart, dateEnd, dateStart, dateEnd, dateStart, dateStart]
-  const [result] = await pool.query(`
+  const queryConditions = [
+    userId,
+    dateStart,
+    dateEnd,
+    dateStart,
+    dateEnd,
+    dateStart,
+    dateStart,
+  ];
+  const [result] = await pool.query(
+    `
     SELECT 
 	  t.user_id user_id,
     t.id t_id,
@@ -66,12 +89,13 @@ const getIndependentTasksByDateRange = async (userId, dateStart, dateEnd) => {
     OR (t.origin_date BETWEEN ? AND ?) 
     OR (t.repeat = 1 AND t.due_date < ? AND r.end_date >= ?))
     ORDER BY t_due_date;  
-  `, queryConditions) 
-  // console.log("[event model] result: ", result)
-  return result
-}
+  `,
+    queryConditions
+  );
+  return result;
+};
 
 module.exports = {
   getGoalEventsByDateRange,
-  getIndependentTasksByDateRange
-}
+  getIndependentTasksByDateRange,
+};

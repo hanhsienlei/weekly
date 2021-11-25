@@ -284,8 +284,6 @@ const validateTaskDueDate = () => {
         req.body.taskRepeatEndDate = getDateYMD(userByeDay);
         console.log("independent task repeat end date set to forever");
       } else {
-
-
         if (taskDueDate > taskRepeatEndDate) {
           res.status(400).send({
             error: `Task shouldn't due after its repeat end date (${getDateYMD(

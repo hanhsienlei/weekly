@@ -39,7 +39,18 @@ const saveNewRepeatedTask = async (
   SELECT ?, ?, milestone_id, user_id, ?, ?, ?, ?, ?, ?, ?
   from task
   WHERE id = ?;`;
-  const queryData = [title, description, status, dueDate, dueDateUnix, 0, originId, originDate, originDateUnix, originId];
+  const queryData = [
+    title,
+    description,
+    status,
+    dueDate,
+    dueDateUnix,
+    0,
+    originId,
+    originDate,
+    originDateUnix,
+    originId,
+  ];
   const [result] = await pool.query(query, queryData);
   return result.insertId;
 };

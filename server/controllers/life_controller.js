@@ -2,7 +2,7 @@ const Goal = require("../models/goal_model");
 const {
   getDateYMD,
   getWeekNumberByDate,
-  getUserByeDay
+  getUserByeDay,
 } = require("../../utils/date_converter");
 
 const getGoalsLife = async (req, res) => {
@@ -37,14 +37,14 @@ const getGoalsLife = async (req, res) => {
       week: getWeekForLife(userByeDay),
     },
     goals: [],
-    userName: req.user.name
+    userName: req.user.name,
   };
   result.forEach((row) => {
     const dateObject = new Date(row.g_due_date);
     const goal = {
       id: row.g_id,
       title: row.g_title,
-      category:row.g_category,
+      category: row.g_category,
       date: getDateYMD(dateObject),
       year: dateObject.getFullYear(),
       week: getWeekForLife(dateObject),
