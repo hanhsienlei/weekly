@@ -9,8 +9,11 @@ const getGoalsLife = async (req, res) => {
   const userId = req.user.id;
   const userBirthday = new Date(req.user.birthday);
   const userByeDay = getUserByeDay(userBirthday);
+  const getYearForLife = (dateObject) => {
+    return getWeekNumberByDate(dateObject).year;
+  };
   const getWeekForLife = (dateObject) => {
-    const weekNumber = getWeekNumberByDate(dateObject).weekNumber;
+    let weekNumber = getWeekNumberByDate(dateObject).weekNumber;
     if (weekNumber === 53) {
       weekNumber = 52;
     }
@@ -20,17 +23,17 @@ const getGoalsLife = async (req, res) => {
   const data = {
     birthday: {
       date: getDateYMD(userBirthday),
-      year: userBirthday.getFullYear(),
+      year: getYearForLife(userBirthday),
       week: getWeekForLife(userBirthday),
     },
     today: {
       date: getDateYMD(new Date()),
-      year: new Date().getFullYear(),
+      year: getYearForLife(new Date()),
       week: getWeekForLife(new Date()),
     },
     byeDay: {
       date: getDateYMD(userByeDay),
-      year: userByeDay.getFullYear(),
+      year: getYearForLife(userByeDay),
       week: getWeekForLife(userByeDay),
     },
     goals: [],
