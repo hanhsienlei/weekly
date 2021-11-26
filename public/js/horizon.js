@@ -185,7 +185,7 @@ const renderEvents = async (date) => {
         data.week.tasks.forEach((task) => {
           if (task.taskStatus > -1) {
             const repeatedFrequency = task.taskRepeat
-              ? task.repeatfrequency
+              ? task.repeatFrequency
               : 0;
             const taskParents = task.taskParent
               ? task.taskParent.join("．")
@@ -265,7 +265,7 @@ const renderEvents = async (date) => {
         data.month.tasks.forEach((task) => {
           if (task.taskStatus > -1) {
             const repeatedFrequency = task.taskRepeat
-              ? task.repeatfrequency
+              ? task.repeatFrequency
               : 0;
             const taskParents = task.taskParent
               ? task.taskParent.join("．")

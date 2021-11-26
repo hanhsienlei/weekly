@@ -789,9 +789,11 @@ const createDeleteTaskButton = (
                 showConfirmButton: false,
               });
               parentContainer.removeChild(eventOuterContainer);
+              if (window.location.pathname.includes("horizon")) {
               const currentDate =
                 document.querySelector(".date-value").dataset.dueDate;
               renderEvents(currentDate);
+            }
             } else {
               Swal.fire({
                 icon: "error",
