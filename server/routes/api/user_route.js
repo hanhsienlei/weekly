@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const { wrapAsync, authentication } = require("../../../utils/util");
+const { errorCatcher, authentication } = require("../../../utils/util");
 
 const {
   signUp,
@@ -8,10 +8,10 @@ const {
   getUserProfile,
 } = require("../../controllers/user_controller");
 
-router.route("/user/signup").post(wrapAsync(signUp));
+router.route("/user/signup").post(errorCatcher(signUp));
 
-router.route("/user/signin").post(wrapAsync(signIn));
+router.route("/user/signin").post(errorCatcher(signIn));
 
-router.route("/user/profile").get(authentication(), wrapAsync(getUserProfile));
+router.route("/user/profile").get(authentication(), errorCatcher(getUserProfile));
 
 module.exports = router;

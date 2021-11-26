@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   authentication,
-  wrapAsync,
+  errorCatcher,
   validateMilestoneDueDate,
 } = require("../../../utils/util");
 
@@ -17,8 +17,8 @@ router
   .post(
     authentication(USER_ROLE.ALL),
     validateMilestoneDueDate(),
-    wrapAsync(saveMilestone)
+    errorCatcher(saveMilestone)
   )
-  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteMilestoneAndChildren));
+  .delete(authentication(USER_ROLE.ALL), errorCatcher(deleteMilestoneAndChildren));
 
 module.exports = router;

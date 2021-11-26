@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   authentication,
-  wrapAsync,
+  errorCatcher,
   validateTaskDueDate,
 } = require("../../../utils/util");
 
@@ -20,21 +20,21 @@ router
   .post(
     authentication(USER_ROLE.ALL),
     validateTaskDueDate(),
-    wrapAsync(saveNewRepeatedTask)
+    errorCatcher(saveNewRepeatedTask)
   )
-  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteNewRepeatedTask));
+  .delete(authentication(USER_ROLE.ALL), errorCatcher(deleteNewRepeatedTask));
 
 router
   .route("/repeated-task/saved")
   .post(
     authentication(USER_ROLE.ALL),
     validateTaskDueDate(),
-    wrapAsync(updateSavedRepeatedTask)
+    errorCatcher(updateSavedRepeatedTask)
   )
-  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteSavedRepeatedTask));
+  .delete(authentication(USER_ROLE.ALL), errorCatcher(deleteSavedRepeatedTask));
 
 router
   .route("/repeated-task/stop")
-  .post(authentication(USER_ROLE.ALL), wrapAsync(stopRepeatTask));
+  .post(authentication(USER_ROLE.ALL), errorCatcher(stopRepeatTask));
 
 module.exports = router;

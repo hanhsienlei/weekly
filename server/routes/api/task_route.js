@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   authentication,
-  wrapAsync,
+  errorCatcher,
   validateTaskDueDate,
 } = require("../../../utils/util");
 
@@ -13,8 +13,8 @@ router
   .post(
     authentication(USER_ROLE.ALL),
     validateTaskDueDate(),
-    wrapAsync(updateTask)
+    errorCatcher(updateTask)
   )
-  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteTask));
+  .delete(authentication(USER_ROLE.ALL), errorCatcher(deleteTask));
 
 module.exports = router;

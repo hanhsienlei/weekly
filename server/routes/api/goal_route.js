@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   authentication,
-  wrapAsync,
+  errorCatcher,
   validateGoalDueDate,
   authorizationGoalProgress,
 } = require("../../../utils/util");
@@ -17,27 +17,27 @@ const { USER_ROLE } = require("../../models/user_model");
 
 router
   .route("/goals")
-  .get(authentication(USER_ROLE.ALL), wrapAsync(getGoalsByUser));
+  .get(authentication(USER_ROLE.ALL), errorCatcher(getGoalsByUser));
 
 router
   .route("/goal")
   .post(
     authentication(USER_ROLE.ALL),
     validateGoalDueDate(),
-    wrapAsync(saveGoal)
+    errorCatcher(saveGoal)
   )
-  .delete(authentication(USER_ROLE.ALL), wrapAsync(deleteGoalAndChildren));
+  .delete(authentication(USER_ROLE.ALL), errorCatcher(deleteGoalAndChildren));
 
 router
   .route("/goal/plan")
-  .get(authentication(USER_ROLE.ALL), wrapAsync(getGoalWithPlan));
+  .get(authentication(USER_ROLE.ALL), errorCatcher(getGoalWithPlan));
 
 router
   .route("/goal/progress")
   .get(
     authentication(USER_ROLE.ALL),
     authorizationGoalProgress(),
-    wrapAsync(getGoalProgress)
+    errorCatcher(getGoalProgress)
   );
 
 module.exports = router;

@@ -19,10 +19,10 @@ const { getTask, getUserByTask } = require("../server/models/task_model");
 //const { getRepeatRule } = require("../server/models/repeated_task_model");
 
 // reference: https://thecodebarbarian.com/80-20-guide-to-express-error-handling
-const wrapAsync = (fn) => {
+const errorCatcher = (fn) => {
   return function (req, res, next) {
-    // Make sure to `.catch()` any errors and pass them along to the `next()`
-    // middleware in the chain, in this case the error handler.
+    // catch unhandled errors from async middlewares 
+    // and next() to final error handler
     fn(req, res, next).catch(next);
   };
 };
@@ -290,7 +290,7 @@ const getInputLength = (string) => {
 };
 
 module.exports = {
-  wrapAsync,
+  errorCatcher,
   authentication,
   authorizationGoalProgress,
   validateGoalDueDate,
