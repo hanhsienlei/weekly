@@ -107,7 +107,6 @@ const getEventsByDate = async (req, res) => {
       return;
     } else {
       events.forEach((row) => {
-        
         const goalDueDate = row.g_due_date ? getDateYMD(row.g_due_date) : null;
         const milestoneDueDate = row.m_due_date
           ? getDateYMD(row.m_due_date)
@@ -274,18 +273,14 @@ const getEventsByDate = async (req, res) => {
             case REPEAT_FREQUENCY.DAILY:
               addNewRepeatingTask();
               break;
+
             case REPEAT_FREQUENCY.WEEKLY:
-              const dateStartRepeatValue = new Date(taskDueDate).valueOf();
-              const dateEndValue = new Date(targetDate).valueOf();
-              const sevenDaysInMilliSecond = 60 * 60 * 24 * 1000 * 7;
-              const isWeekly =
-                (dateEndValue - dateStartRepeatValue) %
-                  sevenDaysInMilliSecond ===
-                0;
-              if (isWeekly) {
-                addNewRepeatingTask();
-              }
+              const dateStartRepeat = new Date(taskDueDate);
+              const dateRepeat = new Date(targetDate);
+              const isWeekly = dateStartRepeat.getDay() === dateRepeat.getDay();
+              if (isWeekly) addNewRepeatingTask();
               break;
+
             case REPEAT_FREQUENCY.MONTHLY:
               let dateInit = taskDueDate;
               while (dateInit <= targetDate) {

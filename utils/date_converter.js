@@ -1,3 +1,5 @@
+const monthLengthList = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
 //return YYYY-MM-DD in local timezone
 const getDateYMD = (dateObject) => {
   const year = dateObject.getFullYear().toString();
@@ -93,7 +95,6 @@ const getNextMonthThisDay = (dateObject) => {
   const year = dateObject.getFullYear();
   const monthIndex = dateObject.getMonth();
   const date = dateObject.getDate();
-  const monthLengthList = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   let monthIndexNew = monthIndex + 1;
   let yearNew = 0;
   let dateNew = 0;
@@ -120,7 +121,6 @@ const getPreviousMonthThisDay = (dateObject) => {
   const year = dateObject.getFullYear();
   const monthIndex = dateObject.getMonth();
   const date = dateObject.getDate();
-  const monthLengthList = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   let monthIndexNew = monthIndex - 1;
   let yearNew = 0;
   let dateNew = 0;
