@@ -91,6 +91,14 @@ const deleteRepeatedTasks = async (OriginId) => {
   return result.info;
 };
 
+const getSavedRepeatedTask = async (originId, OriginDate) => {
+  const [result] = await pool.query(
+    "SELECT * FROM task WHERE origin_id = ? AND origin_date = ?",
+    [ originId, OriginDate ] 
+  );
+  return result;
+}
+
 module.exports = {
   createRepeatRule,
   updateRepeatRule,
@@ -100,4 +108,5 @@ module.exports = {
   deleteSavedRepeatedTask,
   updateRepeatedTasks,
   deleteRepeatedTasks,
+  getSavedRepeatedTask
 };

@@ -32,8 +32,14 @@ const saveNewRepeatedTask = async (req, res) => {
   const dueDate = req.body.taskDueDate;
   const dueDateUnix = Math.ceil(new Date(dueDate + "T23:59:59"));
   const originDate = req.body.taskOriginDate;
-  const originDateUnix = Math.ceil(new Date(originDate + "T23:59:59"));
+  const originDateUnix =  Math.ceil(new Date(originDate + "T23:59:59"));
   const status = req.body.taskStatus;
+
+  const isRepeatAlreadySaved = await validateRepeatedTask(originId, originDate)
+   if (isRepeatAlreadySaved) {
+     res.status(400).send({ error: "origin id / origin date already exist"});
+    return;
+   } 
   if (getInputLength(req.body.taskTitle) > 100) {
     res.status(400).send({ error: "title too long" });
     return;
@@ -55,6 +61,12 @@ const deleteNewRepeatedTask = async (req, res) => {
   const originId = req.query.task_origin_id;
   const originDate = req.query.task_origin_date;
   const originDateUnix = Math.ceil(new Date(originDate + "T23:59:59"));
+
+  const isRepeatAlreadySaved = await validateRepeatedTask(originId, originDate)
+   if (isRepeatAlreadySaved) {
+     res.status(400).send({ error: "origin id / origin date already exist"});
+    return;
+   } 
   const returnedId = await RepeatedTask.deleteNewRepeatedTask(
     originId,
     originDate,
@@ -82,6 +94,15 @@ const deleteSavedRepeatedTask = async (req, res) => {
   const deleteResult = await Task.deleteTask(taskId);
   res.status(200).send({ deleteResult: deleteResult });
 };
+
+const validateRepeatedTask = async(originId, originDate) => {
+  const result = await RepeatedTask.getSavedRepeatedTask(originId, originDate)
+  if(result.length){
+    return true
+  } else {
+    return false
+  }
+}
 
 module.exports = {
   saveNewRepeatedTask,
