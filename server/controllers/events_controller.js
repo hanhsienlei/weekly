@@ -142,6 +142,7 @@ const getEventsByDate = async (req, res) => {
           }
 
           if (
+            row.g_status !== -1 &&
             row.m_id &&
             row.m_status !== -1 &&
             milestoneDueDate >= targetDate &&
@@ -164,53 +165,56 @@ const getEventsByDate = async (req, res) => {
             };
             data[range].milestones.push(newMilestone);
           }
+          if ((row.m_id && row.m_status !== -1) || !row.m_id) {
+            if (
+              taskDueDate >= targetDate &&
+              taskDueDate <= dateEnd &&
+              !records.taskIds.includes(row.t_id)
+            ) {
+              if (row.t_status !== -1) {
+                records.taskIds.push(row.t_id);
+                const {
+                  t_id,
+                  t_title,
+                  t_description,
+                  t_status,
+                  r_frequency,
+                  t_repeat,
+                  t_origin_id,
+                } = row;
+                const milestoneId = row.m_id ? row.m_id : null;
+                const goalId = row.g_id ? row.g_id : null;
+                const goalCategory = row.g_category ? row.g_category : null;
 
-          if (
-            taskDueDate >= targetDate &&
-            taskDueDate <= dateEnd &&
-            !records.taskIds.includes(row.t_id)
-          ) {
-            if (row.t_status !== -1) {
-              records.taskIds.push(row.t_id);
-              const {
-                t_id,
-                t_title,
-                t_description,
-                t_status,
-                r_frequency,
-                t_repeat,
-                t_origin_id,
-              } = row;
-              const milestoneId = row.m_id ? row.m_id : null;
-              const goalId = row.g_id ? row.g_id : null;
-              const goalCategory = row.g_category ? row.g_category : null;
+                const newTask = {
+                  taskId: t_id,
+                  taskTitle: t_title,
+                  taskDescription: t_description,
+                  taskDueDate,
+                  taskStatus: t_status,
+                  taskRepeat: t_repeat,
+                  taskOriginId: t_origin_id,
+                  repeatFrequency: r_frequency,
+                  repeatEndDate,
+                  milestoneId,
+                  milestoneDueDate,
+                  goalId,
+                  goalDueDate,
+                  goalCategory,
+                };
+                newTask.taskParent = row.m_id
+                  ? [row.g_title, row.m_title]
+                  : null;
 
-              const newTask = {
-                taskId: t_id,
-                taskTitle: t_title,
-                taskDescription: t_description,
-                taskDueDate,
-                taskStatus: t_status,
-                taskRepeat: t_repeat,
-                taskOriginId: t_origin_id,
-                repeatFrequency: r_frequency,
-                repeatEndDate,
-                milestoneId,
-                milestoneDueDate,
-                goalId,
-                goalDueDate,
-                goalCategory,
-              };
-              newTask.taskParent = row.m_id ? [row.g_title, row.m_title] : null;
-
-              if (row.t_origin_id) {
-                newTask.taskOriginDate = taskOriginDate;
+                if (row.t_origin_id) {
+                  newTask.taskOriginDate = taskOriginDate;
+                }
+                data[range].tasks.push(newTask);
               }
-              data[range].tasks.push(newTask);
             }
-          }
-          if (taskOriginDate >= targetDate && taskOriginDate <= dateEnd) {
-            repeatedTaskIds.push(row.t_origin_id);
+            if (taskOriginDate >= targetDate && taskOriginDate <= dateEnd) {
+              repeatedTaskIds.push(row.t_origin_id);
+            }
           }
         }
       });
@@ -263,6 +267,7 @@ const getEventsByDate = async (req, res) => {
           taskDueDate < targetDate && repeatEndDate >= targetDate;
 
         if (
+          ((row.m_id && row.m_status !== -1) || !row.m_id) &&
           row.t_status != -1 &&
           row.t_repeat == 1 &&
           !isTaskListed &&
