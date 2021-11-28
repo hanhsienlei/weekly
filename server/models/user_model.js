@@ -94,9 +94,9 @@ const nativeSignIn = async (email, password) => {
 
     await conn.query("COMMIT");
 
-    user.accessToken = accessToken;
-    user.loginAt = loginAt;
-    user.accessExpired = TOKEN_EXPIRE;
+    user.access_token = accessToken;
+    user.login_at = loginAt;
+    user.access_expired = TOKEN_EXPIRE;
 
     return { user };
   } catch (error) {

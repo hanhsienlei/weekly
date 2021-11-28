@@ -33,19 +33,27 @@ const _createFakeUsers = async (conn) => {
 };
 
 const _createFakeGoals = async (conn) => {
-  return await conn.query("INSERT INTO goal SET ?", goals);
+  return await conn.query("INSERT INTO goal (id, title, description, due_date, due_date_unix, status, user_id, category) VALUES ?", [
+    goals.map((x) => Object.values(x)),
+  ]);
 };
 
 const _createFakeMilestones = async (conn) => {
-  return await conn.query("INSERT INTO milestone SET ?", milestones);
+  return await conn.query("INSERT INTO milestone (id, title, description, due_date, due_date_unix, status, goal_id) VALUES ?", [
+    milestones.map((x) => Object.values(x)),
+  ]);
 };
 
 const _createFakeTasks = async (conn) => {
-  return await conn.query("INSERT INTO task SET ?", tasks);
+  return await conn.query("INSERT INTO task (id, title, description, due_date, due_date_unix, status, milestone_id, user_id, \`repeat\`, origin_id, origin_date, origin_date_unix) VALUES ?", [
+    tasks.map((x) => Object.values(x)),
+  ]);
 };
 
 const _createFakeRepeatedTasks = async (conn) => {
-  return await conn.query("INSERT INTO repeated_task SET ?", repeatedTasks);
+  return await conn.query("INSERT INTO repeated_task (id, task_id, frequency, end_date, end_date_unix) VALUES ?", [
+    repeatedTasks.map((x) => Object.values(x)),
+  ]);
 };
 
 const createFakeData = async () => {
@@ -53,17 +61,22 @@ const createFakeData = async () => {
     console.log("Not in test env");
     return;
   }
-  const conn = await pool.getConnection();
-  await conn.query("START TRANSACTION");
-  await conn.query("SET FOREIGN_KEY_CHECKS = ?", 0);
-  await _createFakeUsers(conn);
-  await _createFakeGoals(conn);
-  await _createFakeMilestones(conn);
-  await _createFakeTasks(conn);
-  await _createFakeRepeatedTasks(conn);
-  await conn.query("SET FOREIGN_KEY_CHECKS = ?", 1);
-  await conn.query("COMMIT");
-  await conn.release();
+  try {
+    const conn = await pool.getConnection();
+    await conn.query("START TRANSACTION");
+    await conn.query("SET FOREIGN_KEY_CHECKS = ?", 0);
+    await _createFakeUsers(conn);
+    await _createFakeGoals(conn);
+    await _createFakeMilestones(conn);
+    await _createFakeTasks(conn);
+    await _createFakeRepeatedTasks(conn);
+    await conn.query("SET FOREIGN_KEY_CHECKS = ?", 1);
+    await conn.query("COMMIT");
+    await conn.release();
+  } catch (error) {
+    console.log(error);
+    return;
+  }
 };
 
 const truncateFakeData = async () => {
@@ -84,10 +97,14 @@ const truncateFakeData = async () => {
     return;
   };
 
-  for (let table of tables) {
-    await truncateTable(table);
+  try {
+    for (let table of tables) {
+      await truncateTable(table);
+    }
+  } catch (error) {
+    console.log(error);
+    return;
   }
-
   return;
 };
 

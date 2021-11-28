@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const { PORT } = process.env;
+const { PORT_TEST, PORT, NODE_ENV } = process.env;
+const port = NODE_ENV == 'test' ? PORT_TEST : PORT;
 const ejs = require("ejs");
 
 app.set("view engine", "ejs");
@@ -34,8 +35,8 @@ app.use(function(err, req, res, next) {
     res.status(500).send('Internal Server Error');
 });
 
-app.listen(PORT, () => {
-  console.log(`server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`server running on port ${port}`);
 });
 
 

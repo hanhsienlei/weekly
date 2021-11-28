@@ -169,12 +169,13 @@ const tasks = [
     origin_date: null,
     origin_date_unix: null,
   },
+  //repeated from task id 1 on 2022-11-01, rescheduled to 2022-11-02
   {
     id: 3,
-    title: "testTask3",
-    description: "taskDescription3",
-    due_date: "2022-10-31",
-    due_date_unix: Math.ceil(new Date("2022-10-31T23:59:59")),
+    title: "testTask1Repeat",
+    description: "testTask1Repeat",
+    due_date: "2022-11-02",
+    due_date_unix: Math.ceil(new Date("2022-11-02T23:59:59")),
     status: 1,
     milestone_id: 1,
     user_id: 1,
