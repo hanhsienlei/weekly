@@ -270,6 +270,7 @@ const getEventsByDate = async (req, res) => {
           ((row.m_id && row.m_status !== -1) || !row.m_id) &&
           row.t_status != -1 &&
           row.t_repeat == 1 &&
+          !row.t_origin_id &&
           !isTaskListed &&
           !isRepeatedTaskRecorded &&
           isInDateRange
