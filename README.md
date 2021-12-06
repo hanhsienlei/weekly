@@ -10,8 +10,6 @@ Try out [here](https://weeklytheplanner.com/)
 * [Technologies](#technologies)
 * [Contact](#contact)
 
----
-
 ## Features
 
 ### Goal planner
@@ -57,8 +55,6 @@ Try out [here](https://weeklytheplanner.com/)
 * Share the goals with the community, allowing other to use them as templates
 * Recommendation of courses bases on the goal categories
 
----
-
 ## Technologies
 
 ### Back-End
@@ -99,8 +95,6 @@ Try out [here](https://weeklytheplanner.com/)
 email: weekly.test@mail.com  
 password: weeklytest  
 *write some note here* -->
-
----
 
 ## Contact
 
