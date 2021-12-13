@@ -33,21 +33,21 @@ const getSundayByDate = (dateObject) => {
 const getWeekNumberByDate = (dateObject) => {
   // week number guideline: ISO 8601
   const jan01 = new Date(dateObject.getFullYear(), 0, 1);
+  //step 1. get week day offset of Jan01
   const jan01DaysFromMonday = (jan01.getDay() + 6) % 7;
   const dec31 = new Date(dateObject.getFullYear(), 11, 31);
-  const daysFromJan01 =
-    (dateObject.valueOf() - jan01.valueOf()) / (60 * 60 * 24 * 1000);
-  let year = 0;
-  let weekNumber = 0;
-  //step 1. get week day offset of Jan 1st
+  const DaysOfYear =
+    Math.round(
+      (dateObject.valueOf() - jan01.valueOf()) / (60 * 60 * 24 * 1000)
+    ) + 1;
+  let year = dateObject.getFullYear();
+  //step 2. get week number
+  let weekNumber = Math.ceil((DaysOfYear + jan01DaysFromMonday) / 7);
+  //step 3. correct week number based on Jan01 weekday
   if (jan01.getDay() > 4 || jan01.getDay() === 0) {
-    weekNumber = Math.ceil((daysFromJan01 + jan01DaysFromMonday) / 7) - 1;
-    year = dateObject.getFullYear();
-  } else {
-    weekNumber = Math.ceil((daysFromJan01 + jan01DaysFromMonday) / 7);
-    year = dateObject.getFullYear();
+    weekNumber = weekNumber - 1;
   }
-  //step 2. correct week 0 and week 53
+  //step 4. correct week 0 and week 53
   if (weekNumber === 0) {
     weekNumber = getWeekCountByYear(dateObject.getFullYear() - 1);
     year = dateObject.getFullYear() - 1;
