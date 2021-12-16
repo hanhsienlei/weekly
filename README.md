@@ -92,11 +92,6 @@ password: weeklytest
 * Test: Mocha + Chai
 * Data visualization: Chart.js
 
-Try out [here](https://weeklytheplanner.com/) with the test account:  
-email: weekly.test@mail.com  
-password: weeklytest  
-
-
 ## Contact
 
 Author: Han-Hsien LEI  
