@@ -2,8 +2,9 @@
 
 A life-goal planner designed to help users reach their dreams by incorporating tailored goal-oriented actions into their daily routine.
 
-Try out [here](https://weeklytheplanner.com/)
-
+Try out [here](https://weeklytheplanner.com/) with the test account:  
+email: weekly.test@mail.com  
+password: weeklytest  
 ## Table of Content
 
 * [Features](#features)
@@ -60,7 +61,7 @@ Try out [here](https://weeklytheplanner.com/)
 ### Back-End
 
 * Cloud service: AWS EC2
-* Environment: Linus + Node.js
+* Environment: Linux + Node.js
 * Framework: Express.js
 * User authorization: JWT
 * Server-side render: EJS 
@@ -91,10 +92,10 @@ Try out [here](https://weeklytheplanner.com/)
 * Test: Mocha + Chai
 * Data visualization: Chart.js
 
-<!-- Try out [here](https://weeklytheplanner.com/) with the test account:  
+Try out [here](https://weeklytheplanner.com/) with the test account:  
 email: weekly.test@mail.com  
 password: weeklytest  
-*write some note here* -->
+
 
 ## Contact
 
